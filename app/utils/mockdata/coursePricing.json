@@ -1,0 +1,29 @@
+{
+    "plans": [
+        {
+            "name": "Premium",
+            "amount": 1000,
+            "perks": [
+                "Videos",
+                "Extra course materials and worksheets",
+                "One on one meeting with instructor",
+                "Certificate"
+            ]
+        },
+        {
+            "name": "Standard",
+            "amount": 700,
+            "perks": [
+                "Videos",
+                "Certificate"
+            ]
+        },
+        {
+            "name": "Bronze",
+            "amount": 200,
+            "perks": [
+                "Videos"
+            ]
+        }
+    ]
+}

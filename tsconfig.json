@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "downlevelIteration": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.config.js", "app/components/elements/Tabs.spec.ts", "text.js", "pdfworker.js", "app/components/InteractiveResourcePreview/ClickAndMatchPreview", "app/components/InteractiveResourcePreview/InteractivePreviewContainer.tsx"],
+  "exclude": ["node_modules"]
+}

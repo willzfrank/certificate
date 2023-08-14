@@ -1,0 +1,37 @@
+.videoslidecontainer:hover > div {
+  height: 6px;
+}
+
+.videoTitle {
+  background-color: #b61046;
+  max-width: 100%;
+}
+
+.videoContainer {
+  width: 100% !important;
+}
+
+@media screen and (min-width: 1114px) {
+  .videoContainer {
+    max-width: 550px !important;
+    height: auto !important;
+  }
+}
+
+.videoslidecontainer > div > div:after {
+  width: 4px;
+  height: 4px;
+  background-color: #b61046;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) translateX(50%);
+  transform-origin: center;
+
+  transition: transform 400ms;
+}
+
+.videoslidecontainer:hover > div > div:after {
+  transform: translateY(-50%) translateX(50%) scale(4);
+  transform-origin: center;
+  background-color: #b61046;
+}

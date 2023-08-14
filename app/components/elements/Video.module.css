@@ -1,0 +1,22 @@
+
+.videoslidecontainer:hover > div {
+    height: 6px;
+}
+
+.videoslidecontainer > div > div:after {
+    width: 4px;
+    height: 4px;
+    background-color: #B61046;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) translateX(50%);
+    transform-origin: center;
+
+    transition: transform 400ms;
+}
+
+.videoslidecontainer:hover > div > div:after {
+    transform: translateY(-50%) translateX(50%) scale(4);
+    transform-origin: center;
+    background-color: #B61046;
+}

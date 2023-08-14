@@ -1,0 +1,94 @@
+name: Certifications Frontend
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Heads Up!!!
+      if: always()
+      uses: ravsamhq/notify-slack-action@v1
+      with:
+        status: ${{ job.status }}
+        notify_when: 'failure,success'
+        notification_title: ${{ github.event.head_commit.author.name }} don push'
+        message_format: '{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}> ${{ github.event.head_commit.message }}'
+        footer: 'Linked to Repo <{repo_url}|{repo}>'
+
+        mention_users: 'U037BKFR0HX'
+        mention_users_when: 'failure,warnings'
+
+      env:
+       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+       
+    - uses: actions/checkout@v3
+
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ secrets.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        
+    - name: Add environment variable to docker image
+      run: |
+            touch .env
+            echo ${{ secrets.ENV }} > .env
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+  #           file: ./Dockerfile
+        push: true
+        builder: ${{ steps.buildx.outputs.name }} 
+        tags: '${{ secrets.REGISTRY }}/certification/frontend'
+        
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      env:
+        REGISTRY: ${{ secrets.REGISTRY }}
+        IMAGE_NAME: ${{ secrets.REGISTRY }}/certification/frontend
+        REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+
+      with:
+        host: ${{ secrets.FI_LAB_SERVER }}
+        username: ${{ secrets.FI_LAB_USER }}
+        key: ${{ secrets.FI_LAB_KEYS }}
+        port: ${{ secrets.FI_LAB_PORT }}
+        envs: IMAGE_NAME, REGISTRY, REGISTRY_PASSWORD, REGISTRY_USER
+        script: |
+           docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY
+           docker pull $IMAGE_NAME
+           docker logout $REGISTRY
+           docker rm -f certification-frontend
+           docker run --name certification-frontend --restart always -e PORT=5239 -d -p 5239:5239 $IMAGE_NAME
+           docker images
+          
+          
+    - name: Report Status
+      if: always()
+      uses: ravsamhq/notify-slack-action@v1
+      with:
+        status: ${{ job.status }}
+        notify_when: 'failure,success'
+        notification_title: '{workflow} has {status_message}'
+        message_format: '{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}> by ${{ github.event.head_commit.author.name }} ${{ github.event.head_commit.message }}'
+        footer: 'Linked to Repo <{repo_url}|{repo}>'
+    #           notify_when: 'failure'
+        mention_users: 'U037BKFR0HX'
+        mention_users_when: 'failure,warnings'
+    #           mention_groups: ''
+    #           mention_groups_when: 'failure,warnings'
+      env:
+       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 

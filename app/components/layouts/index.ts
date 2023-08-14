@@ -1,0 +1,6 @@
+export { default as SmoothScroll } from './SmoothScroll'
+export { default as MainLayout } from './MainLayout'
+export { default as Fixed } from './Fixed'
+export { default as Accordion } from './Accordion'
+export { default as InstructorsLayout } from './InstructorsLayout'
+export { default as CreateCourseLayout } from './CreateCourseLayout'
