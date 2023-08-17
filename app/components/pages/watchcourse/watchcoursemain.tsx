@@ -73,14 +73,14 @@ const WatchCourseMain = () => {
 		// we just completed the last module
 		if (activeResourceIndex === allResourses.length - 1) {
 			let modulesLength = courseDetails?.modules?.length ? courseDetails?.modules?.length - 1 : 0;
-			console.log(modulesLength);
+
 			if (activeModuleIndex < modulesLength) {
 				moveToNextModule();
 				return;
 			}
 			// If all modules have been completed, show the certificate
+			// This will also send request to server
 			setShouldShowCertificate(true);
-			// Send request to server
 		} else {
 			const nextResourceIndex = clamp(0, allResourses.length - 1, activeResourceIndex + 1);
 

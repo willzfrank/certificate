@@ -22,11 +22,6 @@ const useCourseCompletion = (courseId: string, courseModulesIds: string[], shoul
                 allDocuments.every(document => document.isRead)
 
             setIsCompleted(isCourseCompleted)
-            // So if had the isComplete property set on the schema , we will say
-            // if(!isComplete && isCourseCompleted){
-            //  const res = await markCourseAsCompleted(courseId);
-            // }
-            // where isComplete is yet to be passed
 
             if (isCourseCompleted) {
                 const res = await markCourseAsCompleted(courseId);
