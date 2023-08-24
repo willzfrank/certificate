@@ -41,7 +41,7 @@ const AddAssessment = ({
         courseId,
       }).unwrap()
 
-      console.log(res)
+      // console.log(res)
 
     } else {
       notify({

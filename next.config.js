@@ -42,4 +42,4 @@ module.exports = {
     // ignoreBuildErrors: true,
   },
   ...nextConfig,
-}
+};

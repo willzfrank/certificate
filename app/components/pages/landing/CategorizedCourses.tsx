@@ -70,7 +70,6 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
           A wide variety of courses from powerfully talented <br /> individuals
         </h1>
       </div>
-
       {/* <div className="categoryTitles mb-10">
         <div className="flex space-x-10 justify-center">
           <button className="font-semibold" role="button">
@@ -90,7 +89,6 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
           </button>
         </div>
       </div> */}
-
       <div className="md:mx-14 mx-6">
         {/* {courses.length > 1 ? ( */}
         <Slider {...settings} ref={(el) => (sliderRef.current = el)}>
@@ -108,7 +106,6 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
         {/* </div> */}
         {/* } */}
       </div>
-
       {courses.length > 1 ? (
         <div className="flex gap-2 items-center justify-end mt-8 md:px-14 px-6">
           <button
@@ -159,7 +156,6 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
           </button>
         </div>
       ) : null}
-
       <Modal isOpen={modalOpen} closeModal={() => setModalOpen(false)}>
           <VideoPlayer
             title={courses[activeCarouselItemIndex]?.title}

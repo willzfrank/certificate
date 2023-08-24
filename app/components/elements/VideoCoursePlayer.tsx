@@ -42,12 +42,12 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
     });
   }, [videoSrc]);
 
-   const handleContextMenu = (event: { preventDefault: () => void; }) => {
-     event.preventDefault(); // Prevent the default right-click menu
-   };
+  const handleContextMenu = (event: { preventDefault: () => void }) => {
+    event.preventDefault(); // Prevent the default right-click menu
+  };
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <motion.div>
         <h6 className="capitalize inter">{props.title}</h6>
         <div>
@@ -62,7 +62,7 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
                 onEnded={props.onVideoEnded}
                 ref={videoRef}
                 width="100%"
-                className="rounded  md:border-4 border-app-pink "
+                className="rounded h-full md:border-4 border-app-pink "
               >
                 {videoSrc.map((source, index) => (
                   <source

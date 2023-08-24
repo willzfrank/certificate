@@ -1,16 +1,16 @@
-import * as React from 'react'
-import { useAppSelector, useNotify } from 'app/hooks'
-import { useGradeAssessmentMutation } from 'app/api/subscriptionApi'
-import { Button } from 'app/components'
-import { WatchCourseContext } from 'app/contexts'
+import * as React from 'react';
+import { useAppSelector, useNotify } from 'app/hooks';
+import { useGradeAssessmentMutation } from 'app/api/subscriptionApi';
+import { Button } from 'app/components';
+import { WatchCourseContext } from 'app/contexts';
 import {
   AssessmentResultQuestion,
   AssessmentType,
   ModuleContentResponse,
-} from 'app/types'
-import type { QuestionOptionType, ExcludePositionAndType } from 'app/types'
-import { useRouter } from 'next/router'
-import * as resourceguards from 'app/types/guards'
+} from 'app/types';
+import type { QuestionOptionType, ExcludePositionAndType } from 'app/types';
+import { useRouter } from 'next/router';
+import * as resourceguards from 'app/types/guards';
 
 const QuestionsAndAnswersPage = ({
   questions,
@@ -23,45 +23,42 @@ const QuestionsAndAnswersPage = ({
   isReview,
   reviewQuestions,
 }: {
-  questions: Array<AssessmentType>
-  totalQuestions: number
-  next?: () => void
-  prev?: () => void
-  isAtLastPage: boolean
-  questionsPerPage: number
-  assessmentPageIndex: number
-  isReview?: boolean
-  reviewQuestions?: Array<AssessmentResultQuestion>
+  questions: Array<AssessmentType>;
+  totalQuestions: number;
+  next?: () => void;
+  prev?: () => void;
+  isAtLastPage: boolean;
+  questionsPerPage: number;
+  assessmentPageIndex: number;
+  isReview?: boolean;
+  reviewQuestions?: Array<AssessmentResultQuestion>;
 }) => {
   type ModuleAssessments = ExcludePositionAndType<
     ModuleContentResponse['data']['assessments'][number]
-  >
+  >;
 
-  const questionContainerRef = React.useRef<HTMLDivElement>(null)
-  const router = useRouter()
-  const urlParams = new URLSearchParams('?' + router.asPath.split('?')[1])
+  const questionContainerRef = React.useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const urlParams = new URLSearchParams('?' + router.asPath.split('?')[1]);
 
-  const notify = useNotify()
+  const notify = useNotify();
 
-  const [
-    currentAssessmentDetails,
-    setCurrentAssessmentDetails,
-  ] = React.useState<NonNullable<ModuleAssessments>>({
-    id: '',
-    name: '',
-    totalNumberOfQuestions: 0,
-    isCompleted: false,
-  })
+  const [currentAssessmentDetails, setCurrentAssessmentDetails] =
+    React.useState<NonNullable<ModuleAssessments>>({
+      id: '',
+      name: '',
+      totalNumberOfQuestions: 0,
+      isCompleted: false,
+    });
 
-  const { id: studentId, firstName } = useAppSelector((store) => store.user)
+  const { id: studentId, firstName } = useAppSelector((store) => store.user);
 
   React.useEffect(() => {
-    questionContainerRef.current?.scrollTo(0, 0)
-  }, [assessmentPageIndex])
+    questionContainerRef.current?.scrollTo(0, 0);
+  }, [assessmentPageIndex]);
 
-  const { activeResourceIndex, allResourses, courseDetails } = React.useContext(
-    WatchCourseContext,
-  )
+  const { activeResourceIndex, allResourses, courseDetails } =
+    React.useContext(WatchCourseContext);
 
   const [
     gradeAnswers,
@@ -71,38 +68,38 @@ const QuestionsAndAnswersPage = ({
       isSuccess: isGradingSuccess,
       data,
     },
-  ] = useGradeAssessmentMutation()
+  ] = useGradeAssessmentMutation();
 
-  const currentResource = allResourses[activeResourceIndex]
+  const currentResource = allResourses[activeResourceIndex];
 
   React.useEffect(() => {
     if (resourceguards.isAssessment(currentResource)) {
-      setCurrentAssessmentDetails(currentResource)
+      setCurrentAssessmentDetails(currentResource);
     }
-  }, [currentResource])
+  }, [currentResource]);
 
   React.useEffect(() => {
-    questionContainerRef.current?.scrollIntoView()
-  }, [questions])
+    questionContainerRef.current?.scrollIntoView();
+  }, [questions]);
 
   const [answers, setAnswers] = React.useState<
     Array<{ questionId: string; chosenOption: QuestionOptionType }>
-  >([])
+  >([]);
 
   const navigateToReviewSection = () => {
-    urlParams.set('action', 'review')
+    urlParams.set('action', 'review');
 
     const toRedirect = `/course/${
       router.query.courseId
-    }/?${urlParams.toString()}`
+    }/?${urlParams.toString()}`;
 
-    router.push(toRedirect)
-  }
+    router.push(toRedirect);
+  };
 
   const onAnswer = (questionId: string, optionChosen: QuestionOptionType) => {
     const answerIndex = answers.findIndex(
-      (question) => question.questionId === questionId,
-    )
+      (question) => question.questionId === questionId
+    );
 
     if (answerIndex >= 0) {
       setAnswers((answers) =>
@@ -111,16 +108,18 @@ const QuestionsAndAnswersPage = ({
             return {
               questionId,
               chosenOption: optionChosen,
-            }
+            };
           } else {
-            return answer
+            return answer;
           }
-        }),
-      )
+        })
+      );
     } else {
-      setAnswers([...answers, { questionId, chosenOption: optionChosen }])
+      setAnswers([...answers, { questionId, chosenOption: optionChosen }]);
     }
-  }
+  };
+
+  const [assessmentSubmitted, setAssessmentSubmitted] = React.useState(false);
 
   const handleAssessmentSubmit = async () => {
     if (answers.length !== totalQuestions) {
@@ -128,7 +127,7 @@ const QuestionsAndAnswersPage = ({
         title: 'Not allowed',
         description: "You haven't answered all the questions",
         type: 'error',
-      })
+      });
     } else {
       await gradeAnswers({
         studentId: studentId as string,
@@ -143,21 +142,24 @@ const QuestionsAndAnswersPage = ({
         assessmentGradeId: questions[0].assessmentGradeId,
         moduleId: questions[0].moduleId,
         courseId: courseDetails?.id as string,
-      })
+      });
+
+      // Mark the assessment as submitted
+      setAssessmentSubmitted(true);
     }
-  }
+  };
 
   const closeAssessmentModal = () => {
-    urlParams.delete('page')
-    urlParams.delete('assessmentId')
-    urlParams.delete('action')
+    urlParams.delete('page');
+    urlParams.delete('assessmentId');
+    urlParams.delete('action');
 
     const toRedirect = `/course/${
       router.query.courseId
-    }/${urlParams.toString()}`
+    }/${urlParams.toString()}`;
 
-    router.push(toRedirect)
-  }
+    router.push(toRedirect);
+  };
 
   return (
     <div className="flex flex-col items-stretch justify-between h-full w-full">
@@ -218,7 +220,7 @@ const QuestionsAndAnswersPage = ({
                   <Question
                     selectedOption={
                       answers.find(
-                        (answer) => answer.questionId === question.id,
+                        (answer) => answer.questionId === question.id
                       )?.chosenOption
                     }
                     key={question.id}
@@ -249,7 +251,9 @@ const QuestionsAndAnswersPage = ({
         <Button
           loading={isGradingAnswers}
           onClick={
-            isAtLastPage
+            assessmentSubmitted
+              ? closeAssessmentModal
+              : isAtLastPage
               ? isReview
                 ? closeAssessmentModal
                 : handleAssessmentSubmit
@@ -257,15 +261,21 @@ const QuestionsAndAnswersPage = ({
           }
           className="px-9 py-2 border-2 bg-app-pink border-app-pink rounded text-white"
         >
-          {isAtLastPage ? (isReview ? 'Close Assessment' : 'Submit') : 'Next'}
+          {assessmentSubmitted
+            ? 'Close'
+            : isAtLastPage
+            ? isReview
+              ? 'Close Assessment'
+              : 'Submit'
+            : 'Next'}
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const ReviewQuestion = (
-  props: AssessmentResultQuestion & { index: number },
+  props: AssessmentResultQuestion & { index: number }
 ) => {
   return (
     <div className="mb-6">
@@ -378,15 +388,15 @@ const ReviewQuestion = (
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Question = (
   props: AssessmentType & {
-    index: number
-    selectedOption?: QuestionOptionType
-    onAnswer: (questionId: string, optionChosen: QuestionOptionType) => void
-  },
+    index: number;
+    selectedOption?: QuestionOptionType;
+    onAnswer: (questionId: string, optionChosen: QuestionOptionType) => void;
+  }
 ) => {
   // const allOptions = [
   //   'Javascript',
@@ -447,7 +457,7 @@ const Question = (
                   | 'OptionOne'
                   | 'OptionTwo'
                   | 'OptionThree'
-                  | 'OptionFour',
+                  | 'OptionFour'
               )
             }
           />
@@ -474,7 +484,7 @@ const Question = (
                   | 'OptionOne'
                   | 'OptionTwo'
                   | 'OptionThree'
-                  | 'OptionFour',
+                  | 'OptionFour'
               )
             }
           />
@@ -501,7 +511,7 @@ const Question = (
                   | 'OptionOne'
                   | 'OptionTwo'
                   | 'OptionThree'
-                  | 'OptionFour',
+                  | 'OptionFour'
               )
             }
           />
@@ -528,7 +538,7 @@ const Question = (
                   | 'OptionOne'
                   | 'OptionTwo'
                   | 'OptionThree'
-                  | 'OptionFour',
+                  | 'OptionFour'
               )
             }
           />
@@ -541,7 +551,7 @@ const Question = (
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default QuestionsAndAnswersPage
+export default QuestionsAndAnswersPage;

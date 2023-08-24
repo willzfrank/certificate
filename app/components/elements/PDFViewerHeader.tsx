@@ -10,23 +10,29 @@ interface PDFViewerProps {
   close: () => void;
   markAsCompleted: () => void;
   markAsCompletedLoading: boolean;
+  courseDetails: any;
 }
 
 const PDFViewerHeader = (props: PDFViewerProps) => {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const handleOpenModal = () => {
-      dispatch(openModal());
-    };
+  const handleOpenModal = () => {
+    dispatch(openModal());
+  };
 
-    // const closeModal = () => {
-    //   setmodalOpen((prev) => !prev);
-    // };
+  // const closeModal = () => {
+  //   setmodalOpen((prev) => !prev);
+  // };
 
   return (
-    <div>
-      <div className="md:w-[100%] mx-auto flex md:items-center justify-between flex-col md:flex-row mt-10">
-        <h1 className="capitalize inter ">{props.document?.displayName}</h1>
+    <div className="relative h-full flex flex-col justify-center items-center">
+      <h6 className="text-black absolute text-center text-base md:text-xl inter font-semibold hidden md:block">
+        {props.courseDetails?.name}
+      </h6>
+      <div className="md:w-full items-end flex justify-between flex-col md:flex-row mt-10">
+        <h1 className="capitalize inter w-full">
+          {props.document?.displayName}
+        </h1>
 
         <div className="flex items-center justify-center md:justify-end gap-2 text-gray-300">
           <div className="w-full px-2">
@@ -35,7 +41,7 @@ const PDFViewerHeader = (props: PDFViewerProps) => {
                 <a className="btn-floating">
                   <Button
                     onClick={props.close}
-                    className="transition duration-300 bg-app-pink py-0 px-3 text-sm rounded text-white hover:text-white cursor-not-allowed"
+                    className="transition duration-300 bg-app-pink py-0 px-3 text-sm text-white hover:text-white cursor-not-allowed rounded"
                   >
                     Close
                   </Button>
@@ -81,7 +87,7 @@ const PDFViewerHeader = (props: PDFViewerProps) => {
               />
             </svg>
           </Button>
-          <Button
+          {/* <Button
             className="hover:text-app-pink transition duration-300 text-[#1c1b1b] w-full flex flex-col items-center justify-center
               "
             onClick={handleOpenModal}
@@ -101,7 +107,7 @@ const PDFViewerHeader = (props: PDFViewerProps) => {
               />
             </svg>
             <p className="text-[10px]">Full screen </p>
-          </Button>
+          </Button> */}
           <div>
             <Button
               loading={props.markAsCompletedLoading}

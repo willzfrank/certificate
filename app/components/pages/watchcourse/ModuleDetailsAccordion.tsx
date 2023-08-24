@@ -94,6 +94,8 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
     [moduleContent?.data]
   );
 
+  const buttonRef = React.useRef(null);
+
   return (
     <Accordion.Item
       key={module.moduleId}
@@ -114,24 +116,45 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                 : ''}
             </p>
           </div>
-          <svg
-            className={`transition duration-300 ${
-              isOpen ? 'rotate-180' : 'rotate-0'
-            }`}
-            width="16"
-            height="9"
-            viewBox="0 0 16 9"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15 1L8 8L1 1"
-              stroke="#2F2D37"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          {/* PADLOCK HERE */}
+          <div className="flex items-center gap-1 space-x-1 pr-1">
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                />
+              </svg>
+            </div>
+            <div className="pr-10">
+              <svg
+                className={`transition duration-300 ${
+                  isOpen ? 'rotate-180' : 'rotate-0'
+                }`}
+                width="16"
+                height="9"
+                viewBox="0 0 16 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 1L8 8L1 1"
+                  stroke="#2F2D37"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       )}
       body={
@@ -148,7 +171,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                     ref={(el: HTMLButtonElement) =>
                       (courseContentRefs.current[index] = el)
                     }
-                    className="grid grid-cols-[1fr,auto] text-muted w-full my-4"
+                    className="grid grid-cols-[1fr,auto] text-muted hover:text-[#b61046] w-full my-4 "
                     key={item.id}
                     onClick={() =>
                       handleResourceClick(
@@ -210,7 +233,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                 return (
                   <button
                     ref={(el) => el && (courseContentRefs.current[index] = el)}
-                    className="flex items-center justify-start gap-3 text-muted my-4 w-full"
+                    className="flex items-center justify-start gap-3 text-muted my-4 w-full hover:text-[#b61046]"
                     key={item.question}
                     onClick={() => {
                       handleResourceClick(
@@ -238,7 +261,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                     ref={(el: HTMLButtonElement) =>
                       (courseContentRefs.current[index] = el)
                     }
-                    className="flex items-center justify-start gap-3 text-muted my-3 w-full "
+                    className="flex items-center justify-start gap-3 text-muted my-3 w-full hover:text-[#b61046] "
                     key={item.id}
                     onClick={() => {
                       handleResourceClick(
@@ -264,7 +287,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                 return (
                   <button
                     ref={(el) => el && (courseContentRefs.current[index] = el)}
-                    className="flex items-center justify-start gap-3 text-muted my-3 w-full "
+                    className="flex items-center justify-start gap-3 text-muted my-3 w-full hover:text-[#b61046]"
                     key={item.id}
                     onClick={() => {
                       handleResourceClick(
@@ -290,7 +313,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                 return (
                   <button
                     ref={(el) => el && (courseContentRefs.current[index] = el)}
-                    className="flex items-center justify-start gap-3 text-muted my-3 w-full "
+                    className="flex items-center justify-start gap-3 text-muted my-3 w-full hover:text-[#b61046]"
                     key={item.id}
                     onClick={() => {
                       handleResourceClick(
@@ -316,7 +339,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                 return (
                   <button
                     ref={(el) => el && (courseContentRefs.current[index] = el)}
-                    className="flex items-center justify-start gap-3 text-muted my-3 w-full"
+                    className="flex items-center justify-start gap-3 text-muted my-3 w-full hover:text-[#b61046]"
                     key={item.id}
                     onClick={() => {
                       handleResourceClick(
@@ -342,7 +365,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                 return (
                   <button
                     ref={(el) => el && (courseContentRefs.current[index] = el)}
-                    className="flex items-center justify-between text-muted my-4 w-31 text-ellipsis  truncate"
+                    className="flex items-center justify-between text-muted my-4 w-31 text-ellipsis  truncate hover:text-[#b61046]"
                     key={item.id}
                     onClick={() =>
                       handleResourceClick(
@@ -397,7 +420,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
                         moduleIndex
                       )
                     }
-                    className="flex items-center justify-between text-muted my-4 w-full"
+                    className="flex items-center justify-between text-muted my-4 w-full hover:text-[#b61046]"
                     key={item.id}
                   >
                     <div className="flex space-x-3 items-center">

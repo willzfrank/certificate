@@ -19,10 +19,18 @@ import joinOurComm from '../../../public/images/joinourcommunity.png';
 import WhiteLogo from '../../../public/images/CBU.png';
 import manShaking from '../../../public/images/ManShaking.png';
 import { USERTYPES } from 'app/types';
+import LangOfBankTab from 'app/components/pages/landing/LangOfBankTab';
+import mobileMan from '../../../public/images/mobileConcentratedMan.png';
+import Perks from '../../../app/components/pages/landing/Perks';
+import TargetAudienceAccordion from 'app/components/pages/landing/TargetAudienceAccordion';
+import bankersImage from '../../../public/images/Banker Picture.png';
+import FAQAccordion from 'app/components/pages/landing/FAQAccordion';
 
 const BecomeABanker: NextPageWithLayout<{}> = function () {
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [activeTab, setActiveTab] = React.useState(1);
+  const [ReadMoreAboutOpen, setReadMoreAboutOpen] = React.useState(false);
+  const [criteriaReadMore, setIsCriteriaReadMore] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
@@ -30,20 +38,29 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
 
   return (
     <SmoothScroll>
-      <div className="bg-white">
+      <div className="bg-white overflow-hidden">
         <Header />
         <main className="">
-          <div className="bg-banking-gradient px-[45px] pt-[150px] pb-[10px] flex gap-3 items-center">
-            <div className="w-1/2">
-              <h1 className=" text-white text-6xl font-black jost leading-[75px]">
+          <div className="md:hidden w-full flex h-full relative right-[-50px]">
+            <Image
+              src={bankersImage}
+              alt="bankersImage"
+              className="border border-black"
+              // layout="fill"
+              objectFit="contain"
+            />
+          </div>
+          <div className="bg-banking-gradient md:px-[45px] md:pt-[150px] md:pb-[10px] px-[30px] flex gap-3 items-center">
+            <div className="md:w-1/2 text-center md:text-start">
+              <h1 className=" md:text-white md:text-6xl text-xl font-black jost leading-tight md:leading-[75px] md:mb-0 mb-2">
                 BECOME A BANKER IN LESS THAN 2 MONTHS!
               </h1>
-              <span className="jost text-white text-3xl font-normal leading-10">
+              <span className="jost md:text-white text-neutral-900 md:text-3xl text-[15px] font-normal md:leading-10">
                 Learn everything you need to know about starting a career in
                 banking
               </span>
             </div>
-            <div className="relative w-1/2">
+            <div className="hidden md:block relative w-1/2">
               <div className=" z-[5] rounded-[30px]">
                 <Image
                   src={concentratedGuy}
@@ -68,34 +85,46 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </div>
           </div>
 
-          <div className=" px-[50px] py-[40px] ">
+          <div className=" md:px-[50px] md:py-[40px] md:my-0 my-10 p-3 flex md:block items-center gap-1">
             <div
-              className="w-[555px] h-[307px] border-4 p-7 relative border-b-0"
+              className="md:w-[555px] w-3/4 h-full md:h-[307px] border-4 p-2 md:p-7 relative border-b-0"
               style={{
                 borderImage: 'linear-gradient(to right, #D60049, #FF8F40) 1',
                 borderImageSlice: 1,
               }}
             >
-              <h2 className="text-neutral-800 text-[40px] font-bold jost">
+              <h2 className="text-neutral-800 text-xl md:text-[40px] font-bold jost">
                 Classes are on-going
               </h2>
-              <p className="w-[523px] h-[98px] text-black text-[25px] font-normal jost">
+              <p className="md:w-[523px] h-full md:h-[98px] text-black  text-[18px] md:text-[25px] font-normal jost md:mt-5">
                 Register now to join the next co-hort. A new cohort begins on
                 the 1st of every month.
               </p>
-              <div className="flex items-start justify-start w-[555px] absolute bottom-0 left-0 ">
+
+              <div
+                className="hidden md:flex items-start justify-start w-[555px] absolute bottom-0 left-0 "
+                onClick={() => setModalOpen(true)}
+              >
                 <div className="mx-4 px-5 py-[11px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[30px] justify-center items-center gap-2.5 flex">
-                  <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
+                  <div>
                     <span className="text-white text-[20px] font-medium cursor-pointer jost">
                       Learn More
                     </span>
-                  </Link>
+                  </div>
                 </div>
+              </div>
+            </div>
+            <div className="md:hidden text-center w-1/4 px-3 py-[13px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[30px] justify-center items-center gap-2.5 block">
+              <div
+                className="text-white text-[9px] font-medium"
+                onClick={() => setModalOpen(true)}
+              >
+                Learn More
               </div>
             </div>
           </div>
 
-          <div className=" bg-gray-100 bg-opacity-50 py-7">
+          <div className="md:block hidden bg-gray-100 bg-opacity-50 py-7">
             <div className=" flex items-center justify-center gap-4">
               <div className=" flex items-center">
                 <div className=" bg-black h-[2px] w-[100px]"></div>
@@ -105,48 +134,132 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
               <h1 className="text-center jost text-neutral-800 text-xl font-bold">
                 Partners
               </h1>
-              <div className=" flex items-center">
+              <div className=" flex items-center ">
                 <div className=" bg-black h-3 w-3 rounded-full"></div>
                 <div className=" bg-black h-[2px] w-[100px]"></div>
               </div>
             </div>
-            <div className=" flex justify-around  items-center gap-7 px-[50px]  py-5 my-5">
-              <Image src={sterlinglogo} alt="logo" width="152px" height="59" />
-              <Image
-                src={nextfordLogo}
-                alt="logo"
-                width="186px"
-                height="100%"
-              />
-              <Image src={fusionLogo} alt="logo" width="142px" height="100%" />
-              <Image src={cafeOneLogo} alt="logo" width="138px" height="100%" />
-              <Image src={eduBancLogo} alt="logo" width="181px" height="100%" />
-              <Image src={altBankLogo} alt="logo" width="148px" height="100%" />
+            <div className=" flex justify-around  items-center py-5 my-5">
+              <div>
+                <Image src={sterlinglogo} alt="logo" width="180%" />
+              </div>
+              <div>
+                <Image
+                  src={nextfordLogo}
+                  alt="logo"
+                  width="180%"
+                  height="100%"
+                />
+              </div>
+              <div>
+                <Image src={fusionLogo} alt="logo" width="180%" height="50%" />
+              </div>
+              <div>
+                <Image
+                  src={cafeOneLogo}
+                  alt="logo"
+                  width="100%"
+                  height="100%"
+                />
+              </div>
+              <div>
+                <Image
+                  src={eduBancLogo}
+                  alt="logo"
+                  width="100%"
+                  height="100%"
+                />
+              </div>
+              <div>
+                <Image
+                  src={altBankLogo}
+                  alt="logo"
+                  width="100%"
+                  height="100%"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="flex px-[50px] py-[90px]">
+          {/* MOBILE PARTNERS */}
+          <div className="block md:hidden bg-gray-100 bg-opacity-50 pt-5 ">
+            <div className=" flex items-center justify-center gap-4">
+              <div className=" flex items-center">
+                <div className=" bg-black h-[2px] w-[50px]"></div>
+                <div className=" bg-black h-3 w-3 rounded-full"></div>
+                <h1 className="text-center px-4 text-neutral-800 text-xl font-bold">
+                  Partners
+                </h1>
+                <div className=" flex items-center ">
+                  <div className=" bg-black h-3 w-3 rounded-full"></div>
+                  <div className=" bg-black h-[2px] w-[50px]"></div>
+                </div>
+              </div>
+            </div>
+            <div className=" grid grid-cols-3  items-center p-2 gap-1 my-5">
+              <div>
+                <Image src={sterlinglogo} alt="logo" width="180%" />
+              </div>
+              <div>
+                <Image
+                  src={nextfordLogo}
+                  alt="logo"
+                  width="150%"
+                  height="150%"
+                />
+              </div>
+              <div>
+                <Image src={fusionLogo} alt="logo" width="180%" height="50%" />
+              </div>
+              <div>
+                <Image
+                  src={cafeOneLogo}
+                  alt="logo"
+                  width="100%"
+                  height="100%"
+                />
+              </div>
+              <div>
+                <Image
+                  src={eduBancLogo}
+                  alt="logo"
+                  width="150%"
+                  height="150%"
+                />
+              </div>
+              <div>
+                <Image
+                  src={altBankLogo}
+                  alt="logo"
+                  width="100%"
+                  height="100%"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center md:items-start md:px-[50px] md:py-[90px]">
             <div>
-              <h2 className="w-[640px] text-neutral-800 text-[50px] font-black jost">
+              <h2 className="md:w-[640px] text-neutral-800 text-xl leading-tight md:text-[50px] font-black jost md:pl-0 pl-5">
                 LEARN THE INS AND OUTS OF THE FINANCE INDUSTRY
               </h2>
-              <ul className=" text-xl list-disc pl-10 flex flex-col gap-6 w-11/12 pt-12 pb-8">
-                <li className="jost text-black text-2xl font-normal ">
+              <ul className=" md:text-xl list-disc pl-10 flex flex-col gap-2 md:gap-6 md:w-11/12 pt-12 pb-8">
+                <li className="jost text-black text-[15px] md:text-2xl font-normal ">
                   Accelerate your career path
                 </li>
-                <li className=" jost text-black text-2xl font-normal">
+                <li className=" jost text-black text-[15px] md:text-2xl font-normal">
                   Acquire transferable skills
                 </li>
-                <li className=" jost text-black text-2xl font-normal">
+                <li className=" jost text-black text-[15px] md:text-2xl font-normal">
                   Build your network
                 </li>
-                <li className="jost text-black text-2xl font-normal ">
+                <li className="jost text-black text-[15px] md:text-2xl font-normal ">
                   Land the job of your dreams
                 </li>
               </ul>
-              <div className="w-[304px] h-16 bg-gradient-to-r from-rose-600 to-orange-400 rounded-[50px] flex items-center justify-center">
+              <div className="md:w-[304px] md:ml-0 ml-5 py-3 md:py-0 md:h-16 bg-gradient-to-r from-rose-600 to-orange-400 rounded-[50px] flex items-center justify-center md:mb-0 mb-10">
                 <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
-                  <p className="text-white text-[20px] font-medium cursor-pointer jost">
+                  <p className="text-white text-[10px] md:text-[20px] font-medium cursor-pointer jost">
                     Start your Journey here
                   </p>
                 </Link>
@@ -154,7 +267,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </div>
             <div className="relative w-full">
               <div className="relative w-full">
-                <div className="z-20 absolute left-0 top-[120px]">
+                <div className="z-20 hidden md:block absolute left-0 top-[120px]">
                   <Image
                     src={manShaking}
                     alt="Man shaking hands"
@@ -163,7 +276,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                     className="transform transition-transform hover:scale-105"
                   />
                 </div>
-                <div className="z-10 absolute right-0 top-[30px]">
+                <div className="hidden md:block z-10 absolute right-0 top-[30px]">
                   <Image
                     src={manShaking}
                     alt="Man shaking hands"
@@ -172,25 +285,71 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                     className="transform transition-transform hover:scale-105 "
                   />
                 </div>
+                <div className="md:hidden w-full h-full">
+                  <Image
+                    src={manShaking}
+                    alt="Man shaking hands"
+                    className="z-[100]"
+                  />
+                </div>
               </div>
 
-              <div className="absolute top-[-100px] right-[-200px] w-[528px] h-[528px] rounded-full border-2 border-rose-600" />
-              <div className="absolute top-0 right-[0px] w-[528px] h-[528px] rounded-full border-2 border-rose-600" />
+              <div className="absolute top-[-20px] md:top-[-100px] right-[-50px] md:right-[-200px] md:w-[528px] md:h-[528px] rounded-full border-2 border-rose-600 w-[218.68px] h-[218.68px] " />
+              <div className="absolute top-[-50px] md:top-0 md:right-[0px] right-[-100px] md:w-[528px] md:h-[528px] rounded-full border-2 border-rose-600 w-[208.68px] h-[208.68px] " />
             </div>
           </div>
 
-          <div className="px-[50px]  bg-gray-100 bg-opacity-50 py-7">
-            <h1 className=" font-bold text-6xl text-[#d60049] w-[1075px] jost">
-              What is the language of banking course all about?
+          <div className="md:px-[50px] px-5 py-10  bg-gray-100 bg-opacity-50 md;py-7">
+            <h1 className=" font-bold text-xl md:text-6xl text-[#d60049] md:w-[1075px] jost">
+              What is the Language of Banking course all about?
             </h1>
-            <p className=" text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
+            <div
+              className={`md:hidden w-[350px] h-[18px] bg-gradient-to-r from-rose-600 to-orange-400 text-center flex items-center justify-center my-5 py-5 rounded-[50px] transition-opacity duration-300 `}
+              onClick={() => {
+                setReadMoreAboutOpen(!ReadMoreAboutOpen);
+              }}
+            >
+              <p className="text-white text-[10px] font-medium leading-[8px]">
+                READ MORE
+              </p>
+            </div>
+            {ReadMoreAboutOpen && (
+              <div
+                className={`md:hidden transition-opacity duration-300 ${
+                  ReadMoreAboutOpen ? 'opacity-100 py-3' : ' opacity-0 py-0'
+                }`}
+              >
+                <p className=" text-base md:text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
+                  The Language of Banking course establishes a strong foundation
+                  in the core concepts and principles of finance and banking.
+                  Learners will acquire in-depth understanding of diverse
+                  banking practices and processes.
+                </p>
+
+                <p className=" text-base md:text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
+                  The curriculum covers diverse key subjects relevant to the
+                  banking sector, such as accounting, credit analysis, risk
+                  management, digital banking, agile methodologies, and
+                  essential soft skills such as effective communication,
+                  emotional intelligence and critical thinking.
+                </p>
+
+                <p className=" text-base md:text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
+                  Designed in partnership with and delivered on the Nexford
+                  University learning portal, our engaging course content will
+                  help you gain the knowledge and skills necessary to succeed in
+                  the banking industry.
+                </p>
+              </div>
+            )}
+            <p className="hidden md:block text-base md:text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
               The Language of Banking course establishes a strong foundation in
               the core concepts and principles of finance and banking. Learners
               will acquire in-depth understanding of diverse banking practices
               and processes.
             </p>
 
-            <p className=" text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
+            <p className="hidden md:block  text-base md:text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
               The curriculum covers diverse key subjects relevant to the banking
               sector, such as accounting, credit analysis, risk management,
               digital banking, agile methodologies, and essential soft skills
@@ -198,7 +357,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
               critical thinking.
             </p>
 
-            <p className=" text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
+            <p className="hidden md:block text-base md:text-[25px] pt-3 jost text-justify text-neutral-800 font-normal">
               Designed in partnership with and delivered on the Nexford
               University learning portal, our engaging course content will help
               you gain the knowledge and skills necessary to succeed in the
@@ -206,90 +365,45 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </p>
           </div>
 
-          <div className="px-24 py-10">
-            <h1 className="font-bold text-4xl jost">Who is the Course for?</h1>
-            <p className="text-2xl py-6 jost">
-              The course is for 4 categories of people;
-            </p>
-
-            <nav
-              className="relative z-0 flex gap-6 overflow-hidden transition ease-in-out delay-150 duration-300"
-              aria-label="Tabs"
-              role="tablist"
-            >
-              {[1, 2, 3, 4].map((tabIndex) => (
-                <button
-                  key={tabIndex}
-                  type="button"
-                  className={`hs-tab-active:border-[#d60049] ${
-                    activeTab === tabIndex
-                      ? 'hs-tab-active:text-gray-900 border border-[#d60049]'
-                      : ''
-                  } relative heading min-w-0 flex-1 bg-white  hover:border-[#E7E7E7] m-1 border-2 py-4 px-4 font-semibold text-xl text-center overflow-hidden focus:z-10 active transition ease-in-out delay-50 duration-300`}
-                  id={`bar-with-underline-item-${tabIndex}`}
-                  onClick={() => handleTabClick(tabIndex)}
-                  role="tab"
-                  aria-controls={`bar-with-underline-${tabIndex}`}
-                  aria-selected={activeTab === tabIndex}
-                >
-                  {tabIndex === 1 && 'Recent graduates'}
-                  {tabIndex === 2 && 'Corp members'}
-                  {tabIndex === 3 && 'Entry-level'}
-                  {tabIndex === 4 && 'Contract Staff'}
-                </button>
-              ))}
-            </nav>
-
-            <div className="mt-5">
-              {[1, 2, 3, 4].map((tabIndex) => (
-                <div
-                  key={tabIndex}
-                  id={`bar-with-underline-${tabIndex}`}
-                  role="tabpanel"
-                  aria-labelledby={`bar-with-underline-item-${tabIndex}`}
-                  className={activeTab === tabIndex ? '' : 'hidden'}
-                >
-                  <div className="border-2 border-[#E7E7E7] p-5 rounded-2xl">
-                    <h1 className="text-black text-3xl font-bold uppercase mb-2 jost">
-                      {tabIndex === 1 &&
-                        'Recent graduates looking to work in a bank:'}
-                      {tabIndex === 2 &&
-                        'Corp members looking to work in a bank:'}
-                      {tabIndex === 3 &&
-                        'Entry-level looking to work in a bank:'}
-                      {tabIndex === 4 &&
-                        'Contract staff looking to work in a bank:'}
-                    </h1>
-                    <p className="text-black text-[20px] font-normal jost">
-                      This course is beneficial for individuals who have
-                      recently graduated and are eager to start a career in the
-                      banking industry.
-                    </p>
-                  </div>
-                  <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
-                    <button className="py-2 px-6 mt-5 text-white font-semibold rounded-[30px] jost bg-gradient-to-r from-[#d60049] to-[#ff8c40]">
-                      Join Now
-                    </button>
-                  </Link>
-                </div>
-              ))}
-            </div>
+          <div className="hidden md:block">
+            <LangOfBankTab />
           </div>
 
-          <div className=" overflow-hidden relative py-20 flex items-center gap-6 ">
-            <div className=" absolute z-[3] top-[45px] -left-8 border-[3px] border-[#d60049] h-[750px] w-[500px] rounded-tr-[80px]"></div>
+          <div className="block md:hidden p-5">
+            <h2 className="text-black text-xl font-bold">
+              Who is the Course for?
+            </h2>
+            <p className="text-black text-[15px] font-normal">
+              The course is for 5 categories of people;
+            </p>
 
-            <div className=" z-[5]">
+            <TargetAudienceAccordion />
+          </div>
+
+          <div className=" overflow-hidden relative px-5 md:px-0 md:py-20 py-5 flex items-center gap-6 ">
+            <div className="hidden md:block absolute z-[3] top-[45px] -left-8 border-[3px] border-[#d60049] h-[750px] w-[500px] rounded-tr-[80px]"></div>
+
+            <div className=" hidden md:block z-[5]">
               <Image src={Bulb} alt="" />
             </div>
-
-            <div className="w-2/4">
-              <h1 className=" font-bold text-5xl leading-[70px] text-[#d60049] pb-8 jost">
+            <div className=" md:hidden block z-[5]">
+              <Image src={Bulb} alt="" width="150%" height="150%" />
+            </div>
+            <div className="md:w-2/4 w-full">
+              <h1 className=" font-bold text-xl md:text-5xl leading-[25px] md:leading-[70px] text-[#d60049] pb-8 jost">
                 What are the enrollment criteria for the Language of Banking
                 Course
+                <span
+                  className="inline-block md:hidden text-sm text-black ml-2"
+                  onClick={() => {
+                    setIsCriteriaReadMore(!criteriaReadMore);
+                  }}
+                >
+                  Read more
+                </span>
               </h1>
 
-              <ul className=" text-xl list-disc pl-10 flex flex-col gap-6 w-11/12">
+              <ul className=" hidden md:flex text-xl list-disc pl-10 flex-col gap-6 w-11/12">
                 <li className=" jost">
                   You must be a graduate of a recognized tertiary institution.
                 </li>
@@ -311,20 +425,45 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </li>
               </ul>
 
-              <button className="py-2 px-6 mt-5 text-white text-[20px] font-medium  rounded-[30px] bg-gradient-to-r from-[#d60049] to-[#ff8c40] w-[186px] h-16 jost">
-                Enroll Now
+              <button className="hidden md:block py-2 px-6 mt-5 text-white text-[20px] font-medium  rounded-[30px] bg-gradient-to-r from-[#d60049] to-[#ff8c40] w-[186px] h-16 jost">
+                <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
+                  Enroll Now
+                </Link>
               </button>
             </div>
           </div>
 
-          <div className="pl-24 relative">
+          {criteriaReadMore && (
+            <ul className=" flex md:hidden text-xl list-disc pl-10 flex-col gap-6 w-11/12">
+              <li className=" jost">
+                You must be a graduate of a recognized tertiary institution.
+              </li>
+              <li className=" jost">
+                You will need a reliable internet connection and a computer or
+                mobile device to access the course.
+              </li>
+              <li className=" jost">
+                You must be able to commit 5-10 hours per week to take your
+                classes.
+              </li>
+              <li className="jost ">
+                You do not require prior accounting or banking skills and
+                knowledge.
+              </li>
+
+              <li className="jost ">
+                You must not be a banking, accounting or finance graduate.
+              </li>
+            </ul>
+          )}
+
+          <div className="pl-24 relative hidden md:block my-20">
             <div className=" absolute border-2 z-10 -top-[300px]  -right-[320px] rounded-full h-[500px] w-[500px] border-[#d60049]"></div>
             <div className=" absolute border-2 z-10 -top-[500px] -right-[400px] rounded-full h-[500px] w-[500px] border-[#d60049]"></div>
             <h1 className=" font-bold text-4xl jost">Key Learning Outcomes:</h1>
-
             <div className=" flex items-center gap-4 py-6">
               <p className=" text-3xl jost">In this course, you will learn:</p>
-              <div className=" flex items-center gap-3">
+              {/* <div className=" flex items-center gap-3">
                 <p className=" italic text-xl">Read More</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -340,15 +479,99 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                     d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
                   />
                 </svg>
-              </div>
+              </div> */}
             </div>
+            <ul className="list-disc space-y-2">
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                Key components and functions of the banking industry, including
+                its structure and regulations.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                Benefits of digital banking and its impact on the industry, as
+                well as data management.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                The use of office productivity tools such as Microsoft Excel,
+                Word, and PowerPoint, for effective business writing and oral
+                communication skills.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                The application of essential leadership skills and traits
+                required to succeed in the banking industry, including emotional
+                intelligence, problem-solving and decision-making.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                How to prepare effective communications both orally and in
+                writing for professional contexts such as job interviews and
+                presentations to key stakeholders.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                How digital and technology trends are impacting the future of
+                work and business, and how to develop a digital marketing
+                strategy that aligns with business goals and objectives.{' '}
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                The fundamentals of data analytics, and how to collect, clean
+                and analyze data to ensure data accuracy and completeness.
+              </li>
+            </ul>
+          </div>
+
+          <div className="block md:hidden p-5 my-5">
+            <h1 className="text-black text-xl font-bold">
+              Key Learning Outcomes:
+            </h1>
+            <p className="w-[246px] h-[29px] text-black text-[15px] font-normal">
+              In this course, you will learn:
+            </p>
+            <ul className="list-disc space-y-2">
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                Key components and functions of the banking industry, including
+                its structure and regulations.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                Benefits of digital banking and its impact on the industry, as
+                well as data management.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                The use of office productivity tools such as Microsoft Excel,
+                Word, and PowerPoint, for effective business writing and oral
+                communication skills.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                The application of essential leadership skills and traits
+                required to succeed in the banking industry, including emotional
+                intelligence, problem-solving and decision-making.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                How to prepare effective communications both orally and in
+                writing for professional contexts such as job interviews and
+                presentations to key stakeholders.
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                How digital and technology trends are impacting the future of
+                work and business, and how to develop a digital marketing
+                strategy that aligns with business goals and objectives.{' '}
+              </li>
+              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
+                The fundamentals of data analytics, and how to collect, clean
+                and analyze data to ensure data accuracy and completeness.
+              </li>
+            </ul>
+            {/* <div className="flex items-center justify-center">
+              <div className="w-[350px] h-[18px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[20px] flex items-center justify-center">
+                <p className="text-white text-[10px] font-medium leading-[8px]">
+                  READ MORE
+                </p>
+              </div>
+            </div> */}
           </div>
 
           <div className=" bg-image pb-[50px]">
-            <h1 className="uppercase text-4xl font-bold text-[#8F8F8F] tracking-widest py-12 text-center jost">
+            <h1 className="uppercase text-xl md:text-4xl font-bold text-[#8F8F8F] tracking-widest py-5 md:py-12 text-center jost">
               Perks
             </h1>
-            <div className="grid grid-cols-6 gap-12 px-24 jost">
+            <div className="grid-cols-6 gap-12 px-24 jost hidden md:grid">
               <div className=" p-3  h-[150px] w-full border border-black border-opacity-25 bg-white card-shadow col-start-1 col-end-3 ">
                 <p className=" text-rose-600 text-xl font-bold jost">
                   Immersive Learning
@@ -375,8 +598,8 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
               <div className=" p-3 h-[150px] w-full border border-black border-opacity-25 bg-white card-shadow col-start-1 col-end-3 ">
                 <p className=" text-rose-600 text-xl font-bold">Mentorship</p>
                 <p className=" leading-5 text-xl pt-1">
-                  The course is designed to offer a practical and immersive
-                  learning experience that caters to your learning needs.
+                  Get the opportunity to connect with banking professionals and
+                  gain exclusive access to in-depth career training.
                 </p>
               </div>
               <div className=" p-3 h-[150px] w-full border border-black border-opacity-25 bg-white card-shadow col-start-3 col-end-5 ">
@@ -403,19 +626,22 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </p>
               </div>
             </div>
+            <div className="block md:hidden">
+              <Perks />
+            </div>
           </div>
 
-          <div className="mx-24 my-20 flex justify-between items-center gap-6 bg-gray-100 bg-opacity-50">
-            <div className="  w-1/2">
+          <div className="md:mx-24 mx-5 my-20 flex flex-col md:flex-row justify-between items-center gap-6 md:bg-gray-100 bg-opacity-50">
+            <div className=" w-full md:w-1/2">
               <Image src={jobpool} alt="" />
             </div>
 
-            <div className=" w-1/2 ">
-              <div className="  jost">
-                <h1 className="text-black text-[50px] font-bold">
+            <div className=" w-full p-5 md:p-0 md:w-1/2 ">
+              <div className="jost">
+                <h1 className="text-black text-xl text-start md:text-[50px] font-bold jost md:leading-tight">
                   WHAT IS THE JOB POOL ABOUT?
                 </h1>
-                <p className="text-black text-[20px] font-normal pr-5">
+                <p className="text-black text-[15px] md:text-[25px] font-normal pr-5">
                   Learners who complete the course and score at least 70% in the
                   final grading will gain exclusive access to our job pool. We
                   have partnered with leading banking and fintech organizations
@@ -426,9 +652,11 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-[50px] bg-zinc-100 bg-opacity-50 py-[70px] w-full jost">
+          <div className="hidden md:flex items-center justify-center gap-[50px] bg-zinc-100 bg-opacity-50 py-[70px] w-full jost">
             <div>
-              <h2 className="text-black text-[40px] font-bold">COURSE FEE</h2>
+              <h2 className="text-black text-[40px] font-bold jost">
+                COURSE FEE
+              </h2>
               <p className="text-black text-2xl font-normal">
                 The cost is priced at
               </p>
@@ -437,7 +665,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
               </p>
             </div>
             <div>
-              <p className="w-[626px] text-black text-2xl font-normal  mb-5">
+              <p className="w-[626px] text-black text-[30px] font-normal  mb-5">
                 You can sign up for the course with a single payment or pay in
                 2, 3 or 4 installments
               </p>
@@ -451,12 +679,43 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </div>
           </div>
 
+          <div className=" block md:hidden mb-5 bg-gradient-to-r from-rose-600 to-orange-400 p-5">
+            <div className="flex items-start flex-col">
+              <div className="flex items-center">
+                <div>
+                  <h2 className="text-white text-xl font-bold">COURSE FEE</h2>
+                  <p className="w-[189px] h-8 text-white text-[15px] font-normal">
+                    The cost is priced at
+                  </p>
+                </div>
+                <div className="w-[145px] h-[38px] flex items-center justify-center bg-white rounded-[30px]">
+                  <h2 className="text-rose-600 text-base font-bold">
+                    N69,955 only
+                  </h2>
+                </div>
+              </div>
+              <p className="w-[290px] text-white text-[15px] font-normal">
+                You can sign up for the course with a single payment or pay in
+                2, 3 or 4 installments
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center justify-center ">
+            <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
+              <div className="md:hidden flex items-center w-[318px] justify-center h-8 rounded-[30px] border border-rose-600">
+                <p className="w-[83px] h-[26px] text-center text-rose-600 text-[15px] font-medium">
+                  Sign Up
+                </p>
+              </div>
+            </Link>
+          </div>
+
           <div className="py-12 ">
-            <div className=" w-[40%] mx-auto mb-32 heading">
-              <h1 className=" text-black text-[45px] font-bold ">
+            <div className=" md:w-[40%] w-1/2 mx-auto mb-32 heading">
+              <h1 className=" text-black text-xl md:text-[45px] font-bold md:leading-tight">
                 JOIN OUR <br /> LEARNERS <br /> COMMUNITY
               </h1>
-              <p className="text-black text-[25px] font-normal">
+              <p className="text-black text-[15px] md:text-[25px] font-normal">
                 Get the answers to your questions from industry experts. Connect
                 and learn with other community members.
               </p>
@@ -465,33 +724,36 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 target="_blank"
                 rel="noreferrer"
               >
-                <button className="w-[296px] h-[51px] text-white text-[20px] font-medium mt-5 py-2 px-3  rounded-[30px] bg-gradient-to-r from-[#d60049] to-[#ff8c40] ">
+                <button className="md:w-[296px] h-[51px] text-white text-[10px] w-full md:text-[20px] font-medium mt-5 py-2 px-3  rounded-[30px] bg-gradient-to-r from-[#d60049] to-[#ff8c40] ">
                   Join our community
                 </button>
               </a>
             </div>
-
             <div
-              className={`heading bg-gray-100 bg-opacity-50 mx-auto w-2/3 px-32 pt-5`}
+              className={`heading bg-gray-100 bg-opacity-50 mx-auto w-full md:w-2/3 md:px-32 p-5 md:pt-5`}
             >
               <div className=" relative">
                 <span className=" absolute text-[100px] top-0 left-0">“</span>
-                <p className=" text-xl pt-24 jus">
+                <p className=" text-xs md:text-xl pt-24 jus">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My learning experience has been
                   great! I was able to learn new things I had no idea about
                   before. I thoroughly enjoyed the aspect of digital marketing.
                   It really is interesting! The course has truly been worthwhile
                   and I’m glad I signed up for it.
                 </p>
-                <h3 className=" text-center text-xl font-bold py-11 ">
+                <h3 className=" text-center text-[10px] md:text-xl font-bold py-11 ">
                   Helen O., Nigeria
                 </h3>
               </div>
             </div>
-
+            {/* FAQ */}
+            <h2 className="text-bold text-xl text-center my-10">
+              FREQUENTLY ASKED QUESTIONS
+            </h2>
+            <FAQAccordion />
             <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
               <div className="flex items-center gap-2 justify-center my-[30px] cursor-pointer heading">
-                <h2 className="text-rose-600 text-[25px] font-semibold">
+                <h2 className="text-rose-600 text-[10px] md:text-[25px] font-semibold">
                   Start your learning journey here
                 </h2>
                 <svg
@@ -510,8 +772,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </svg>
               </div>
             </Link>
-
-            <div className="flex justify-between gap-x-12 items-center w-full px-6 md:px-24 pt-16 md:pt-32 pb-10 heading">
+            {/* <div className="justify-between gap-x-12 items-center w-full px-6 md:px-24 pt-16 md:pt-32 pb-10 heading hidden md:flex">
               <div className="w-1/2">
                 <p className="text-sm font-semibold pb-4">Join Our Community</p>
                 <div className="border border-[#d60049] flex justify-between p-2 rounded-l-[34px] rounded-r-[34px]">
@@ -521,24 +782,26 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                     className="appearance-none border-none bg-transparent outline-none placeholder-italic placeholder-slate-400 placeholder-sm"
                   />
                   <button className="text-white py-2 px-3 font-medium rounded-[30px] bg-gradient-to-r from-[#d60049] to-[#ff8c40]">
-                    Sign up for our newsletter
+                    <Link href="http://eepurl.com/inPIs6">
+                      Sign up for our newsletter
+                    </Link>
                   </button>
                 </div>
               </div>
               <div>
                 <Image src={joinOurComm} alt="" />
               </div>
-            </div>
+            </div> */}
           </div>
         </main>
 
         {/* <Footer withSignUpPromotion /> */}
-        <footer className=" bg-[#d60049] flex px-24 py-14">
+        <footer className=" md:bg-[#d60049] bg-black flex md:px-24 md:py-14 p-5 md:flex-row flex-col gap-5 md:gap-0">
           <div className="text-white w-2/5">
             <div>
               <Image src={WhiteLogo} alt="logo" width="200%" height="100%" />
             </div>
-            <p className="w-[332px] h-[100px] my-3 text-white text-[15px] font-semibold">
+            <p className="w-[332px] h-[100px] my-3 text-white text-[13px] md:text-[15px] font-semibold">
               Enabling the future.
               <br />
               <br />
@@ -547,54 +810,56 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </p>
           </div>
 
-          <div className="text-white text-sm flex justify-between w-1/2 items-center">
-            <ul className=" flex flex-col gap-3">
-              <li className="text-white text-[15px] font-medium leading-8">
+          <div className="text-white text-sm flex justify-between w-full md:w-1/2 items-start">
+            <ul className="flex flex-col gap-5 md:gap-3">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <Link href="/about">About Unify</Link>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <Link href={'/faqs'}>FAQs</Link>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 Features
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <Link href="/privacy/terms">Terms & Condtions</Link>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <Link href="/privacy/policy">Privacy Policy</Link>
               </li>
             </ul>
 
             <ul className="flex flex-col gap-3">
-              <li className="text-white text-[15px] font-medium leading-8">
+              {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 Download the app
-              </li>
-              <li className="text-white text-[15px] font-medium leading-8">
-                <a
-                  href="https://unifyedu.ng/home"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+              </li> */}
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
+                <a href="/" target="_blank" rel="noreferrer">
                   Certifications by Unify
                 </a>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <Link href="https://forms.unifyedu.ng">Unify Forms</Link>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 Learning Labs
-              </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              </li> */}
+              {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 Unify Portal
-              </li>
+              </li> */}
             </ul>
 
             <ul className="flex flex-col gap-3">
-              <li className="text-white text-[15px] font-medium leading-8">
-                LinkedIn
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
+                <a
+                  href="https://www.linkedin.com/company/unifyng/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn
+                </a>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <a
                   href="https://instagram.com/unify_ng?igshid=YmMyMTA2M2Y="
                   target="_blank"
@@ -603,23 +868,39 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                   Instagram
                 </a>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <a
                   href="https://twitter.com/unify_ng?s=11&t=_TXe-Quwv4XWiQaqQ50HMg"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Twitter
+                  X (formerly Twitter)
                 </a>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
-                Youtube
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
+                <a
+                  href="https://www.youtube.com/@unify1003"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Youtube
+                </a>
               </li>
-              <li className="text-white text-[15px] font-medium leading-8">
+              {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 Tiktok
-              </li>
+              </li> */}
             </ul>
           </div>
+          <Modal isOpen={modalOpen} closeModal={() => setModalOpen(false)}>
+            <iframe
+              width="1000"
+              className="aspect-video"
+              src="https://www.youtube-nocookie.com/embed/UY28LXU2M3Q"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
+          </Modal>
         </footer>
       </div>
     </SmoothScroll>

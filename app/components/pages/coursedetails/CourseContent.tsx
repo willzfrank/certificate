@@ -19,7 +19,7 @@ const CourseContent = ({
   containerClassName,
   hideTitle,
 }: CourseContentProps) => {
-        console.log(modules)
+  console.log(modules);
   return (
     <div
       className={`md:p-14 md:w-[60%] px-6 py-12 ${containerClassName || ''}`}
@@ -80,7 +80,7 @@ const ModuleDetailsAccordion = ({
                 )}
               </p>
             </div>
-            {/* <div>
+            <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -95,7 +95,7 @@ const ModuleDetailsAccordion = ({
                   d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
                 />
               </svg>
-            </div> */}
+            </div>
           </div>
           <svg
             className={`transition duration-300 ${
@@ -257,7 +257,7 @@ const ModuleDetailsAccordion = ({
                         })
                       }
                     >
-                      {resource.displayName}
+                      <p>Testing {resource.displayName}</p>
                     </button>
                   </div>
                 );

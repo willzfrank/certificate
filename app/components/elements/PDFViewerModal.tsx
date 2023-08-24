@@ -51,6 +51,7 @@ const PDFViewerModal = (props: PDFViewerModalProps) => {
 			const scale = isSmallMobile ? 0.45 : isMediumMobile ? 0.5 : isMobile ? 0.53 : isTablet ? 1.1 : isTabletSmall ? 1 : isFoldable ? 1.1 : 1.1;
 			setScale(scale);
 		};
+		
 
 		handleResize();
 

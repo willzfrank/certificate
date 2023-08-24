@@ -1,26 +1,28 @@
-import { useRerender } from 'app/hooks'
+import { useRerender } from 'app/hooks';
 import {
   AssessmentDetailsType,
   QuestionFormValues,
   QuestionOptionType,
-} from 'app/types'
-import * as React from 'react'
+} from 'app/types';
+import * as React from 'react';
 import {
   SubmitHandler,
   useForm,
   UseFormGetValues,
   UseFormRegister,
-} from 'react-hook-form'
+} from 'react-hook-form';
 
 const AddModuleTypeAssessmentWithRef: React.ForwardRefRenderFunction<
   {
-    submitAssessmentValues: () => Promise<AssessmentDetailsType & { isValid: boolean }>
+    submitAssessmentValues: () => Promise<
+      AssessmentDetailsType & { isValid: boolean }
+    >;
   },
   { moduleId: string }
 > = ({ moduleId }, ref) => {
   const { register, getValues, setValue, handleSubmit, formState } = useForm<{
-    assessmentName: string
-    questions: Omit<QuestionFormValues, 'moduleId'>[]
+    assessmentName: string;
+    questions: Omit<QuestionFormValues, 'moduleId'>[];
   }>({
     defaultValues: {
       assessmentName: '',
@@ -35,9 +37,9 @@ const AddModuleTypeAssessmentWithRef: React.ForwardRefRenderFunction<
         },
       ],
     },
-  })
+  });
 
-  const [_, rerender] = useRerender()
+  const [_, rerender] = useRerender();
 
   const QUESTION_INIT_VALUES = React.useMemo<QuestionFormValues>(() => {
     return {
@@ -49,16 +51,16 @@ const AddModuleTypeAssessmentWithRef: React.ForwardRefRenderFunction<
       correctOption: null,
       index: getValues('questions').length,
       moduleId,
-    }
-  }, [getValues, moduleId])
+    };
+  }, [getValues, moduleId]);
 
   const editQuestionField = React.useCallback(
     function <T extends keyof QuestionFormValues>(
       questionIndex: number,
       field: T,
-      value: typeof QUESTION_INIT_VALUES[T],
+      value: (typeof QUESTION_INIT_VALUES)[T]
     ) {
-      const prevQuestions = getValues().questions
+      const prevQuestions = getValues().questions;
 
       setValue(
         'questions',
@@ -67,30 +69,30 @@ const AddModuleTypeAssessmentWithRef: React.ForwardRefRenderFunction<
             return {
               ...question,
               [field]: value,
-            }
+            };
           }
 
-          return question
-        }),
-      )
+          return question;
+        })
+      );
     },
-    [getValues, setValue],
-  )
+    [getValues, setValue]
+  );
 
   const deleteQuestion = React.useCallback(
     (index: number) => {
-      const prevQuestions = getValues('questions')
+      const prevQuestions = getValues('questions');
 
       setValue(
         'questions',
-        prevQuestions.filter((_, questionIndex) => questionIndex !== index),
-      )
+        prevQuestions.filter((_, questionIndex) => questionIndex !== index)
+      );
 
-      rerender()
+      rerender();
     },
 
-    [getValues, setValue, rerender],
-  )
+    [getValues, setValue, rerender]
+  );
 
   // exposes the assessment details to the parent.... upon submission
   React.useImperativeHandle(
@@ -101,18 +103,18 @@ const AddModuleTypeAssessmentWithRef: React.ForwardRefRenderFunction<
 
         await handleSubmit(
           () => (isValid = true),
-          () => (isValid = false),
-        )()
-
+          () => (isValid = false)
+        )();
+        console.log('submit', 'submitting');
         return {
           name: getValues('assessmentName'),
           questions: getValues('questions').map((q) => ({ ...q, moduleId })),
           isValid: isValid,
-        }
+        };
       },
     }),
-    [handleSubmit, getValues, moduleId],
-  )
+    [handleSubmit, getValues, moduleId]
+  );
 
   return (
     <div>
@@ -145,18 +147,20 @@ const AddModuleTypeAssessmentWithRef: React.ForwardRefRenderFunction<
           setValue('questions', [
             ...getValues('questions'),
             QUESTION_INIT_VALUES,
-          ])
-          rerender()
+          ]);
+          rerender();
         }}
         type="button"
       >
         Add Question
       </button>
     </div>
-  )
-}
+  );
+};
 
-const AddModuleTypeAssessment = React.forwardRef(AddModuleTypeAssessmentWithRef)
+const AddModuleTypeAssessment = React.forwardRef(
+  AddModuleTypeAssessmentWithRef
+);
 
 const AddModuleTypeAssessmentQuestion = React.memo(function AssessmentQuestion({
   getValues,
@@ -166,27 +170,27 @@ const AddModuleTypeAssessmentQuestion = React.memo(function AssessmentQuestion({
   handleSubmit,
 }: {
   getValues: UseFormGetValues<{
-    assessmentName: string
-    questions: Omit<QuestionFormValues, 'moduleId'>[]
-  }>
-  onDelete: (index: number) => void
+    assessmentName: string;
+    questions: Omit<QuestionFormValues, 'moduleId'>[];
+  }>;
+  onDelete: (index: number) => void;
   register: UseFormRegister<{
-    questions: Omit<QuestionFormValues, 'moduleId'>[]
-    assessmentName: string
-  }>
-  index: number
-  handleSubmit: Function
+    questions: Omit<QuestionFormValues, 'moduleId'>[];
+    assessmentName: string;
+  }>;
+  index: number;
+  handleSubmit: Function;
 }) {
-  const [isEditing, setEditing] = React.useState<boolean>(true)
-  const [_, rerender] = useRerender()
+  const [isEditing, setEditing] = React.useState<boolean>(true);
+  const [_, rerender] = useRerender();
 
   const onSave: SubmitHandler<QuestionFormValues> = (data) => {
-    setEditing(false)
-    rerender()
-  }
+    setEditing(false);
+    rerender();
+  };
 
   const correctOptionValue = React.useMemo(() => {
-    const values = getValues(`questions.${index}`)
+    const values = getValues(`questions.${index}`);
 
     const {
       correctOption,
@@ -195,19 +199,19 @@ const AddModuleTypeAssessmentQuestion = React.memo(function AssessmentQuestion({
       optionTwo,
       optionThree,
       optionFour,
-    } = values
+    } = values;
 
     switch (correctOption) {
       case 'OptionOne':
-        return optionOne
+        return optionOne;
       case 'OptionTwo':
-        return optionTwo
+        return optionTwo;
       case 'OptionThree':
-        return optionThree
+        return optionThree;
       default:
-        return optionFour
+        return optionFour;
     }
-  }, [getValues, index])
+  }, [getValues, index]);
 
   if (!isEditing) {
     return (
@@ -227,7 +231,7 @@ const AddModuleTypeAssessmentQuestion = React.memo(function AssessmentQuestion({
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -355,7 +359,7 @@ const AddModuleTypeAssessmentQuestion = React.memo(function AssessmentQuestion({
         </button>
       </div>
     </div>
-  )
-})
+  );
+});
 
-export default AddModuleTypeAssessment
+export default AddModuleTypeAssessment;

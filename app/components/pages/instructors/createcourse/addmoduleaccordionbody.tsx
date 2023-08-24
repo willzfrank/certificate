@@ -6,6 +6,7 @@ import {
   DocumentResourceType,
   ModuleContentTypes,
   ThisOrThatInteractives,
+  AssessmentResourceType,
 } from 'app/types';
 import { CourseCreationContext } from 'app/contexts';
 
@@ -192,6 +193,26 @@ const AddModuleAccordion__Body = ({
         return {
           value: document.value,
           isInputing: !document.isInputing,
+        };
+      } else {
+        return _resource;
+      }
+    });
+
+    setAllResources(editedResources);
+    setResourceType(ModuleContentTypes.NULL);
+  };
+
+  const toggleAccessmentEdit = (assessment: AssessmentResourceType) => {
+    console.log(assessment);
+    const editedResources = allResources.map((_resource) => {
+      if (
+        resourceguards.isAssessmentResource(_resource) &&
+        _resource.value.id === assessment.value.id
+      ) {
+        return {
+          value: assessment.value,
+          isInputing: !assessment.isInputing,
         };
       } else {
         return _resource;
@@ -527,100 +548,118 @@ const AddModuleAccordion__Body = ({
               </Draggable>
             );
         } else if (resourceguards.isAssessmentResource(resource)) {
-          return (
-            <Draggable
-              contentType={resource.value.type}
-              position={resource.value.position}
-              elementId={resource.value.id}
-              key={resource.value.id}
-              onDropClassName="opacity-50 p-4 border"
-              onDropCallback={onDropCallback}
-            >
-              <div className="px-4 md:px-6 py-3 flex justify-between items-center text-sm text-gray-600">
-                <div className="flex gap-8">
-                  <p className="w-[250px] truncate">
-                    Assessment Name: {resource.value.name}
-                  </p>
-                  <p>{resource.value.totalNumberOfQuestions} questions added</p>
-                </div>
-                <div className="flex items-center gap-3 justify-end">
-                  <Button className="w-10 !h-10 rounded-full flex items-center justify-center bg-app-stroke">
-                    <svg
-                      width="32"
-                      height="32"
-                      viewBox="0 0 32 32"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+          if (resource.isInputing) {
+            return (
+              <AddModuleContentForm
+                resourceType={ModuleContentTypes.assessment}
+                moduleId={moduleId}
+                initialValues={resource}
+                discard={() => setResourceType(ModuleContentTypes.NULL)}
+                isEditing={resource.isInputing}
+                toggleEdit={() => toggleAccessmentEdit(resource)}
+                key={resource.value.id}
+              />
+            );
+          } else
+            return (
+              <Draggable
+                contentType={resource.value.type}
+                position={resource.value.position}
+                elementId={resource.value.id}
+                key={resource.value.id}
+                onDropClassName="opacity-50 p-4 border"
+                onDropCallback={onDropCallback}
+              >
+                <div className="px-4 md:px-6 py-3 flex justify-between items-center text-sm text-gray-600">
+                  <div className="flex gap-8">
+                    <p className="w-[250px] truncate">
+                      Assessment Name: {resource.value.name}
+                    </p>
+                    <p>
+                      {resource.value.totalNumberOfQuestions} questions added
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 justify-end">
+                    <Button
+                      className="w-10 !h-10 rounded-full flex items-center justify-center bg-app-stroke"
+                      onClick={() => toggleAccessmentEdit(resource)}
                     >
-                      <path
-                        d="M17.1641 21.6287H21.9991"
-                        stroke="#545454"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M16.52 10.5299C17.0371 9.91186 17.9667 9.82124 18.5975 10.3278C18.6324 10.3553 19.753 11.2259 19.753 11.2259C20.446 11.6448 20.6613 12.5354 20.2329 13.2151C20.2102 13.2515 13.8746 21.1763 13.8746 21.1763C13.6639 21.4393 13.3439 21.5945 13.0019 21.5982L10.5757 21.6287L10.029 19.3149C9.95244 18.9895 10.029 18.6478 10.2398 18.3849L16.52 10.5299Z"
-                        stroke="#545454"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M15.3477 12.0005L18.9825 14.7919"
-                        stroke="#545454"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Button>
-                  <Button
-                    className="w-10 !h-10 rounded-full bg-[#F6E9ED] flex items-center justify-center "
-                    onClick={() =>
-                      deleteAssessment({
-                        moduleId: moduleId,
-                        assessmentModuleId: resource.value.id,
-                      })
-                    }
-                    loading={isDeletingAssessment}
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M17.1641 21.6287H21.9991"
+                          stroke="#545454"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M16.52 10.5299C17.0371 9.91186 17.9667 9.82124 18.5975 10.3278C18.6324 10.3553 19.753 11.2259 19.753 11.2259C20.446 11.6448 20.6613 12.5354 20.2329 13.2151C20.2102 13.2515 13.8746 21.1763 13.8746 21.1763C13.6639 21.4393 13.3439 21.5945 13.0019 21.5982L10.5757 21.6287L10.029 19.3149C9.95244 18.9895 10.029 18.6478 10.2398 18.3849L16.52 10.5299Z"
+                          stroke="#545454"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M15.3477 12.0005L18.9825 14.7919"
+                          stroke="#545454"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </Button>
+                    <Button
+                      className="w-10 !h-10 rounded-full bg-[#F6E9ED] flex items-center justify-center "
+                      onClick={() =>
+                        deleteAssessment({
+                          moduleId: moduleId,
+                          assessmentModuleId: resource.value.id,
+                        })
+                      }
+                      loading={isDeletingAssessment}
                     >
-                      <path
-                        d="M12.8825 6.3125C12.8825 6.3125 12.5205 10.8025 12.3105 12.6938C12.2105 13.5972 11.6525 14.1265 10.7385 14.1432C8.99921 14.1745 7.25788 14.1765 5.51921 14.1398C4.63987 14.1218 4.09121 13.5858 3.99321 12.6985C3.78188 10.7905 3.42188 6.3125 3.42188 6.3125"
-                        stroke="#B61010"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M13.8053 4.15999H2.5"
-                        stroke="#B61010"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M11.6284 4.15998C11.105 4.15998 10.6544 3.78998 10.5517 3.27732L10.3897 2.46665C10.2897 2.09265 9.95102 1.83398 9.56502 1.83398H6.74302C6.35702 1.83398 6.01835 2.09265 5.91835 2.46665L5.75635 3.27732C5.65369 3.78998 5.20302 4.15998 4.67969 4.15998"
-                        stroke="#B61010"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Button>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12.8825 6.3125C12.8825 6.3125 12.5205 10.8025 12.3105 12.6938C12.2105 13.5972 11.6525 14.1265 10.7385 14.1432C8.99921 14.1745 7.25788 14.1765 5.51921 14.1398C4.63987 14.1218 4.09121 13.5858 3.99321 12.6985C3.78188 10.7905 3.42188 6.3125 3.42188 6.3125"
+                          stroke="#B61010"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M13.8053 4.15999H2.5"
+                          stroke="#B61010"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11.6284 4.15998C11.105 4.15998 10.6544 3.78998 10.5517 3.27732L10.3897 2.46665C10.2897 2.09265 9.95102 1.83398 9.56502 1.83398H6.74302C6.35702 1.83398 6.01835 2.09265 5.91835 2.46665L5.75635 3.27732C5.65369 3.78998 5.20302 4.15998 4.67969 4.15998"
+                          stroke="#B61010"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </Draggable>
-          );
+              </Draggable>
+            );
         } else if (resourceguards.isClickAndMatchResource(resource)) {
           if (resource.isInputing) {
             return (

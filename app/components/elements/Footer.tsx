@@ -176,7 +176,7 @@ const Footer = ({ withSignUpPromotion }: FooterProps) => {
               target="_blank"
               rel="noreferrer"
             >
-              Twitter
+              X (formerly Twitter)
             </a>
           </p>
           {/* <p className="mb-4 leading-9 tracking-wide text-app-stroke">

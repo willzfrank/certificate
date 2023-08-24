@@ -71,10 +71,9 @@ const PDFViewer = (props: PDFViewerProps) => {
   }, []);
 
   return (
-    <div className="mb-10 sm:w-full  min-h-max">
-      <div
+    <div className="mb-10 sm:w-full min-h-max">
+      {/* <div
         className="p-2 text-[#1c1b1b] w-full md:mb-2"
-        style={{ boxShadow: '0px 5px 10px #2b2a2a' }}
       >
         <div className="md:w-[100%] mx-auto flex md:items-center justify-between flex-col md:flex-row">
           <h1 className="capitalize inter ">{props.document?.displayName}</h1>
@@ -127,7 +126,7 @@ const PDFViewer = (props: PDFViewerProps) => {
             </div>
           </div>
         </div>
-      </div>{' '}
+      </div>{' '} */}
       <div className={`${props.className}  mb-8 relative `}>
         <div className="absolute top-2 right-4">
           <div className="flex items-center gap-2 group">
@@ -138,7 +137,7 @@ const PDFViewer = (props: PDFViewerProps) => {
               strokeWidth={1.5}
               stroke="currentColor"
               onClick={handleZoomOut}
-              className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              className="w-10 h-10 opacity-0 z-10  group-hover:opacity-100 transition-opacity cursor-pointer"
             >
               <path
                 strokeLinecap="round"
@@ -150,10 +149,25 @@ const PDFViewer = (props: PDFViewerProps) => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              onClick={handleOpenModal}
+              className="w-10 h-10 opacity-0 z-10 group-hover:opacity-100 transition-opacity cursor-pointer"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
               onClick={handleZoomIn}
-              className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              className="w-10 h-10 opacity-0 z-10 group-hover:opacity-100 transition-opacity cursor-pointer"
             >
               <path
                 strokeLinecap="round"
@@ -164,7 +178,7 @@ const PDFViewer = (props: PDFViewerProps) => {
           </div>
         </div>
         <Document
-          className="md:border-4 border-app-pink h-[450px] overflow-scroll"
+          className="md:border-4 border-app-pink h-[450px] overflow-x-hidden rounded overflow-y-auto document-scroll"
           file={props.document?.documentUrl}
           renderMode="svg"
           error={<PDFError errorType={errorType} />}
