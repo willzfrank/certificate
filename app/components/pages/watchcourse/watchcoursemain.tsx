@@ -7,7 +7,8 @@ import { WatchCourseContext } from "app/contexts";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "app/types";
 
-import useFreeModulesAvailable from "app/hooks/useFreeModulesAvailable";
+// import useFreeModulesAvailable from "app/hooks/useFreeModulesAvailable";
+import FullAccess from "./FullAccess";
 
 import { VideoPlayer, Certificate, Modal, Tabs, SelectAllThatApplyPreview, ClickAndMatchPreview, ThisOrThatPreview, FillInTheBlankPreview, SelectAnAnswerPreview, Button } from "app/components";
 import CourseContent from "./CourseContent";
@@ -57,14 +58,20 @@ const WatchCourseMain = () => {
 	const { activeResourceIndex, setActiveResourceIndex, activeModuleIndex, setActiveModuleIndex, courseDetails, allResourses, activeResourceType, setActiveResourceType } =
 		React.useContext(WatchCourseContext);
 
-	const freeModules = useFreeModulesAvailable(courseDetails?.modules ? courseDetails?.modules : []);
-
 	const activeResource = allResourses[activeResourceIndex];
 
 	const moveToNextModule = React.useCallback(() => {
 		setActiveModuleIndex(clamp(0, (courseDetails?.modules.length as number) - 1, activeModuleIndex + 1));
 		setActiveResourceIndex(0);
 	}, [activeModuleIndex, courseDetails?.modules.length, setActiveModuleIndex, setActiveResourceIndex]);
+
+	// Use payment required to display modal
+	const [showModal, setShowModal] = React.useState(false);
+
+	React.useEffect(() => {
+		const paymentRequired = courseDetails?.modules[activeModuleIndex]?.paymentRequired;
+		setShowModal(paymentRequired == undefined ? true : paymentRequired);
+	}, [courseDetails?.modules, activeModuleIndex]);
 
 	const moveToNextResource = React.useCallback(() => {
 		if (resourceGuards.isVideo(activeResource) && roleName?.toLowerCase() === USERTYPES.STUDENT) {
@@ -584,6 +591,22 @@ const WatchCourseMain = () => {
 						</div>
 					</Dialog>
 				</Transition>
+
+				<Modal isOpen={!showModal} closeModal={() => setShowModal(false)}>
+					<p>Refactor full access to work on this page</p>
+					{/* <FullAccess
+						closeModal={closeModal}
+						pricingPlan={pricingPlan}
+						user={user}
+						discountDetails={discountDetails}
+						setDiscountDetails={setDiscountDetails}
+						isCheckingCodeValidity={isCheckingCodeValidity}
+						handlePay={handlePay}
+						confirmingPurchase={confirmingPurchase}
+						isLoadingCourseDetails={isLoadingCourseDetails}
+						isLoading={isLoading}
+					/> */}
+				</Modal>
 			</div>
 		</>
 	);
