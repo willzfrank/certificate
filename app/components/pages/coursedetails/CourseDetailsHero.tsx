@@ -58,6 +58,13 @@ const CourseDetailsHero = (props: ExternalCourse) => {
   const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
   const [addSubscription, { isLoading, error, isError, isSuccess }] =
     useAddSubscriptionMutation();
+  const [accessCourse, setAccessCourse] = useState(false);
+  const [showAccessButton, setShowAccessButton] = useState(true);
+
+  const handleAccessCourse = () => {
+    setShowAccessButton(false);
+    setAccessCourse(true);
+  };
 
   const [trigger, { isLoading: confirmingPurchase }] =
     useLazyPaymentConfirmQuery();
@@ -523,35 +530,67 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                 </Link>
               ) : (
                 <>
-                  <Button
-                    onClick={handlePay(
-                      pricingPlan?.price,
-                      pricingPlan?.subscriptionType,
-                      pricingPlan?.name,
-                      pricingPlan?.id
-                    )}
-                    className={`bg-white text-[#4993ea] font-bold rounded-lg h-[56px] w-full mb-2 border-2 border-black`}
-                    loading={
-                      confirmingPurchase || isLoading || isLoadingCourseDetails
-                    }
-                  >
-                    {pricingPlan.price === 0 ? (
-                      <div>
+                  {showAccessButton && (
+                    <button
+                      className={`bg-white text-[#4993ea] font-bold rounded-lg h-[56px] w-full mb-2 border-2 border-black`}
+                      onClick={() => {
+                        handleAccessCourse();
+                      }}
+                    >
+                      {pricingPlan.price === 0 ? (
                         <div>
-                          <p>Enroll For Free</p>
-                          <p className="text-xs">Start now</p>
+                          <div>
+                            <p>Enroll For Free</p>
+                            <p className="text-xs">Start now</p>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      `Buy now (${pricingPlan?.name})`
-                    )}
-                  </Button>
-                  {pricingPlan.price === 0 && (
-                    <p className="text-center text-xs text-app-pink mb-2">
-                      Enroll now to access the free contents in this course
+                      ) : (
+                        <p>Access Course</p>
+                      )}
+                    </button>
+                  )}
+                  {showAccessButton && (
+                    <p
+                      className={`text-center text-xs text-zinc-100 mb-2 ${
+                        pricingPlan.price === 0 ? '' : 'font-bold'
+                      }`}
+                    >
+                      {pricingPlan.price === 0
+                        ? 'Enroll now to access the free contents in this course'
+                        : 'Start now to access the contents in this course'}
                     </p>
                   )}
                 </>
+              )}
+              {/* BUY NOW BUTTON */}
+              {accessCourse && (
+                <div className="space-y-2">
+                  <div className="w-full h-[56px] flex items-center justify-center bg-red-600 rounded-[35.06px]">
+                    <Button
+                      className="text-white text-[12.88px] font-semibold cursor-pointer"
+                      onClick={handlePay(
+                        pricingPlan?.price,
+                        pricingPlan?.subscriptionType,
+                        pricingPlan?.name,
+                        pricingPlan?.id
+                      )}
+                      loading={
+                        confirmingPurchase ||
+                        isLoading ||
+                        isLoadingCourseDetails
+                      }
+                    >
+                      Buy Now
+                    </Button>
+                  </div>
+                  <Link href={`/course/${props.id}?slugName=${props.slugName}`}>
+                    <div className="w-full h-[56px] flex items-center justify-center rounded-[35.06px] border border-red-600 cursor-pointer">
+                      <p className="text-white text-[12.88px] font-semibold">
+                        Start Free{' '}
+                      </p>
+                    </div>
+                  </Link>
+                </div>
               )}
             </div>
           </div>
