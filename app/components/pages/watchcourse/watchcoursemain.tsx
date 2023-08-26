@@ -7,6 +7,8 @@ import { WatchCourseContext } from "app/contexts";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "app/types";
 
+import useFreeModulesAvailable from "app/hooks/useFreeModulesAvailable";
+
 import { VideoPlayer, Certificate, Modal, Tabs, SelectAllThatApplyPreview, ClickAndMatchPreview, ThisOrThatPreview, FillInTheBlankPreview, SelectAnAnswerPreview, Button } from "app/components";
 import CourseContent from "./CourseContent";
 import { LOCAL_COMPLETED_COURSES } from "app/constants";
@@ -54,6 +56,8 @@ const WatchCourseMain = () => {
 
 	const { activeResourceIndex, setActiveResourceIndex, activeModuleIndex, setActiveModuleIndex, courseDetails, allResourses, activeResourceType, setActiveResourceType } =
 		React.useContext(WatchCourseContext);
+
+	const freeModules = useFreeModulesAvailable(courseDetails?.modules ? courseDetails?.modules : []);
 
 	const activeResource = allResourses[activeResourceIndex];
 
