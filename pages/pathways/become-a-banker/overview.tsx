@@ -670,11 +670,16 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 2, 3 or 4 installments
               </p>
               <div className="w-[175px] h-[51px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[30px] flex items-center justify-center">
-                <Link href={`/auth/register?as=${USERTYPES.STUDENT}`}>
-                  <p className="w-28 h-9 text-center text-white text-2xl font-medium cursor-pointer">
-                    Sign Up
+                <a
+                  href="https://forms.gle/kaRXYvDoAD6azPnc7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {' '}
+                  <p className="w-full h-[26px] flex items-center justify-center text-center text-white text-[15px] font-medium">
+                    Get Discount{' '}
                   </p>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -701,13 +706,18 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </div>
           </div>
           <div className="flex items-center justify-center ">
-            <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
+            <a
+              href="https://forms.gle/kaRXYvDoAD6azPnc7"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {' '}
               <div className="md:hidden flex items-center w-[318px] justify-center h-8 rounded-[30px] border border-rose-600">
-                <p className="w-[83px] h-[26px] text-center text-rose-600 text-[15px] font-medium">
-                  Sign Up
+                <p className="w-full h-[26px] flex items-center justify-center text-center text-rose-600 text-[15px] font-medium">
+                  Get Discount{' '}
                 </p>
               </div>
-            </Link>
+            </a>
           </div>
 
           <div className="py-12 ">

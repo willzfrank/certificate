@@ -450,7 +450,6 @@ const Header = () => {
                     </svg>
                   </motion.a>
                 </Link>
-
                 {/* <Link href="/dashboard">
                   <motion.a
                     variants={children(2)}
@@ -484,7 +483,6 @@ const Header = () => {
                     </svg>}
                   </motion.a>
                 </Link> */}
-
                 {/* <Link href="/pricing">
                   <motion.a
                     variants={children(3)}
@@ -496,7 +494,6 @@ const Header = () => {
                     Pricing
                   </motion.a>
                 </Link> */}
-
                 {user.roleName?.toLowerCase() === USERTYPES.STUDENT ? (
                   <Link href={`/dashboard`}>
                     <motion.a
@@ -522,10 +519,20 @@ const Header = () => {
                     </motion.a>
                   </Link>
                 )}
-
-                <Link href={`/about`}>
+                <Link href={`/pathways/become-a-banker/overview`}>
                   <motion.a
                     variants={children(4)}
+                    initial={'hidden'}
+                    animate={'show'}
+                    exit={'exit'}
+                    className="py-6"
+                  >
+                    Language Of Banking{' '}
+                  </motion.a>
+                </Link>{' '}
+                <Link href={`/about`}>
+                  <motion.a
+                    variants={children(5)}
                     initial={'hidden'}
                     animate={'show'}
                     exit={'exit'}
@@ -536,7 +543,7 @@ const Header = () => {
                 </Link>
                 <Link href="/faqs">
                   <motion.a
-                    variants={children(5)}
+                    variants={children(6)}
                     initial={'hidden'}
                     animate={'show'}
                     exit={'exit'}
