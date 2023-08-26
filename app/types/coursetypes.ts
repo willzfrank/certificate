@@ -38,6 +38,7 @@ export interface CourseModules {
   description: string;
   isExtra: boolean;
   position: number;
+  paymentRequired?: boolean
 }
 
 export interface CourseResponse {
@@ -207,9 +208,9 @@ export enum CourseApprovalStatus {
 
 export type AllModuleResources =
   | ModuleContentResponse['data'][keyof Omit<
-      ModuleContentResponse['data'],
-      'totalSeconds' | 'thisOrThatInteractiveTypes'
-    >]
+    ModuleContentResponse['data'],
+    'totalSeconds' | 'thisOrThatInteractiveTypes'
+  >]
   | ThisOrThatInteractives[];
 
 export type ThisOrThatInteractives = {

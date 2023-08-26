@@ -45,7 +45,8 @@ const makeStore = () =>
     },
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware().concat(middlewares),
-  });
+  }
+  );
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore['getState']>;
