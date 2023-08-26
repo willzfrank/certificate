@@ -31,7 +31,7 @@ type InteractiveTypesBody = {
   moduleId: string;
 };
 
-interface SelectAnAnswerBody extends InteractiveTypesBody {}
+interface SelectAnAnswerBody extends InteractiveTypesBody { }
 
 interface SelectAllThatApplyBody
   extends Omit<InteractiveTypesBody, 'correctOption'> {
@@ -113,6 +113,7 @@ const courseCreationApi = createApi({
         redirectURL?: string;
         certificateRequired?: boolean;
         price?: number;
+        subTitle: string
       }
     >({
       query: (argz) => ({
@@ -128,6 +129,7 @@ const courseCreationApi = createApi({
           isExternal: argz.isExternal || false,
           certificateRequired: argz.certificateRequired,
           [argz.isExternal ? 'redirectUrl' : '']: argz.redirectURL,
+          subTitle: argz.subTitle || ''
         },
       }),
       invalidatesTags: (res, error, args) =>
@@ -216,13 +218,17 @@ const courseCreationApi = createApi({
           : [{ type: 'MODULECONTENT' as const, id: 'LIST' }],
     }),
 
-    // setCoursePricing: build.mutation<any, { courseId: string; pricing: any }>({
-    //   query: ({ courseId, pricing }) => ({
-    //     url: `/${courseId}/set-pricings`,
-    //     method: 'POST',
-    //     body: pricing,
-    //   }),
-    // }),
+    setCoursePricing: build.mutation<any, { courseId: string; pricing: any }>({
+      query: ({ courseId, pricing }) => ({
+        url: `/${courseId}/set-pricings`,
+        method: 'POST',
+        body: pricing,
+      }),
+      invalidatesTags: (result, error, args) =>
+        result
+          ? [{ type: 'MODULECONTENT' as const, id: args.courseId }]
+          : [{ type: 'MODULECONTENT' as const, id: 'LIST' }],
+    }),
 
     createNewCourse__RemoveVideoFromModule: build.mutation<
       void,
@@ -376,7 +382,7 @@ const courseCreationApi = createApi({
           formData.append(
             `models[${index}].cardDetails.cardType`,
             value.cardDetails.type.charAt(0).toUpperCase() +
-              value.cardDetails.type.slice(1, value.cardDetails.type.length)
+            value.cardDetails.type.slice(1, value.cardDetails.type.length)
           );
           formData.append(
             `models[${index}].cardDetails.contentText`,
@@ -512,6 +518,7 @@ const courseCreationApi = createApi({
           name: string;
           description: string;
           isExtra: boolean;
+          paymentRequired: boolean
         };
       }
     >({
@@ -522,6 +529,7 @@ const courseCreationApi = createApi({
           name: args.moduleDetails.name,
           description: args.moduleDetails.description,
           isExtra: args.moduleDetails.isExtra,
+          paymentRequired: args.moduleDetails.paymentRequired
         },
         params: {
           moduleId: args.moduleDetails.id,
@@ -560,8 +568,9 @@ const courseCreationApi = createApi({
         description?: string;
         subTitle?: string;
         intendedUsers?: string;
-        courseId: string;
+        courseId?: string;
         certificateRequired?: boolean;
+        price?: number
       }
     >({
       query: (args) => ({
@@ -811,6 +820,8 @@ const courseCreationApi = createApi({
 });
 
 export default courseCreationApi;
+
+
 export const {
   useCreateNewCourse_CourseInfoMutation,
   useCreateNewCourse__GenerateModulesMutation,
@@ -820,6 +831,7 @@ export const {
   useCreateNewCourse__UploadPreviewMediaMutation,
   useCreateNewCourse__AddDocumentToModuleMutation,
   useCreateNewCourse__RemoveDocumentFromModuleMutation,
+  useSetCoursePricingMutation,
 
   useGetModuleContentQuery,
   useLazyGetModuleContentQuery,
