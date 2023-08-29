@@ -21,6 +21,7 @@ const CreateCourse_CourseInfo: NextPageWithLayout<{}> = () => {
 	};
 
 	const { updateCourseInfo, courseInfo } = React.useContext(CourseCreationContext);
+	console.log(courseInfo);
 
 	const {
 		register: registerField,
@@ -76,6 +77,7 @@ const CreateCourse_CourseInfo: NextPageWithLayout<{}> = () => {
 	}, [categoriesRes, isCategoriesFetching, isGetCategoriesError]);
 
 	const onSubmit: SubmitHandler<CourseInfoType> = async (values) => {
+		console.log(values);
 		if (mode === "edit") {
 			// edit the course
 			const { data } = await editCourse({
@@ -83,7 +85,7 @@ const CreateCourse_CourseInfo: NextPageWithLayout<{}> = () => {
 				name: values.courseName,
 				intendedUsers: values.targetAudience,
 				description: values.courseDescription,
-				// subTitle: values.subtitle as string,
+				subTitle: values.subtitle as string,
 			}).unwrap();
 
 			if (data) {
