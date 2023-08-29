@@ -131,11 +131,16 @@ const CoursesSection = () => {
     data: inProgressCourses,
     isLoading: loadingInProgressCourses,
     isError: inProgressCoursesError,
-  } = useGetInProgressCoursesQuery({
-    page: 1,
-    perPage: 1000,
-    studentId: user.id as string,
-  });
+  } = useGetInProgressCoursesQuery(
+    {
+      page: 1,
+      perPage: 1000,
+      studentId: user.id as string,
+    },
+    {
+      pollingInterval: 3000,
+    }
+  );
 
   const {
     data: completedCourses,

@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
-import { API_URL } from "app/constants";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { API_URL } from 'app/constants';
 import {
   ApiError,
   CheckDiscountCodeValidityResponse,
@@ -8,42 +8,42 @@ import {
   ModuleContentResponse,
   QuestionOptionType,
   RootState,
-} from "app/types";
+} from 'app/types';
 
 interface AddSubscriptionRequestParams {
   courseId: string;
   studentId: string;
   amountPaid: number;
   subscriptionType: string | number;
-  channel: "Card" | "Bank";
-  source: "Web" | "App";
+  channel: 'Card' | 'Bank';
+  source: 'Web' | 'App';
   coursePricingId: string;
   discountCode?: string;
 }
 
 const subscriptionApi = createApi({
-  reducerPath: "subscriptionApi",
+  reducerPath: 'subscriptionApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL + "/Subscriptions",
+    baseUrl: API_URL + '/Subscriptions',
     prepareHeaders: (headers, { getState }) => {
       const {
         user: { token },
       } = getState() as RootState;
 
       if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+        headers.set('Authorization', `Bearer ${token}`);
       }
 
       return headers;
     },
   }),
-  tagTypes: ["MODULECONTENT"],
+  tagTypes: ['MODULECONTENT'],
   endpoints: (builder) => ({
     addSubscription: builder.mutation<any, AddSubscriptionRequestParams>({
       query: (args) => ({
-        url: "/add-subscription",
+        url: '/add-subscription',
         body: args,
-        method: "POST",
+        method: 'POST',
       }),
     }),
 
@@ -56,14 +56,15 @@ const subscriptionApi = createApi({
         params: args,
       }),
       transformResponse: (res: any) => res.data.pagedList,
-    }),
+    }
+    ),
 
     getCompletedCourses: builder.query<
       InProgressCoursesResponse[],
       { studentId: string; page: number; perPage: number }
     >({
       query: (args) => ({
-        url: "/get-completed-courses",
+        url: '/get-completed-courses',
         params: args,
       }),
       transformResponse: (res: any) => res.data.pagedList,
@@ -78,7 +79,7 @@ const subscriptionApi = createApi({
       }),
 
       providesTags: (result, error, args) => [
-        { type: "MODULECONTENT" as const, id: args.moduleId },
+        { type: 'MODULECONTENT' as const, id: args.moduleId },
       ],
       transformResponse: (res: any): ModuleContentResponse => {
         return {
@@ -92,7 +93,7 @@ const subscriptionApi = createApi({
               isWatched: video.isWatched,
               description: video.description,
               position: video.position,
-              type: video.type
+              type: video.type,
             })),
             assessments: res.data.assessments,
             documents: res.data.documents ?? [],
@@ -104,8 +105,10 @@ const subscriptionApi = createApi({
             thisOrThatInteractiveTypes: res.data.thisOrThatInteractiveTypes,
             clickAndMatchInteractiveTypes:
               res.data.clickAndMatchInteractiveTypes,
-            clickForMoreInteractiveTypes: res.data.clickForMoreInteractiveTypes || [],
-            boxWithOptionsInteractiveTypes: res.data.boxWithOptionsInteractiveTypes || []
+            clickForMoreInteractiveTypes:
+              res.data.clickForMoreInteractiveTypes || [],
+            boxWithOptionsInteractiveTypes:
+              res.data.boxWithOptionsInteractiveTypes || [],
           },
           error: res.error,
         };
@@ -117,15 +120,15 @@ const subscriptionApi = createApi({
       { studentId: string; moduleVideoId: string; moduleId: string }
     >({
       query: (args) => ({
-        url: "/set-modulevideo-as-watched",
+        url: '/set-modulevideo-as-watched',
         params: {
           studentId: args.studentId,
           moduleVideoId: args.moduleVideoId,
         },
-        method: "PATCH",
+        method: 'PATCH',
       }),
       invalidatesTags: (result, error, args) => [
-        { type: "MODULECONTENT" as const, id: args.moduleId },
+        { type: 'MODULECONTENT' as const, id: args.moduleId },
       ],
     }),
 
@@ -134,26 +137,36 @@ const subscriptionApi = createApi({
       { studentId: string; moduleDocumentID: string; moduleId: string }
     >({
       query: (args) => ({
-        url: "/set-moduledocument-as-read",
+        url: '/set-moduledocument-as-read',
         params: {
           moduleDocumentId: args.moduleDocumentID,
           studentId: args.studentId,
         },
-        method: "PATCH",
+        method: 'PATCH',
       }),
       invalidatesTags: (result, error, args) => [
-        { type: "MODULECONTENT" as const, id: args.moduleId },
+        { type: 'MODULECONTENT' as const, id: args.moduleId },
       ],
     }),
 
-    setInteractiveTypeAsTaken: builder.mutation<{ message: string }, { values: Array<{ interactiveTypeId: string, studentId: string, interactiveType: InteractiveTypes }>, moduleId: string }>({
+    setInteractiveTypeAsTaken: builder.mutation<
+      { message: string },
+      {
+        values: Array<{
+          interactiveTypeId: string;
+          studentId: string;
+          interactiveType: InteractiveTypes;
+        }>;
+        moduleId: string;
+      }
+    >({
       query: (args) => ({
         url: '/set-interactivetype-as-taken',
         body: args.values,
-        method: "PATCH"
+        method: 'PATCH',
       }),
       invalidatesTags: (result, error, args) => [
-        { type: "MODULECONTENT" as const, id: args.moduleId },
+        { type: 'MODULECONTENT' as const, id: args.moduleId },
       ],
     }),
 
@@ -169,7 +182,7 @@ const subscriptionApi = createApi({
     >({
       query: (args) => ({
         url: `${API_URL}/courses/${args.courseId}/modules/${args.moduleId}/grade-assessments-taken`,
-        method: "PATCH",
+        method: 'PATCH',
         body: args.answers,
         params: {
           assessmentGradeId: args.assessmentGradeId,
@@ -177,19 +190,20 @@ const subscriptionApi = createApi({
         },
       }),
       invalidatesTags: (result, error, args) => [
-        { type: "MODULECONTENT" as const, id: args.moduleId },
+        { type: 'MODULECONTENT' as const, id: args.moduleId },
       ],
     }),
 
-    checkDiscountCodeValidity: builder.mutation<CheckDiscountCodeValidityResponse, string>({
+    checkDiscountCodeValidity: builder.mutation<
+      CheckDiscountCodeValidityResponse,
+      string
+    >({
       query: (code) => ({
         url: `${API_URL}/discountcodes/check-code-validity`,
         params: { code },
-        method: 'POST'
+        method: 'POST',
       }),
-
-    })
-
+    }),
   }),
 });
 
@@ -205,5 +219,5 @@ export const {
   useGradeAssessmentMutation,
   useGetCompletedCoursesQuery,
   useSetInteractiveTypeAsTakenMutation,
-  useCheckDiscountCodeValidityMutation
+  useCheckDiscountCodeValidityMutation,
 } = subscriptionApi;

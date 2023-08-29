@@ -33,12 +33,10 @@ const CourseTaken = function (props: CourseTakenType) {
           </div>
         </Link>
         <div>
-          {props.percentageCompleted !== undefined &&
-          (props.percentageCompleted >= 0 ||
-            props.percentageCompleted === 0) ? (
+          {props.percentageCompleted ||
+          props.percentageCompleted?.toString() === '0' ? (
             <div className="flex items-center justify-between">
-              {props.percentageCompleted >= 100 &&
-              props.certificateRequired === true ? (
+              {props.percentageCompleted?.toString() === '100' ? (
                 <DownloadCertificateButton
                   title={props.title}
                   courseId={props.courseId}
@@ -47,7 +45,7 @@ const CourseTaken = function (props: CourseTakenType) {
                 <p>{props.percentageCompleted.toString() + '%'}</p>
               )}
 
-              {props.percentageCompleted < 100 && (
+              {props.percentageCompleted?.toString() !== '100' && (
                 <div className="px-3 py-1 rounded bg-blue-600 text-white text-sm">
                   In Progress
                 </div>
