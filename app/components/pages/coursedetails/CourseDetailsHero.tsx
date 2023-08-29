@@ -37,7 +37,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 	const [videoModalOpen, setVideoModalOpen] = useState(false);
 	const [accessModal, setAccessModal] = useState(false);
 	const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
-	const [addSubscription, { isLoading, error, isError, isSuccess }] = useAddSubscriptionMutation();
+	 const [addSubscription, { isLoading, error, isError, isSuccess }] = useAddSubscriptionMutation();
 	const [accessCourse, setAccessCourse] = useState(false);
 	const [showAccessButton, setShowAccessButton] = useState(true);
 
