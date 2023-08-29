@@ -37,6 +37,7 @@ const WatchCourseMain = () => {
 	const isPdfOpen = useSelector((state: RootState) => state.modalToggle.isOpen);
 
 	const [courseId, page] = useWatchSearchParams(["courseId", "page"]) as string[];
+	const [isSubscribed, setIsSubscribed] = React.useState<boolean | null>(null);
 
 	/**
 	 * page can be either of the following: coursecontent, notes, discussion, assessment or interactivepreview
@@ -66,7 +67,7 @@ const WatchCourseMain = () => {
 	}, [activeModuleIndex, courseDetails?.modules.length, setActiveModuleIndex, setActiveResourceIndex]);
 
 	// Use payment required to display modal
-	const [showModal, setShowModal] = React.useState(false);
+	const [showModal, setShowModal] = React.useState(true);
 
 	React.useEffect(() => {
 		const paymentRequired = courseDetails?.modules[activeModuleIndex]?.paymentRequired;
@@ -594,22 +595,15 @@ const WatchCourseMain = () => {
 					</Dialog>
 				</Transition>
 
-				{/* <Modal isOpen={!showModal} closeModal={() => setShowModal(false)}> */}
-				{/* <p>Refactor full access to work on this page</p> */}
-				{/* <FullAccess
-            closeModal={closeModal}
-            pricingPlan={pricingPlan}
-            user={user}
-            discountDetails={discountDetails}
-            setDiscountDetails={setDiscountDetails}
-            applyDiscountCode={applyDiscountCode}
-            isCheckingCodeValidity={isCheckingCodeValidity}
-            handlePay={handlePay}
-            confirmingPurchase={confirmingPurchase}
-            isLoadingCourseDetails={isLoadingCourseDetails}
-            isLoading={isLoading}
-          /> */}
-				{/* </Modal> */}
+				<Modal isOpen={showModal} closeModal={() => setShowModal(false)}>
+					<FullAccess
+						closeModal={() => setShowModal(false)}
+						pricings={courseDetails?.pricings}
+						courseId={courseDetails?.id as string}
+						setIsSubscribed={setIsSubscribed}
+						isExternal={courseDetails?.isExternal ? true : false}
+					/>
+				</Modal>
 			</div>
 		</>
 	);
