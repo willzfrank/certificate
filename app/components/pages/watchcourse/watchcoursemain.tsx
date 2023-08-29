@@ -676,7 +676,7 @@ const WatchCourseMain = () => {
           </Dialog>
         </Transition>
 
-        <Modal isOpen={!showModal} closeModal={() => setShowModal(false)}>
+        {/* <Modal isOpen={!showModal} closeModal={() => setShowModal(false)}> */}
           {/* <p>Refactor full access to work on this page</p> */}
           {/* <FullAccess
             closeModal={closeModal}
@@ -691,7 +691,7 @@ const WatchCourseMain = () => {
             isLoadingCourseDetails={isLoadingCourseDetails}
             isLoading={isLoading}
           /> */}
-        </Modal>
+        {/* </Modal> */}
 
         
       </div>
