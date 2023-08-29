@@ -30,7 +30,7 @@ const EditIconLink = ({ color, href }: { color?: string; href: string }) => (
 
 const CreateCourse_Review: NextPageWithLayout<{}> = () => {
 	const [openVideoModal, setOpenVideoModal] = React.useState(false);
-	const { courseInfo, courseMedia, courseModules } = React.useContext(CourseCreationContext);
+	const { courseInfo, courseMedia, courseModules, pricings } = React.useContext(CourseCreationContext);
 
 	const courseId = courseInfo.id;
 
@@ -182,7 +182,7 @@ const CreateCourse_Review: NextPageWithLayout<{}> = () => {
             ))}
         </Accordion.Group> */}
 
-				<CourseContent modules={courseModules} courseId={courseInfo.id} containerClassName="!p-0" hideTitle />
+				<CourseContent modules={courseModules} courseId={courseInfo.id} containerClassName="!p-0" hideTitle courseType={pricings[0]?.price === 0 ? "free" : "paid"} />
 
 				<div className="items-center flex gap-2 mt-8 mb-2">
 					<p className="font-medium">Instructor profile</p>

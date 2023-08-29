@@ -11,9 +11,10 @@ type CourseContentProps = {
 	courseId: string;
 	containerClassName?: string;
 	hideTitle?: boolean;
+	courseType?: "free" | "paid";
 };
 
-const CourseContent = ({ modules, courseId, containerClassName, hideTitle }: CourseContentProps) => {
+const CourseContent = ({ modules, courseId, containerClassName, hideTitle, courseType = "free" }: CourseContentProps) => {
 	return (
 		<div className={`md:p-14 md:w-[60%] px-6 py-12 ${containerClassName || ""}`}>
 			{!hideTitle ? <p className="font-medium text-xl mb-4">Course Content</p> : null}
@@ -26,6 +27,7 @@ const CourseContent = ({ modules, courseId, containerClassName, hideTitle }: Cou
 								courseId,
 								moduleName: module.name,
 								paymentRequired: module.paymentRequired == undefined ? true : module?.paymentRequired,
+								courseType: courseType,
 							}}
 							key={module.moduleId}
 						/>
@@ -36,7 +38,19 @@ const CourseContent = ({ modules, courseId, containerClassName, hideTitle }: Cou
 	);
 };
 
-const ModuleDetailsAccordion = ({ moduleId, courseId, moduleName, paymentRequired }: { moduleId: string; courseId: string; moduleName: string; paymentRequired: boolean }) => {
+const ModuleDetailsAccordion = ({
+	moduleId,
+	courseId,
+	moduleName,
+	paymentRequired,
+	courseType,
+}: {
+	moduleId: string;
+	courseId: string;
+	moduleName: string;
+	paymentRequired: boolean;
+	courseType?: "free" | "paid";
+}) => {
 	const { isLoading, data: moduleContent } = useGetModuleContentQuery({
 		courseId,
 		moduleId,
@@ -57,7 +71,7 @@ const ModuleDetailsAccordion = ({ moduleId, courseId, moduleName, paymentRequire
 							<p className="text-muted text-[15px]">{getTime((moduleContent?.data.totalSeconds || 0) * 1000, "MM mins", "absolute")}</p>
 						</div>
 						<div>
-							{paymentRequired && (
+							{paymentRequired && courseType !== "free" && (
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
 									<path
 										strokeLinecap="round"
@@ -66,7 +80,7 @@ const ModuleDetailsAccordion = ({ moduleId, courseId, moduleName, paymentRequire
 									/>
 								</svg>
 							)}
-							{!paymentRequired && (
+							{(!paymentRequired || courseType === "free") && (
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
 									<path
 										strokeLinecap="round"

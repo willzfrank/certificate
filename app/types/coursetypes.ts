@@ -78,6 +78,7 @@ export interface SingleCourseDetailsResponse {
   isSubscribed: boolean;
   categories: Category[];
   subTitle: string | null;
+  isExternal: boolean
 }
 
 export interface ExternalCourse extends SingleCourseDetailsResponse {

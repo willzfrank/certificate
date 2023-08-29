@@ -37,7 +37,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 	const [videoModalOpen, setVideoModalOpen] = useState(false);
 	const [accessModal, setAccessModal] = useState(false);
 	const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
-	 const [addSubscription, { isLoading, error, isError, isSuccess }] = useAddSubscriptionMutation();
+	const [addSubscription, { isLoading, error, isError, isSuccess }] = useAddSubscriptionMutation();
 	const [accessCourse, setAccessCourse] = useState(false);
 	const [showAccessButton, setShowAccessButton] = useState(true);
 
@@ -70,45 +70,6 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 		hasAppliedDiscount: false,
 		discountCode: "",
 	});
-
-	// const [isApplyingDiscountCode, setIsApplyingDiscountCode] =
-	//   React.useState(false);
-
-	const [checkCodeValidity, { isLoading: isCheckingCodeValidity }] = useCheckDiscountCodeValidityMutation();
-
-	const applyDiscountCode = React.useCallback(async () => {
-		try {
-			const res = await checkCodeValidity(discountDetails.discountCode).unwrap();
-
-			if (res.data.isValid) {
-				setDiscountDetails({
-					...discountDetails,
-					hasAppliedDiscount: true,
-					value: res.data.value,
-					type: res.data.discountType,
-				});
-
-				notify({
-					type: "success",
-					title: `Discount code ${res.data.code.toUpperCase()} applied successfully`,
-					description: "Please process to make payment",
-				});
-			} else {
-				notify({
-					type: "error",
-					title: `Discount code ${res.data.code.toUpperCase()} not valid`,
-				});
-			}
-		} catch (error) {
-			notify({
-				type: "error",
-				title: "Failed to apply discount code",
-				description: (error as any).data.errors[0].errorMessages[0],
-			});
-		}
-
-		// eslint-disable-next-line
-	}, [discountDetails]);
 
 	React.useEffect(() => {
 		if (discountDetails.hasAppliedDiscount) {
@@ -148,112 +109,6 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 
 	const user = useAppSelector(selectUser);
 	const [profile, setProfile] = useState<USERMODEL | null>(null);
-
-	const handlePay = (price: number, subscriptionType: string | number, title: string, pricingId: string) => async () => {
-		if (price === 0) {
-			try {
-				const {
-					data: { id, referenceNumber },
-				} = await addSubscription({
-					studentId: profile?.id as string,
-					courseId: props.id,
-					amountPaid: price,
-					subscriptionType,
-					channel: "Card",
-					source: "Web",
-					discountCode: discountDetails.hasAppliedDiscount ? discountDetails.discountCode : undefined,
-					coursePricingId: pricingId,
-				}).unwrap();
-
-				await trigger({ tx_ref: referenceNumber }).unwrap();
-
-				setIsSubscribed(true);
-
-				// router.push(`/paymentProcess?tx_ref=${referenceNumber}`)
-			} catch (error) {
-				//@ts-ignore
-				if (error?.status === 400 || error?.status === 401) {
-					router.push("/auth/register");
-					notify({
-						title: "Couldn't enroll for this course.",
-						description: "Please create an account to enrol for this course.",
-						type: "error",
-					});
-				}
-
-				//@ts-ignore
-				if (error?.status >= 500) {
-					notify({
-						title: "Could not enroll for this course",
-						description: "The fault is on us. Please reach out to our customer support",
-						type: "error",
-					});
-				}
-			}
-
-			return;
-		}
-
-		if (status === "ready" && window) {
-			const config = {
-				public_key: props.isExternal
-					? process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY_NEXFORD
-					: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY_TEST || process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY,
-				tx_ref: "",
-				amount: price,
-				currency: "NGN",
-				meta: {},
-
-				payment_options: "card,mobilemoney,ussd",
-				customer: {
-					email: profile?.email,
-					name: `${profile?.lastName} ${profile?.firstName}`,
-				},
-				customizations: {
-					title: `${title} package`,
-				},
-				redirect_url: `${window?.location?.origin}/paymentProcess/${props.id}?isExternal=${props.isExternal}`,
-			};
-
-			try {
-				const {
-					data: { id, referenceNumber },
-				} = await addSubscription({
-					studentId: profile?.id as string,
-					courseId: props.id,
-					amountPaid: price,
-					subscriptionType,
-					channel: "Card",
-					source: "Web",
-					coursePricingId: pricingId,
-					discountCode: discountDetails.hasAppliedDiscount ? discountDetails.discountCode : undefined,
-				}).unwrap();
-
-				config.meta = { id, referenceNumber };
-				config.tx_ref = referenceNumber;
-				// console.log(config)
-
-				// @ts-ignore
-				window.FlutterwaveCheckout(config);
-			} catch (error) {
-				// @ts-ignore
-				if (error?.status === 400 || error?.status === 401) {
-					router.push("/auth/register");
-					notify({
-						title: "Couldn't enroll for this course.",
-						description: "Please create an account to enrol for this course.",
-						type: "error",
-					});
-				} else {
-					notify({
-						title: "Couldn't process payment",
-						description: JSON.stringify(error),
-						type: "error",
-					});
-				}
-			}
-		}
-	};
 
 	useEffect(() => {
 		if (user?.id) {
@@ -383,16 +238,10 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 														<Modal isOpen={accessModal} closeModal={closeModal}>
 															<FullAccess
 																closeModal={closeModal}
-																pricingPlan={pricingPlan}
-																user={user}
-																discountDetails={discountDetails}
-																setDiscountDetails={setDiscountDetails}
-																applyDiscountCode={applyDiscountCode}
-																isCheckingCodeValidity={isCheckingCodeValidity}
-																handlePay={handlePay}
-																confirmingPurchase={confirmingPurchase}
-																isLoadingCourseDetails={isLoadingCourseDetails}
-																isLoading={isLoading}
+																pricings={props?.pricings}
+																courseId={props?.id}
+																setIsSubscribed={setIsSubscribed}
+																isExternal={props?.isExternal}
 															/>
 														</Modal>
 													)}

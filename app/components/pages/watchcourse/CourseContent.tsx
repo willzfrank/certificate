@@ -7,6 +7,7 @@ type CourseContentProps = {
 	courseModules: SingleCourseDetailsResponse["modules"];
 	courseId: string;
 	openModuleId?: string;
+	courseType?: "free" | "paid";
 };
 
 const CourseContentWithRef: React.ForwardRefRenderFunction<
@@ -15,12 +16,12 @@ const CourseContentWithRef: React.ForwardRefRenderFunction<
 		autoClick: (resourceIndex: number) => void;
 	},
 	CourseContentProps
-> = ({ courseModules, courseId, openModuleId }, ref) => {
+> = ({ courseModules, courseId, openModuleId, courseType = "paid" }, ref) => {
 	return (
 		<div className="bg-white">
 			<Accordion.Group>
 				{courseModules.map((module, moduleIndex) => (
-					<ModuleDetailsAccordion courseId={courseId} module={module} moduleIndex={moduleIndex} key={module.moduleId} openModuleId={openModuleId} ref={ref} />
+					<ModuleDetailsAccordion courseId={courseId} courseType={courseType} module={module} moduleIndex={moduleIndex} key={module.moduleId} openModuleId={openModuleId} ref={ref} />
 				))}
 			</Accordion.Group>
 		</div>

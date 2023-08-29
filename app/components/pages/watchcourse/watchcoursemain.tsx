@@ -37,6 +37,7 @@ const WatchCourseMain = () => {
 	const isPdfOpen = useSelector((state: RootState) => state.modalToggle.isOpen);
 
 	const [courseId, page] = useWatchSearchParams(["courseId", "page"]) as string[];
+	const [isSubscribed, setIsSubscribed] = React.useState<boolean | null>(null);
 
 	/**
 	 * page can be either of the following: coursecontent, notes, discussion, assessment or interactivepreview
@@ -66,7 +67,7 @@ const WatchCourseMain = () => {
 	}, [activeModuleIndex, courseDetails?.modules.length, setActiveModuleIndex, setActiveResourceIndex]);
 
 	// Use payment required to display modal
-	const [showModal, setShowModal] = React.useState(false);
+	const [showModal, setShowModal] = React.useState(true);
 
 	React.useEffect(() => {
 		const paymentRequired = courseDetails?.modules[activeModuleIndex]?.paymentRequired;
@@ -238,465 +239,374 @@ const WatchCourseMain = () => {
 	};
 
 	return (
-    <>
-      <Head>
-        <title>{courseDetails?.name}</title>
-      </Head>
-      <div className="px-6 md:px-5 md:fullscreen:px-0 ">
-        <p className="py-3 md:py-6 text-sm">
-          {/* Science of Afro-pop / Lesson 1 / Introduction to the course */}
-        </p>
+		<>
+			<Head>
+				<title>{courseDetails?.name}</title>
+			</Head>
+			<div className="px-6 md:px-5 md:fullscreen:px-0 ">
+				<p className="py-3 md:py-6 text-sm">{/* Science of Afro-pop / Lesson 1 / Introduction to the course */}</p>
 
-        <div className=" block lg:grid lg:grid-cols-[25vw,_1fr] gap-2 lg:fullscreen:grid-cols-1 ">
-          <div className="hidden lg:block ">
-            <h6 className="hidden lg:block text-black text-base inter font-normal mb-2">
-              Course Outline
-            </h6>
-            <div className=" h-screen overflow-x-hidden overflow-y-auto">
-              <CourseContent
-                openModuleId={
-                  courseDetails?.modules[activeModuleIndex]?.moduleId
-                }
-                courseModules={courseDetails?.modules || []}
-                courseId={courseDetails?.id as string}
-                ref={courseContentRef}
-              />
-            </div>
-          </div>
-          <div>
-            {shouldShowCertificate && (
-              <Certificate
-                courseName={courseDetails?.name || ''}
-                onClick={openModal}
-                courseId={courseId}
-                close={() => setShouldShowCertificate(false)}
-                hasCertificate={courseCompletionData?.hasCertificate}
-              />
-            )}
-            {!shouldShowCertificate && (
-              <>
-                {resourceGuards.isVideo(activeResource) ? (
-                  <div className=" flex items-center justify-center flex-col mt-[-30px]">
-                    <div className=" w-full h-auto">
-                      <h6 className="text-black mb-3 text-center text-base md:text-xl mt-2 lg:mt-0 inter font-semibold ">
-                        {courseDetails?.name}
-                      </h6>
+				<div className=" block lg:grid lg:grid-cols-[25vw,_1fr] gap-2 lg:fullscreen:grid-cols-1 ">
+					<div className="hidden lg:block ">
+						<h6 className="hidden lg:block text-black text-base inter font-normal mb-2">Course Outline</h6>
+						<div className=" h-screen overflow-x-hidden overflow-y-auto">
+							<CourseContent
+								openModuleId={courseDetails?.modules[activeModuleIndex]?.moduleId}
+								courseModules={courseDetails?.modules || []}
+								courseId={courseDetails?.id as string}
+								ref={courseContentRef}
+								courseType={courseDetails?.pricings[0]?.price === 0 ? "free" : "paid"}
+							/>
+						</div>
+					</div>
+					<div>
+						{shouldShowCertificate && (
+							<Certificate
+								courseName={courseDetails?.name || ""}
+								onClick={openModal}
+								courseId={courseId}
+								close={() => setShouldShowCertificate(false)}
+								hasCertificate={courseCompletionData?.hasCertificate}
+							/>
+						)}
+						{!shouldShowCertificate && (
+							<>
+								{resourceGuards.isVideo(activeResource) ? (
+									<div className=" flex items-center justify-center flex-col mt-[-30px]">
+										<div className=" w-full h-auto">
+											<h6 className="text-black mb-3 text-center text-base md:text-xl mt-2 lg:mt-0 inter font-semibold ">{courseDetails?.name}</h6>
 
-                      {/* <VideoPlayer
+											{/* <VideoPlayer
                     className="mt-4 md:mt-0 md:fullscreen:h-screen md:fullscreen:rounded-none"
                     title={activeResource.displayName}
                     description={activeResource.description}
                     src={activeResource.videoUrl}
                     onVideoEnded={moveToNextResource}
                   /> */}
-                      <VideoCoursePlayer
-                        className="mt-4 md:mt-0 md:fullscreen:h-screen md:fullscreen:rounded-none"
-                        title={activeResource.displayName}
-                        description={activeResource.description}
-                        src={activeResource.videoUrl}
-                        onVideoEnded={moveToNextResource}
-                      />
-                    </div>
-                  </div>
-                ) : null}
+											<VideoCoursePlayer
+												className="mt-4 md:mt-0 md:fullscreen:h-screen md:fullscreen:rounded-none"
+												title={activeResource.displayName}
+												description={activeResource.description}
+												src={activeResource.videoUrl}
+												onVideoEnded={moveToNextResource}
+											/>
+										</div>
+									</div>
+								) : null}
 
-                {resourceGuards.isDocument(activeResource) ? (
-                  <div className="relative">
-                    <h6 className="block md:hidden text-black  text-center text-base md:text-xl inter font-semibold">
-                      {courseDetails?.name}
-                    </h6>
-                    <div className="md:mt-[-60px] mt-0 mb-2 w-full">
-                      <PDFViewerHeader
-                        markAsCompleted={markDocumentAsRead}
-                        markAsCompletedLoading={isRegisteringDocumentAsRead}
-                        document={activeResource}
-                        courseDetails={courseDetails}
-                        close={() =>
-                          setActiveResourceType(ModuleContentTypes.video)
-                        }
-                      />
-                    </div>
+								{resourceGuards.isDocument(activeResource) ? (
+									<div className="relative">
+										<h6 className="block md:hidden text-black  text-center text-base md:text-xl inter font-semibold">{courseDetails?.name}</h6>
+										<div className="md:mt-[-60px] mt-0 mb-2 w-full">
+											<PDFViewerHeader
+												markAsCompleted={markDocumentAsRead}
+												markAsCompletedLoading={isRegisteringDocumentAsRead}
+												document={activeResource}
+												courseDetails={courseDetails}
+												close={() => setActiveResourceType(ModuleContentTypes.video)}
+											/>
+										</div>
 
-                    <React.Suspense fallback={'Loading PDF Reader'}>
-                      <PDFViewer
-                        document={activeResource}
-                        close={() =>
-                          setActiveResourceType(ModuleContentTypes.video)
-                        }
-                        markAsCompletedLoading={isRegisteringDocumentAsRead}
-                        markAsCompleted={markDocumentAsRead}
-                      />
-                    </React.Suspense>
-                  </div>
-                ) : null}
-                {isPdfOpen && resourceGuards.isDocument(activeResource) && (
-                  <Modal
-                    isOpen={activeResourceType === ModuleContentTypes.document}
-                    closeModal={() =>
-                      setActiveResourceType(ModuleContentTypes.video)
-                    }
-                    className="!bg-opacity-100"
-                  >
-                    <React.Suspense fallback={'Loading PDF Reader'}>
-                      <PDFViewerModal
-                        document={activeResource}
-                        close={() =>
-                          setActiveResourceType(ModuleContentTypes.video)
-                        }
-                        markAsCompletedLoading={isRegisteringDocumentAsRead}
-                        markAsCompleted={markDocumentAsRead}
-                      />
-                    </React.Suspense>
-                  </Modal>
-                )}
+										<React.Suspense fallback={"Loading PDF Reader"}>
+											<PDFViewer
+												document={activeResource}
+												close={() => setActiveResourceType(ModuleContentTypes.video)}
+												markAsCompletedLoading={isRegisteringDocumentAsRead}
+												markAsCompleted={markDocumentAsRead}
+											/>
+										</React.Suspense>
+									</div>
+								) : null}
+								{isPdfOpen && resourceGuards.isDocument(activeResource) && (
+									<Modal isOpen={activeResourceType === ModuleContentTypes.document} closeModal={() => setActiveResourceType(ModuleContentTypes.video)} className="!bg-opacity-100">
+										<React.Suspense fallback={"Loading PDF Reader"}>
+											<PDFViewerModal
+												document={activeResource}
+												close={() => setActiveResourceType(ModuleContentTypes.video)}
+												markAsCompletedLoading={isRegisteringDocumentAsRead}
+												markAsCompleted={markDocumentAsRead}
+											/>
+										</React.Suspense>
+									</Modal>
+								)}
 
-                {roleName?.toLowerCase() === USERTYPES.STUDENT ? (
-                  <div className="lg:w-[95%] hidden lg:block">
-                    <Tabs
-                      id="notes and discussion tab"
-                      containerClassName="my-8"
-                      isLink
-                      tabs={[
-                        {
-                          title: 'Notes',
-                          href: `/course/${courseId}?page=notes`,
-                          active: !page || !isDiscussion,
-                        },
-                        {
-                          title: 'Discussion Forum',
-                          href: `/course/${courseId}?page=discussion`,
-                          active: page === 'discussion',
-                        },
-                      ]}
-                    />
+								{roleName?.toLowerCase() === USERTYPES.STUDENT ? (
+									<div className="lg:w-[95%] hidden lg:block">
+										<Tabs
+											id="notes and discussion tab"
+											containerClassName="my-8"
+											isLink
+											tabs={[
+												{
+													title: "Notes",
+													href: `/course/${courseId}?page=notes`,
+													active: !page || !isDiscussion,
+												},
+												{
+													title: "Discussion Forum",
+													href: `/course/${courseId}?page=discussion`,
+													active: page === "discussion",
+												},
+											]}
+										/>
 
-                    {page !== 'discussion' && <Notes />}
-                    {page === 'discussion' && <Discussion />}
-                  </div>
-                ) : (
-                  <Discussion />
-                )}
+										{page !== "discussion" && <Notes />}
+										{page === "discussion" && <Discussion />}
+									</div>
+								) : (
+									<Discussion />
+								)}
 
-                {page === 'interactivepreview' &&
-                  (resourceGuards.isSelectAnAnswer(activeResource) ? (
-                    <>
-                      <SelectAnAnswerPreview
-                        shouldShow
-                        onClose={(isCorrect?: boolean) => {
-                          setActiveResourceType(ModuleContentTypes.video);
-                          router.back();
+								{page === "interactivepreview" &&
+									(resourceGuards.isSelectAnAnswer(activeResource) ? (
+										<>
+											<SelectAnAnswerPreview
+												shouldShow
+												onClose={(isCorrect?: boolean) => {
+													setActiveResourceType(ModuleContentTypes.video);
+													router.back();
 
-                          if (isCorrect) moveToNextResource();
-                        }}
-                        initialValues={{
-                          ...activeResource,
-                          correctOption:
-                            numberToQuestionTypeMap[
-                              activeResource.correctOption + 1
-                            ],
-                        }}
-                      />
-                    </>
-                  ) : resourceGuards.isClickAndMatch(activeResource) ? (
-                    <>
-                      <ClickAndMatchPreview
-                        shouldShow
-                        onClose={(isCorrect?: boolean) => {
-                          setActiveResourceType(ModuleContentTypes.video);
-                          router.back();
+													if (isCorrect) moveToNextResource();
+												}}
+												initialValues={{
+													...activeResource,
+													correctOption: numberToQuestionTypeMap[activeResource.correctOption + 1],
+												}}
+											/>
+										</>
+									) : resourceGuards.isClickAndMatch(activeResource) ? (
+										<>
+											<ClickAndMatchPreview
+												shouldShow
+												onClose={(isCorrect?: boolean) => {
+													setActiveResourceType(ModuleContentTypes.video);
+													router.back();
 
-                          if (isCorrect) moveToNextResource();
-                        }}
-                        initialValues={{
-                          title: activeResource.title,
-                          statements: activeResource.statements,
-                          moduleId: activeResource.moduleId,
-                          id: activeResource.id,
-                        }}
-                      />
-                    </>
-                  ) : resourceGuards.isThisOrThat(activeResource) ? (
-                    <>
-                      <ThisOrThatPreview
-                        shouldShow
-                        onClose={(isCorrect?: boolean) => {
-                          setActiveResourceType(ModuleContentTypes.video);
-                          router.back();
+													if (isCorrect) moveToNextResource();
+												}}
+												initialValues={{
+													title: activeResource.title,
+													statements: activeResource.statements,
+													moduleId: activeResource.moduleId,
+													id: activeResource.id,
+												}}
+											/>
+										</>
+									) : resourceGuards.isThisOrThat(activeResource) ? (
+										<>
+											<ThisOrThatPreview
+												shouldShow
+												onClose={(isCorrect?: boolean) => {
+													setActiveResourceType(ModuleContentTypes.video);
+													router.back();
 
-                          if (isCorrect) moveToNextResource();
-                        }}
-                        initialValues={{
-                          questions: activeResource.questions.map((val) => ({
-                            ...val,
-                            answer:
-                              val.correctOption === 0
-                                ? 'OptionOne'
-                                : 'OptionTwo',
-                            // cardType of zero represents image, one represents text
-                            cardType:
-                              val.cardDetails.cardType === 1 ? 'text' : 'image',
-                            cardContent: val.cardDetails.content,
-                          })),
-                          groupId: activeResource.group,
-                        }}
-                      />
-                    </>
-                  ) : resourceGuards.isFillInTheBlank(activeResource) ? (
-                    <>
-                      {/* @ts-ignore */}
-                      <FillInTheBlankPreview
-                        shouldShow
-                        onClose={(isCorrect?: boolean) => {
-                          setActiveResourceType(ModuleContentTypes.video);
-                          router.back();
+													if (isCorrect) moveToNextResource();
+												}}
+												initialValues={{
+													questions: activeResource.questions.map((val) => ({
+														...val,
+														answer: val.correctOption === 0 ? "OptionOne" : "OptionTwo",
+														// cardType of zero represents image, one represents text
+														cardType: val.cardDetails.cardType === 1 ? "text" : "image",
+														cardContent: val.cardDetails.content,
+													})),
+													groupId: activeResource.group,
+												}}
+											/>
+										</>
+									) : resourceGuards.isFillInTheBlank(activeResource) ? (
+										<>
+											{/* @ts-ignore */}
+											<FillInTheBlankPreview
+												shouldShow
+												onClose={(isCorrect?: boolean) => {
+													setActiveResourceType(ModuleContentTypes.video);
+													router.back();
 
-                          if (isCorrect) moveToNextResource();
-                        }}
-                        {...getFillBlank(
-                          //@ts-ignore
-                          activeResource
-                        )}
-                      />
-                    </>
-                  ) : resourceGuards.isAllThatApply(activeResource) ? (
-                    <>
-                      <SelectAllThatApplyPreview
-                        shouldShow
-                        onClose={(isCorrect?: boolean) => {
-                          setActiveResourceType(ModuleContentTypes.video);
-                          router.back();
+													if (isCorrect) moveToNextResource();
+												}}
+												{...getFillBlank(
+													//@ts-ignore
+													activeResource
+												)}
+											/>
+										</>
+									) : resourceGuards.isAllThatApply(activeResource) ? (
+										<>
+											<SelectAllThatApplyPreview
+												shouldShow
+												onClose={(isCorrect?: boolean) => {
+													setActiveResourceType(ModuleContentTypes.video);
+													router.back();
 
-                          if (isCorrect) moveToNextResource();
-                        }}
-                        initialValues={{
-                          ...activeResource,
-                          answers: activeResource.answers.map(
-                            (num) => numberToQuestionTypeMap[num + 1]
-                          ),
-                        }}
-                      />
-                    </>
-                  ) : null)}
+													if (isCorrect) moveToNextResource();
+												}}
+												initialValues={{
+													...activeResource,
+													answers: activeResource.answers.map((num) => numberToQuestionTypeMap[num + 1]),
+												}}
+											/>
+										</>
+									) : null)}
 
-                <div className="block lg:hidden lg:w-1/3">
-                  <Tabs
-                    id="notes and discussion tab mobile "
-                    containerClassName="my-8 !space-x-2"
-                    tabClassName="text-sm"
-                    isLink
-                    tabs={
-                      roleName?.toLowerCase() === USERTYPES.INSTRUCTOR
-                        ? [
-                            {
-                              title: 'Course content',
-                              href: `/course/${courseId}?page=coursecontent`,
-                              active: !page || page === 'coursecontent',
-                            },
-                            {
-                              title: 'Discussion Forum',
-                              href: `/course/${courseId}?page=discussion`,
-                              active: page === 'discussion',
-                            },
-                          ]
-                        : [
-                            {
-                              title: 'Course content',
-                              href: `/course/${courseId}?page=coursecontent`,
-                              active: !page || page === 'coursecontent',
-                            },
-                            {
-                              title: 'Notes',
-                              href: `/course/${courseId}?page=notes`,
-                              active: page === 'notes',
-                            },
-                            {
-                              title: 'Discussion Forum',
-                              href: `/course/${courseId}?page=discussion`,
-                              active: page === 'discussion',
-                            },
-                          ]
-                    }
-                  />
+								<div className="block lg:hidden lg:w-1/3">
+									<Tabs
+										id="notes and discussion tab mobile "
+										containerClassName="my-8 !space-x-2"
+										tabClassName="text-sm"
+										isLink
+										tabs={
+											roleName?.toLowerCase() === USERTYPES.INSTRUCTOR
+												? [
+														{
+															title: "Course content",
+															href: `/course/${courseId}?page=coursecontent`,
+															active: !page || page === "coursecontent",
+														},
+														{
+															title: "Discussion Forum",
+															href: `/course/${courseId}?page=discussion`,
+															active: page === "discussion",
+														},
+												  ]
+												: [
+														{
+															title: "Course content",
+															href: `/course/${courseId}?page=coursecontent`,
+															active: !page || page === "coursecontent",
+														},
+														{
+															title: "Notes",
+															href: `/course/${courseId}?page=notes`,
+															active: page === "notes",
+														},
+														{
+															title: "Discussion Forum",
+															href: `/course/${courseId}?page=discussion`,
+															active: page === "discussion",
+														},
+												  ]
+										}
+									/>
 
-                  {page === 'notes' &&
-                    roleName?.toLowerCase() === USERTYPES.STUDENT && <Notes />}
+									{page === "notes" && roleName?.toLowerCase() === USERTYPES.STUDENT && <Notes />}
 
-                  {page === 'discussion' && <Discussion />}
-                </div>
+									{page === "discussion" && <Discussion />}
+								</div>
 
-                {(!page || page === 'coursecontent') && (
-                  <div className="lg:hidden">
-                    <CourseContent
-                      openModuleId={
-                        courseDetails?.modules[activeModuleIndex]?.moduleId
-                      }
-                      courseModules={courseDetails?.modules || []}
-                      courseId={courseDetails?.id as string}
-                      ref={courseContentRef}
-                    />
-                  </div>
-                )}
+								{(!page || page === "coursecontent") && (
+									<div className="lg:hidden">
+										<CourseContent
+											openModuleId={courseDetails?.modules[activeModuleIndex]?.moduleId}
+											courseModules={courseDetails?.modules || []}
+											courseId={courseDetails?.id as string}
+											ref={courseContentRef}
+											courseType={courseDetails?.pricings[0]?.price === 0 ? "free" : "paid"}
+										/>
+									</div>
+								)}
 
-                {page === 'assessment' && (
-                  <AssessmentDesktop
-                    moduleId={
-                      courseDetails?.modules[activeModuleIndex]
-                        .moduleId as string
-                    }
-                  />
-                )}
-              </>
-            )}
-          </div>
-        </div>
+								{page === "assessment" && <AssessmentDesktop moduleId={courseDetails?.modules[activeModuleIndex].moduleId as string} />}
+							</>
+						)}
+					</div>
+				</div>
 
-        <Transition appear show={isOpen} as={React.Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-10 m-2 min-w-[800px]"
-            onClose={closeModal}
-          >
-            <Transition.Child
-              as={React.Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
+				<Transition appear show={isOpen} as={React.Fragment}>
+					<Dialog as="div" className="relative z-10 m-2 min-w-[800px]" onClose={closeModal}>
+						<Transition.Child
+							as={React.Fragment}
+							enter="ease-out duration-300"
+							enterFrom="opacity-0"
+							enterTo="opacity-100"
+							leave="ease-in duration-200"
+							leaveFrom="opacity-100"
+							leaveTo="opacity-0">
+							<div className="fixed inset-0 bg-black bg-opacity-25" />
+						</Transition.Child>
 
-            <div className="fixed inset-0 overflow-y-auto md:min-w-[531px]">
-              <div className="flex min-h-full items-center justify-center text-center">
-                <Transition.Child
-                  as={React.Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <Dialog.Panel className="w-full md:min-w-[742px] max-w-md transform overflow-hidden rounded-xl bg-white text-left align-middle shadow-xl transition-all divide-y">
-                    <Dialog.Title as="h3" className="font-medium p-4 relative">
-                      <div className="text-center font-sans">
-                        Rate this course
-                      </div>
-                      <button
-                        type="button"
-                        className="absolute right-4 top-2/4 -translate-y-2/4"
-                        onClick={closeModal}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          fill="none"
-                          viewBox="0 0 14 14"
-                        >
-                          <path
-                            stroke="#2F2D37"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="1.5"
-                            d="M12.994 1.005l-11.99 11.99M13 13.002L1 1"
-                          ></path>
-                        </svg>
-                      </button>
-                    </Dialog.Title>
-                    <div className="p-6 px-[50px]">
-                      <div className="text-center mt-2">
-                        <p className=" text-xl font-medium mb-4">
-                          Rate “{courseDetails?.name}”
-                        </p>
-                        <form className="bg-white rounded w-full">
-                          <StarRating rating={rating} setRating={setRating} />
+						<div className="fixed inset-0 overflow-y-auto md:min-w-[531px]">
+							<div className="flex min-h-full items-center justify-center text-center">
+								<Transition.Child
+									as={React.Fragment}
+									enter="ease-out duration-300"
+									enterFrom="opacity-0 scale-95"
+									enterTo="opacity-100 scale-100"
+									leave="ease-in duration-200"
+									leaveFrom="opacity-100 scale-100"
+									leaveTo="opacity-0 scale-95">
+									<Dialog.Panel className="w-full md:min-w-[742px] max-w-md transform overflow-hidden rounded-xl bg-white text-left align-middle shadow-xl transition-all divide-y">
+										<Dialog.Title as="h3" className="font-medium p-4 relative">
+											<div className="text-center font-sans">Rate this course</div>
+											<button type="button" className="absolute right-4 top-2/4 -translate-y-2/4" onClick={closeModal}>
+												<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14">
+													<path stroke="#2F2D37" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12.994 1.005l-11.99 11.99M13 13.002L1 1"></path>
+												</svg>
+											</button>
+										</Dialog.Title>
+										<div className="p-6 px-[50px]">
+											<div className="text-center mt-2">
+												<p className=" text-xl font-medium mb-4">Rate “{courseDetails?.name}”</p>
+												<form className="bg-white rounded w-full">
+													<StarRating rating={rating} setRating={setRating} />
 
-                          <p className="my-4">
-                            Would you recommend this course to your friend?
-                          </p>
-                          <div className="flex items-center justify-center gap-8">
-                            <div className="flex gap-2 items-center">
-                              <label htmlFor="true">Yes</label>
-                              <input
-                                type="radio"
-                                name="would recommend to friend"
-                                id={'true'}
-                                defaultChecked={true}
-                                onChange={() => setWouldRecommend(true)}
-                              />
-                            </div>
-                            <div className="flex gap-2 items-center">
-                              <label htmlFor="false">No</label>
-                              <input
-                                type="radio"
-                                name="would recommend to friend"
-                                id={'false'}
-                                onChange={() => setWouldRecommend(false)}
-                              />
-                            </div>
-                          </div>
+													<p className="my-4">Would you recommend this course to your friend?</p>
+													<div className="flex items-center justify-center gap-8">
+														<div className="flex gap-2 items-center">
+															<label htmlFor="true">Yes</label>
+															<input type="radio" name="would recommend to friend" id={"true"} defaultChecked={true} onChange={() => setWouldRecommend(true)} />
+														</div>
+														<div className="flex gap-2 items-center">
+															<label htmlFor="false">No</label>
+															<input type="radio" name="would recommend to friend" id={"false"} onChange={() => setWouldRecommend(false)} />
+														</div>
+													</div>
 
-                          <div className="mb-5 form-inputs mt-4 md:mt-0">
-                            <div className="overflow-hidden flex items-stretch justify-between relative">
-                              <textarea
-                                id="text"
-                                placeholder=" Your review"
-                                onChange={handleChange}
-                                value={message}
-                                className="mt-5 mx-auto resize-none md:w-[420px] h-40 px-3 py-2 pr-10 leading-tight text-gray-700 border border-app-gray rounded"
-                              ></textarea>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                      <p>
-                        By clicking Submit, I agree that my feedback may be
-                        viewed by the Certifications by Unify community, in
-                        compliance with the Certifications by Unify Terms of Use
-                        and privacy settings.
-                      </p>
-                      <div className="my-9  flex items-center justify-center">
-                        <Button
-                          loading={isLoading}
-                          type="submit"
-                          onClick={onSubmit}
-                          className="relative text-sm font-medium border border-transparent rounded-md group focus:outline-none m py-2.5 px-9 mr-2 mb-2 text-white bg-[#B61046] border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200 "
-                        >
-                          Submit review
-                        </Button>
-                      </div>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </Dialog>
-        </Transition>
+													<div className="mb-5 form-inputs mt-4 md:mt-0">
+														<div className="overflow-hidden flex items-stretch justify-between relative">
+															<textarea
+																id="text"
+																placeholder=" Your review"
+																onChange={handleChange}
+																value={message}
+																className="mt-5 mx-auto resize-none md:w-[420px] h-40 px-3 py-2 pr-10 leading-tight text-gray-700 border border-app-gray rounded"></textarea>
+														</div>
+													</div>
+												</form>
+											</div>
+											<p>
+												By clicking Submit, I agree that my feedback may be viewed by the Certifications by Unify community, in compliance with the Certifications by Unify
+												Terms of Use and privacy settings.
+											</p>
+											<div className="my-9  flex items-center justify-center">
+												<Button
+													loading={isLoading}
+													type="submit"
+													onClick={onSubmit}
+													className="relative text-sm font-medium border border-transparent rounded-md group focus:outline-none m py-2.5 px-9 mr-2 mb-2 text-white bg-[#B61046] border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
+													Submit review
+												</Button>
+											</div>
+										</div>
+									</Dialog.Panel>
+								</Transition.Child>
+							</div>
+						</div>
+					</Dialog>
+				</Transition>
 
-        <Modal isOpen={!showModal} closeModal={() => setShowModal(false)}>
-          {/* <p>Refactor full access to work on this page</p> */}
-          {/* <FullAccess
-            closeModal={closeModal}
-            pricingPlan={pricingPlan}
-            user={user}
-            discountDetails={discountDetails}
-            setDiscountDetails={setDiscountDetails}
-            applyDiscountCode={applyDiscountCode}
-            isCheckingCodeValidity={isCheckingCodeValidity}
-            handlePay={handlePay}
-            confirmingPurchase={confirmingPurchase}
-            isLoadingCourseDetails={isLoadingCourseDetails}
-            isLoading={isLoading}
-          /> */}
-        </Modal>
-
-        
-      </div>
-    </>
-  );
+				<Modal isOpen={showModal} closeModal={() => setShowModal(false)}>
+					<FullAccess
+						closeModal={() => setShowModal(false)}
+						pricings={courseDetails?.pricings}
+						courseId={courseDetails?.id as string}
+						setIsSubscribed={setIsSubscribed}
+						isExternal={courseDetails?.isExternal ? true : false}
+					/>
+				</Modal>
+			</div>
+		</>
+	);
 };
 
 export default WatchCourseMain;
