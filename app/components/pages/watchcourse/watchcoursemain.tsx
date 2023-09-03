@@ -94,7 +94,9 @@ const WatchCourseMain = () => {
 			}
 			// If all modules have been completed, show the certificate
 			// This will also send request to server
-			setShouldShowCertificate(true);
+			if (courseDetails?.isSubscribed || courseDetails?.pricings[0]?.price === 0) {
+				setShouldShowCertificate(true);
+			}
 		} else {
 			const nextResourceIndex = clamp(0, allResourses.length - 1, activeResourceIndex + 1);
 
