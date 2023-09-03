@@ -182,7 +182,8 @@ const CreateCourse_Review: NextPageWithLayout<{}> = () => {
             ))}
         </Accordion.Group> */}
 
-				<CourseContent modules={courseModules} courseId={courseInfo.id} containerClassName="!p-0" hideTitle courseType={pricings[0]?.price === 0 ? "free" : "paid"} />
+				{/* subscribed is false because during course creation it is false */}
+				<CourseContent modules={courseModules} courseId={courseInfo.id} containerClassName="!p-0" hideTitle courseType={pricings[0]?.price === 0 ? "free" : "paid"} subscribed={false} />
 
 				<div className="items-center flex gap-2 mt-8 mb-2">
 					<p className="font-medium">Instructor profile</p>
