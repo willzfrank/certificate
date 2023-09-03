@@ -14,6 +14,8 @@ type ModuleDetailsAccordionProps = {
 	openModuleId?: string;
 	readonly moduleIndex: number;
 	courseType: "free" | "paid";
+	subscribed: boolean;
+	setShowModal?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
@@ -22,7 +24,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
 		autoClick: (resourceIndex: number) => void;
 	},
 	ModuleDetailsAccordionProps
-> = ({ courseId, module, moduleIndex, openModuleId, courseType }, ref) => {
+> = ({ courseId, module, moduleIndex, openModuleId, courseType, subscribed, setShowModal }, ref) => {
 	const { roleName: userRole } = useAppSelector((store) => store.user);
 	const { data: moduleContent, isLoading } = useGetCourseModuleContentQuery({
 		courseId,
@@ -83,8 +85,19 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
 					{/* PADLOCK HERE */}
 					<div className="flex items-center gap-1 space-x-1 pr-1">
 						<div>
-							{module?.paymentRequired && courseType !== "free" && (
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+							{module?.paymentRequired && courseType !== "free" && !subscribed && (
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									strokeWidth="1.5"
+									stroke="currentColor"
+									className="w-4 h-4"
+									onClick={() => {
+										//  Show the modal
+										if (!setShowModal) return;
+										setShowModal(true);
+									}}>
 									<path
 										strokeLinecap="round"
 										strokeLinejoin="round"
@@ -92,7 +105,7 @@ const ModuleDetailsAccordionWithRef: React.ForwardRefRenderFunction<
 									/>
 								</svg>
 							)}
-							{(!module?.paymentRequired || courseType === "free") && (
+							{(!module?.paymentRequired || courseType === "free" || subscribed) && (
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
 									<path
 										strokeLinecap="round"

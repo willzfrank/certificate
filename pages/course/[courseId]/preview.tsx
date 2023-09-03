@@ -63,7 +63,9 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
 				</React.Fragment>
 			)}
 
-			{currentPage === "coursecontent" && <CourseContent modules={course.modules} courseId={course.id} courseType={course?.pricings[0]?.price === 0 ? "free" : "paid"} />}
+			{currentPage === "coursecontent" && (
+				<CourseContent modules={course.modules} courseId={course.id} courseType={course?.pricings[0]?.price === 0 ? "free" : "paid"} subscribed={course.isSubscribed as boolean} />
+			)}
 
 			{currentPage === "instructor" && <CourseInstructorDetails instructors={course.instructors} currentCourseId={course.id} />}
 
