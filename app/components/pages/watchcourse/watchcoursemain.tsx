@@ -71,8 +71,9 @@ const WatchCourseMain = () => {
 
 	React.useEffect(() => {
 		const paymentRequired = courseDetails?.modules[activeModuleIndex]?.paymentRequired;
-		setShowModal(paymentRequired == undefined ? true : paymentRequired);
-	}, [courseDetails?.modules, activeModuleIndex]);
+
+		setShowModal(paymentRequired == undefined ? true : courseDetails?.isSubscribed ? false : paymentRequired);
+	}, [courseDetails?.modules, activeModuleIndex, courseDetails?.isSubscribed]);
 
 	const moveToNextResource = React.useCallback(() => {
 		if (resourceGuards.isVideo(activeResource) && roleName?.toLowerCase() === USERTYPES.STUDENT) {
@@ -256,6 +257,8 @@ const WatchCourseMain = () => {
 								courseId={courseDetails?.id as string}
 								ref={courseContentRef}
 								courseType={courseDetails?.pricings[0]?.price === 0 ? "free" : "paid"}
+								subscribed={courseDetails?.isSubscribed as boolean}
+								setShowModal={setShowModal}
 							/>
 						</div>
 					</div>
@@ -502,6 +505,7 @@ const WatchCourseMain = () => {
 											courseId={courseDetails?.id as string}
 											ref={courseContentRef}
 											courseType={courseDetails?.pricings[0]?.price === 0 ? "free" : "paid"}
+											subscribed={courseDetails?.isSubscribed as boolean}
 										/>
 									</div>
 								)}
