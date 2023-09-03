@@ -258,6 +258,7 @@ const WatchCourseMain = () => {
 								ref={courseContentRef}
 								courseType={courseDetails?.pricings[0]?.price === 0 ? "free" : "paid"}
 								subscribed={courseDetails?.isSubscribed as boolean}
+								setShowModal={setShowModal}
 							/>
 						</div>
 					</div>

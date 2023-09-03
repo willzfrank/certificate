@@ -9,6 +9,7 @@ type CourseContentProps = {
 	openModuleId?: string;
 	courseType?: "free" | "paid";
 	subscribed: boolean;
+	setShowModal?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const CourseContentWithRef: React.ForwardRefRenderFunction<
@@ -17,7 +18,7 @@ const CourseContentWithRef: React.ForwardRefRenderFunction<
 		autoClick: (resourceIndex: number) => void;
 	},
 	CourseContentProps
-> = ({ courseModules, courseId, openModuleId, courseType = "paid", subscribed }, ref) => {
+> = ({ courseModules, courseId, openModuleId, courseType = "paid", subscribed, setShowModal }, ref) => {
 	return (
 		<div className="bg-white">
 			<Accordion.Group>
@@ -30,6 +31,7 @@ const CourseContentWithRef: React.ForwardRefRenderFunction<
 						moduleIndex={moduleIndex}
 						key={module.moduleId}
 						openModuleId={openModuleId}
+						setShowModal={setShowModal}
 						ref={ref}
 					/>
 				))}
