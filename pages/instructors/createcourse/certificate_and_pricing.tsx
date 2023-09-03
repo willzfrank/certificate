@@ -229,7 +229,9 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
                             type="checkbox"
                             value={''}
                             disabled={pricings[0]?.price === 0}
-                            checked={checkboxes[index]}
+                            checked={
+                              pricings[0]?.price !== 0 && checkboxes[index]
+                            }
                             onChange={() => toggleCheckbox(index)}
                             className="sr-only peer"
                           />

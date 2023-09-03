@@ -25,6 +25,7 @@ import Perks from '../../../app/components/pages/landing/Perks';
 import TargetAudienceAccordion from 'app/components/pages/landing/TargetAudienceAccordion';
 import bankersImage from '../../../public/images/Banker Picture.png';
 import FAQAccordion from 'app/components/pages/landing/FAQAccordion';
+import KeyOutcomes from '../../../app/components/pages/landing/KeyOutcomes';
 
 const BecomeABanker: NextPageWithLayout<{}> = function () {
   const [activeTab, setActiveTab] = React.useState(1);
@@ -457,11 +458,13 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </ul>
           )}
 
-          <div className="pl-24 relative hidden md:block my-20">
+          <div className=" relative hidden md:block my-20">
             <div className=" absolute border-2 z-10 -top-[300px]  -right-[320px] rounded-full h-[500px] w-[500px] border-[#d60049]"></div>
             <div className=" absolute border-2 z-10 -top-[500px] -right-[400px] rounded-full h-[500px] w-[500px] border-[#d60049]"></div>
-            <h1 className=" font-bold text-4xl jost">Key Learning Outcomes:</h1>
-            <div className=" flex items-center gap-4 py-6">
+            <h1 className=" font-bold text-4xl jost pl-24 ">
+              Key Learning Outcomes:
+            </h1>
+            <div className=" flex items-center gap-4 py-6 pl-24">
               <p className=" text-3xl jost">In this course, you will learn:</p>
               {/* <div className=" flex items-center gap-3">
                 <p className=" italic text-xl">Read More</p>
@@ -481,83 +484,20 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </svg>
               </div> */}
             </div>
-            <ul className="list-disc space-y-2">
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                Key components and functions of the banking industry, including
-                its structure and regulations.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                Benefits of digital banking and its impact on the industry, as
-                well as data management.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                The use of office productivity tools such as Microsoft Excel,
-                Word, and PowerPoint, for effective business writing and oral
-                communication skills.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                The application of essential leadership skills and traits
-                required to succeed in the banking industry, including emotional
-                intelligence, problem-solving and decision-making.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                How to prepare effective communications both orally and in
-                writing for professional contexts such as job interviews and
-                presentations to key stakeholders.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                How digital and technology trends are impacting the future of
-                work and business, and how to develop a digital marketing
-                strategy that aligns with business goals and objectives.{' '}
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                The fundamentals of data analytics, and how to collect, clean
-                and analyze data to ensure data accuracy and completeness.
-              </li>
-            </ul>
+            <div className="z-20">
+              <KeyOutcomes />
+            </div>
           </div>
 
-          <div className="block md:hidden p-5 my-5">
+          <div className="block md:hidden p-5 my-5 z-[1000]">
             <h1 className="text-black text-xl font-bold">
               Key Learning Outcomes:
             </h1>
             <p className="w-[246px] h-[29px] text-black text-[15px] font-normal">
               In this course, you will learn:
             </p>
-            <ul className="list-disc space-y-2">
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                Key components and functions of the banking industry, including
-                its structure and regulations.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                Benefits of digital banking and its impact on the industry, as
-                well as data management.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                The use of office productivity tools such as Microsoft Excel,
-                Word, and PowerPoint, for effective business writing and oral
-                communication skills.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                The application of essential leadership skills and traits
-                required to succeed in the banking industry, including emotional
-                intelligence, problem-solving and decision-making.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                How to prepare effective communications both orally and in
-                writing for professional contexts such as job interviews and
-                presentations to key stakeholders.
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                How digital and technology trends are impacting the future of
-                work and business, and how to develop a digital marketing
-                strategy that aligns with business goals and objectives.{' '}
-              </li>
-              <li className="jost text-black text-[15px] md:text-2xl font-normal ">
-                The fundamentals of data analytics, and how to collect, clean
-                and analyze data to ensure data accuracy and completeness.
-              </li>
-            </ul>
+            <KeyOutcomes />
+
             {/* <div className="flex items-center justify-center">
               <div className="w-[350px] h-[18px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[20px] flex items-center justify-center">
                 <p className="text-white text-[10px] font-medium leading-[8px]">
@@ -905,9 +845,9 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             <iframe
               width="1000"
               className="aspect-video"
-              src="https://www.youtube-nocookie.com/embed/UY28LXU2M3Q"
+              src="https://www.youtube-nocookie.com/embed/UY28LXU2M3Q?autoplay=1&mute=1"
               title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web"
               allowFullScreen
             ></iframe>
           </Modal>

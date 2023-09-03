@@ -1,37 +1,35 @@
-import * as React from 'react'
-import { MainLayout } from 'app/components/layouts'
-import type { NextPageWithLayout } from 'app/types'
-import Link from 'next/link'
-import { Tabs, Button, BlurPasswordInput } from 'app/components'
-import { useWatchSearchParams } from 'app/hooks'
-import { USERTYPES } from 'app/types'
-import { useRegisterMutation, RegisterBody } from 'app/api/authApi'
-import { useNotify } from 'app/hooks'
-import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
+import * as React from 'react';
+import { MainLayout } from 'app/components/layouts';
+import type { NextPageWithLayout } from 'app/types';
+import Link from 'next/link';
+import { Tabs, Button, BlurPasswordInput } from 'app/components';
+import { useWatchSearchParams } from 'app/hooks';
+import { USERTYPES } from 'app/types';
+import { useRegisterMutation, RegisterBody } from 'app/api/authApi';
+import { useNotify } from 'app/hooks';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 type FormData = {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  confirm_password: string
-  userType: USERTYPES
-  userGroupId?: string
-}
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+  userType: USERTYPES;
+  userGroupId?: string;
+};
 
 const Register: NextPageWithLayout<{}> = () => {
-  const [
-    register,
-    { isLoading, isError, error, isSuccess, data },
-  ] = useRegisterMutation()
+  const [register, { isLoading, isError, error, isSuccess, data }] =
+    useRegisterMutation();
 
   const [searchParam, userGroupId] = useWatchSearchParams([
     'as',
     'userGroupId',
-  ]) as [string, string]
-  const router = useRouter()
+  ]) as [string, string];
+  const router = useRouter();
 
   const {
     register: rhfregister,
@@ -44,20 +42,18 @@ const Register: NextPageWithLayout<{}> = () => {
     defaultValues: {
       userGroupId: userGroupId || undefined,
     },
-  })
+  });
 
   React.useEffect(() => {
-    if (userGroupId) setValue('userGroupId', userGroupId)
+    if (userGroupId) setValue('userGroupId', userGroupId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userGroupId])
+  }, [userGroupId]);
 
-  const isInstructor = searchParam === USERTYPES.INSTRUCTOR
-  const [
-    hasRegisteredSuccessfully,
-    setHasRegisteredSuccessfully,
-  ] = React.useState(false)
+  const isInstructor = searchParam === USERTYPES.INSTRUCTOR;
+  const [hasRegisteredSuccessfully, setHasRegisteredSuccessfully] =
+    React.useState(false);
 
-  const notify = useNotify()
+  const notify = useNotify();
 
   React.useEffect(() => {
     reset({
@@ -68,18 +64,18 @@ const Register: NextPageWithLayout<{}> = () => {
       confirm_password: '',
       userGroupId: undefined,
       userType: isInstructor ? USERTYPES.INSTRUCTOR : USERTYPES.STUDENT,
-    })
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInstructor, reset, router])
+  }, [isInstructor, reset, router]);
 
   React.useEffect(() => {
     if (isSuccess) {
-      setHasRegisteredSuccessfully(true)
+      setHasRegisteredSuccessfully(true);
       notify({
         title: 'Success',
         description: 'Your account has been created successfully',
         type: 'success',
-      })
+      });
     }
 
     if (isError)
@@ -88,19 +84,25 @@ const Register: NextPageWithLayout<{}> = () => {
         description:
           'Error creating account. Please check if account already exists',
         type: 'error',
-      })
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, isError, data, error])
+  }, [isSuccess, isError, data, error]);
 
   const handleFormSubmission = (data: FormData) => {
-    register(data)
-  }
+    register(data);
+  };
+
+  React.useEffect(() => {
+    if (hasRegisteredSuccessfully) {
+      window.scrollTo(0, 0); // Scroll to the top of the page
+    }
+  }, [hasRegisteredSuccessfully]);
 
   if (hasRegisteredSuccessfully) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center  text-center">
-        <p className="flex gap-3 items-center text-app-dark-500 text-xl">
-          You&apos;ve got mail{' '}
+        <p className="flex gap-3 items-center text-app-dark-500 text-3xl">
+          You&apos;ve got a mail{' '}
           <svg
             width="24"
             height="25"
@@ -132,7 +134,7 @@ const Register: NextPageWithLayout<{}> = () => {
           </svg>
         </p>
 
-        <p className="text-muted w-1/3 mt-4 mb-12 leading-6">
+        <p className="text-black w-full md:w-1/3 mt-4 text-base mb-12 leading-6">
           Email verification. Follow the link sent to your email to verify your
           email address and log in to your account
         </p>
@@ -144,11 +146,11 @@ const Register: NextPageWithLayout<{}> = () => {
           </Link>
         </p>
       </div>
-    )
+    );
   }
 
-  const password = watch('password')
-  const formValues = watch()
+  const password = watch('password');
+  const formValues = watch();
   return (
     <div className="flex flex-wrap items-center justify-center min-h-[75vh] my-16">
       <div className="flex-wrap items-center justify-center w-full max-w-[475px]">
@@ -265,7 +267,7 @@ const Register: NextPageWithLayout<{}> = () => {
                       //@ts-ignore
                       validate: (val: string) => {
                         if (password != val || !val?.trim()) {
-                          return 'Your passwords do not match'
+                          return 'Your passwords do not match';
                         }
                       },
                     })}
@@ -334,10 +336,10 @@ const Register: NextPageWithLayout<{}> = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
 
 Register.getLayout = (page) => (
   <MainLayout
@@ -349,4 +351,4 @@ Register.getLayout = (page) => (
     </Head>
     {page}
   </MainLayout>
-)
+);

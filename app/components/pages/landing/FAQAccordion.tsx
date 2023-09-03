@@ -51,30 +51,23 @@ const FAQAccordion = () => {
             className="w-full h-12 border border-rose-600 flex items-center justify-between px-5 cursor-pointer"
             onClick={() => toggleSection(category.index)}
           >
-            <p className="text-center text-black text-[15px] font-semibold">
+            <p className="text-center text-black md:text-xl text-[15px] font-semibold">
               {category.title}
             </p>
             <svg
-              width="16"
-              height="12"
-              viewBox="0 0 16 12"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
               className={`h-6 w-6 ${
                 openSections[category.index] ? 'rotate-180' : ''
               }`}
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M15.0001 7.44824L11.6208 10.8276L8.24146 7.44824"
-                stroke="black"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-              />
-              <path
-                d="M11.6207 10.8275V5.03443C11.6207 2.90147 9.89154 1.17236 7.75862 1.17236H1"
-                stroke="black"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
               />
             </svg>
           </div>

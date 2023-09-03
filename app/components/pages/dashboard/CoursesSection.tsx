@@ -138,7 +138,7 @@ const CoursesSection = () => {
       studentId: user.id as string,
     },
     {
-      pollingInterval: 3000,
+      pollingInterval: 1000,
     }
   );
 
