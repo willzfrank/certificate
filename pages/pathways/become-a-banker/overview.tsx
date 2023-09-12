@@ -88,16 +88,16 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
 
           <div className=" md:px-[50px] md:py-[40px] md:my-0 my-10 p-3 flex md:block items-center gap-1">
             <div
-              className="md:w-[555px] w-3/4 h-full md:h-[307px] border-4 p-2 md:p-7 relative border-b-0"
+              className="md:w-[555px] w-[70%] h-full md:h-[307px] border-4 p-2 md:p-7 relative border-b-0"
               style={{
                 borderImage: 'linear-gradient(to right, #D60049, #FF8F40) 1',
                 borderImageSlice: 1,
               }}
             >
-              <h2 className="text-neutral-800 text-xl md:text-[40px] font-bold jost">
+              <h2 className="text-neutral-800 text-xl md:text-[40px] font-bold jost mb-3 md:mb-0">
                 Classes are on-going
               </h2>
-              <p className="md:w-[523px] h-full md:h-[98px] text-black  text-[18px] md:text-[25px] font-normal jost md:mt-5">
+              <p className="md:w-[523px] h-full md:h-[98px] text-black  text-[10px] md:text-[25px] font-normal jost md:mt-5">
                 Register now to join the next co-hort. A new cohort begins on
                 the 1st of every month.
               </p>
@@ -115,9 +115,9 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </div>
               </div>
             </div>
-            <div className="md:hidden text-center w-1/4 px-3 py-[13px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[30px] justify-center items-center gap-2.5 block">
+            <div className="md:hidden text-center w-[30%] px-2 py-[13px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[30px] justify-center items-center gap-2.5 block">
               <div
-                className="text-white text-[9px] font-medium"
+                className="text-white text-[13px] font-medium"
                 onClick={() => setModalOpen(true)}
               >
                 Learn More
@@ -197,7 +197,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </div>
               </div>
             </div>
-            <div className=" grid grid-cols-3  items-center p-2 gap-1 my-5">
+            <div className=" grid grid-cols-3  items-center py-2 px-10 gap-1 my-5">
               <div>
                 <Image src={sterlinglogo} alt="logo" width="180%" />
               </div>
@@ -258,9 +258,9 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                   Land the job of your dreams
                 </li>
               </ul>
-              <div className="md:w-[304px] md:ml-0 ml-5 py-3 md:py-0 md:h-16 bg-gradient-to-r from-rose-600 to-orange-400 rounded-[50px] flex items-center justify-center md:mb-0 mb-10">
+              <div className="md:w-[304px] md:ml-0 ml-5 md:py-0 md:h-16 bg-gradient-to-r from-rose-600 to-orange-400 rounded-[50px] flex items-center justify-center md:mb-0 mb-10">
                 <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
-                  <p className="text-white text-[10px] md:text-[20px] font-medium cursor-pointer jost">
+                  <p className="text-white text-[15px] md:text-[20px] font-medium cursor-pointer jost">
                     Start your Journey here
                   </p>
                 </Link>
@@ -381,21 +381,21 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             <TargetAudienceAccordion />
           </div>
 
-          <div className=" overflow-hidden relative px-5 md:px-0 md:py-20 py-5 flex items-center gap-6 ">
+          <div className=" overflow-hidden relative px-5 md:px-0 md:py-20 py-5 flex items-center gap-2 md:gap-6 ">
             <div className="hidden md:block absolute z-[3] top-[45px] -left-8 border-[3px] border-[#d60049] h-[750px] w-[500px] rounded-tr-[80px]"></div>
 
             <div className=" hidden md:block z-[5]">
               <Image src={Bulb} alt="" />
             </div>
             <div className=" md:hidden block z-[5]">
-              <Image src={Bulb} alt="" width="150%" height="150%" />
+              <Image src={Bulb} alt="" width="150%" height="200%" />
             </div>
             <div className="md:w-2/4 w-full">
               <h1 className=" font-bold text-xl md:text-5xl leading-[25px] md:leading-[70px] text-[#d60049] pb-8 jost">
                 What are the enrollment criteria for the Language of Banking
                 Course
                 <span
-                  className="inline-block md:hidden text-sm text-black ml-2"
+                  className="inline-block md:hidden text-[10px] text-black ml-2"
                   onClick={() => {
                     setIsCriteriaReadMore(!criteriaReadMore);
                   }}
@@ -435,7 +435,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
           </div>
 
           {criteriaReadMore && (
-            <ul className=" flex md:hidden text-xl list-disc pl-10 flex-col gap-6 w-11/12">
+            <ul className=" flex md:hidden text-base list-disc pl-10 flex-col gap-3 w-11/12">
               <li className=" jost">
                 You must be a graduate of a recognized tertiary institution.
               </li>
@@ -466,49 +466,24 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             </h1>
             <div className=" flex items-center gap-4 py-6 pl-24">
               <p className=" text-3xl jost">In this course, you will learn:</p>
-              {/* <div className=" flex items-center gap-3">
-                <p className=" italic text-xl">Read More</p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                  />
-                </svg>
-              </div> */}
             </div>
             <div className="z-20">
               <KeyOutcomes />
             </div>
           </div>
 
-          <div className="block md:hidden p-5 my-5 z-[1000]">
-            <h1 className="text-black text-xl font-bold">
+          <div className="block md:hidden py-5 my-5 z-[1000]">
+            <h1 className="text-black text-xl font-bold px-5">
               Key Learning Outcomes:
             </h1>
-            <p className="w-[246px] h-[29px] text-black text-[15px] font-normal">
+            <p className="w-full h-[29px] text-black text-[15px] px-5 font-normal">
               In this course, you will learn:
             </p>
             <KeyOutcomes />
-
-            {/* <div className="flex items-center justify-center">
-              <div className="w-[350px] h-[18px] bg-gradient-to-r from-rose-600 to-orange-400 rounded-[20px] flex items-center justify-center">
-                <p className="text-white text-[10px] font-medium leading-[8px]">
-                  READ MORE
-                </p>
-              </div>
-            </div> */}
           </div>
 
           <div className=" bg-image pb-[50px]">
-            <h1 className="uppercase text-xl md:text-4xl font-bold text-[#8F8F8F] tracking-widest py-5 md:py-12 text-center jost">
+            <h1 className="hidden md:block uppercase text-xl md:text-4xl font-bold text-[#8F8F8F] tracking-widest py-5 md:py-12 text-center jost">
               Perks
             </h1>
             <div className="grid-cols-6 gap-12 px-24 jost hidden md:grid">
@@ -566,22 +541,27 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </p>
               </div>
             </div>
-            <div className="block md:hidden">
+            <div className="block md:hidden bg-[#F4F4F4] text-center p-4">
+              <h2 className="text-black text-xl font-bold my-3">PERKS</h2>
               <Perks />
             </div>
           </div>
 
-          <div className="md:mx-24 mx-5 my-20 flex flex-col md:flex-row justify-between items-center gap-6 md:bg-gray-100 bg-opacity-50">
-            <div className=" w-full md:w-1/2">
-              <Image src={jobpool} alt="" />
+          <div className="md:mx-24 mx-5 my-0 md:my-20 flex flex-col md:flex-row justify-between items-center gap-6 md:bg-gray-100 bg-opacity-50">
+            <div className="relative">
+              <div className="block md:hidden absolute border-2 -top-[10px]  -right-[50px] rounded-full h-[150px] w-[150px] border-[#d60049]"></div>
+              <div className=" block md:hidden absolute border-2  -top-[0px] -right-[-50px] rounded-full h-[150px] w-[150px] border-[#d60049]"></div>
+              <div className=" w-[166px] md:w-full z-10">
+                <Image src={jobpool} alt="" />
+              </div>
             </div>
 
-            <div className=" w-full p-5 md:p-0 md:w-1/2 ">
+            <div className=" w-full py-5 md:p-0 md:w-1/2 ">
               <div className="jost">
-                <h1 className="text-black text-xl text-start md:text-[50px] font-bold jost md:leading-tight">
+                <h1 className="text-black text-xl text-center md:text-start md:text-[50px] font-bold jost md:leading-tight">
                   WHAT IS THE JOB POOL ABOUT?
                 </h1>
-                <p className="text-black text-[15px] md:text-[25px] font-normal pr-5">
+                <p className="text-black text-[15px] md:text-[25px] font-normal md:pr-5">
                   Learners who complete the course and score at least 70% in the
                   final grading will gain exclusive access to our job pool. We
                   have partnered with leading banking and fintech organizations
@@ -683,26 +663,26 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
               className={`heading bg-gray-100 bg-opacity-50 mx-auto w-full md:w-2/3 md:px-32 p-5 md:pt-5`}
             >
               <div className=" relative">
-                <span className=" absolute text-[100px] top-0 left-0">“</span>
-                <p className=" text-xs md:text-xl pt-24 jus">
+                <span className=" absolute text-[40px]  md:text-[100px] top-[-25px] md:top-0 left-0">
+                  “
+                </span>
+                <p className=" text-xs md:text-xl md:pt-24 jus">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My learning experience has been
                   great! I was able to learn new things I had no idea about
                   before. I thoroughly enjoyed the aspect of digital marketing.
                   It really is interesting! The course has truly been worthwhile
                   and I’m glad I signed up for it.
                 </p>
-                <h3 className=" text-center text-[10px] md:text-xl font-bold py-11 ">
+                <h3 className=" hidden md:block text-center text-[10px] md:text-xl font-bold py-5 md:py-11 ">
                   Helen O., Nigeria
                 </h3>
               </div>
             </div>
-            {/* FAQ */}
-            <h2 className="text-bold text-xl text-center my-10">
-              FREQUENTLY ASKED QUESTIONS
-            </h2>
-            <FAQAccordion />
+            <h3 className="block md:hidden text-center text-[10px] md:text-xl font-bold py-5 md:py-11 ">
+              Helen O., Nigeria
+            </h3>
             <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
-              <div className="flex items-center gap-2 justify-center my-[30px] cursor-pointer heading">
+              <div className="flex items-center gap-2 justify-center md:my-[30px] cursor-pointer heading">
                 <h2 className="text-rose-600 text-[10px] md:text-[25px] font-semibold">
                   Start your learning journey here
                 </h2>
@@ -722,6 +702,12 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </svg>
               </div>
             </Link>
+            {/* FAQ */}
+            <h2 className="text-bold text-xl text-center my-10">
+              FREQUENTLY ASKED QUESTIONS
+            </h2>
+            <FAQAccordion />
+
             {/* <div className="justify-between gap-x-12 items-center w-full px-6 md:px-24 pt-16 md:pt-32 pb-10 heading hidden md:flex">
               <div className="w-1/2">
                 <p className="text-sm font-semibold pb-4">Join Our Community</p>

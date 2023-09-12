@@ -14,7 +14,7 @@ const Perks = () => {
   };
 
   return (
-    <div className="bg-zinc-100">
+    <div className="bg-zinc-100 pb-5">
       <Slider {...settings}>
         <div className=" p-3  h-[150px] w-full border ml-1 border-black border-opacity-25 bg-white shadow ">
           <p className=" text-rose-600 text-xl font-bold jost">

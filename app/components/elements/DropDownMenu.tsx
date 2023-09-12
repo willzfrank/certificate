@@ -1,21 +1,21 @@
-import * as React from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { USERTYPES } from "app/types";
-import { useAppSelector } from "app/hooks";
-import { Image } from "app/components";
-import Link from "next/link";
+import * as React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { USERTYPES } from 'app/types';
+import { useAppSelector } from 'app/hooks';
+import { Image } from 'app/components';
+import Link from 'next/link';
 
 enum TabValues {
-  inProgress = "inProgress",
-  wishlist = "wishlist",
-  completed = "completed",
+  inProgress = 'inProgress',
+  wishlist = 'wishlist',
+  completed = 'completed',
 }
 
 enum TabValues {
-  basicinformation = "basicinformation",
-  bankInfo = "bankaccountinfo",
-  accountSetting = "accountSettings",
-  notifications = "notifications",
+  basicinformation = 'basicinformation',
+  bankInfo = 'bankaccountinfo',
+  accountSetting = 'accountSettings',
+  notifications = 'notifications',
 }
 
 interface DropdownMenuProps {
@@ -31,8 +31,10 @@ const DropDownMenu: React.ForwardRefRenderFunction<
   const isInstructor = user.roleName?.toLowerCase() === USERTYPES.INSTRUCTOR;
 
   const divRef = React.useRef<HTMLDivElement>(null);
-
-
+  
+   const handleLinkClick = () => {
+    close();
+  };
   /// I should extract this too a hook or a higher order component but i'm too lazy to... lol 🫠
 
   const clickOutListener = React.useCallback(
@@ -51,9 +53,9 @@ const DropDownMenu: React.ForwardRefRenderFunction<
   );
 
   React.useEffect(() => {
-    document.body.addEventListener("click", clickOutListener);
+    document.body.addEventListener('click', clickOutListener);
 
-    return () => document.body.removeEventListener("click", clickOutListener);
+    return () => document.body.removeEventListener('click', clickOutListener);
   }, []);
 
   return (
@@ -89,14 +91,14 @@ const DropDownMenu: React.ForwardRefRenderFunction<
           {isInstructor ? (
             <div className="flex space-x-6">
               <ul className="py-1 text-sm text-black">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href="/instructors/profile">
                     <a className="block px-4 py-2 hover:text-app-pink">
                       Profile
                     </a>
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href="/instructors/courses">
                     <a className="block px-4 py-2 hover:text-app-pink">
                       My courses
@@ -105,7 +107,7 @@ const DropDownMenu: React.ForwardRefRenderFunction<
                 </li>
               </ul>
               <ul className="py-1 text-sm text-black">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link
                     href={`/instructors/profile?page=${TabValues.accountSetting}`}
                   >
@@ -114,7 +116,7 @@ const DropDownMenu: React.ForwardRefRenderFunction<
                     </a>
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link
                     href={`/instructors/profile?page=${TabValues.notifications}`}
                   >
@@ -126,14 +128,14 @@ const DropDownMenu: React.ForwardRefRenderFunction<
               </ul>
               <ul className="py-1 text-sm text-black">
                 <ul>
-                  <li>
+                  <li onClick={handleLinkClick}>
                     <Link href="/instructors/overview">
                       <a className="block px-4 py-2 hover:text-app-pink">
                         Dashboard
                       </a>
                     </Link>
                   </li>
-                  <li>
+                  <li onClick={handleLinkClick}>
                     <Link href="/auth/logout">
                       <a className="block px-4 py-2 text-sm text-black hover:text-app-pink">
                         Log out
@@ -146,28 +148,28 @@ const DropDownMenu: React.ForwardRefRenderFunction<
           ) : (
             <div className="flex space-x-6">
               <ul className="py-1 text-sm text-black">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href="/profile">
                     <a className="block px-4 py-2 hover:text-app-pink">
                       Profile
                     </a>
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href="/dashboard">
                     <a className="block px-4 py-2 hover:text-app-pink">
                       My courses
                     </a>
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href={`/dashboard?page=${TabValues.wishlist}`}>
                     <a className="block px-4 py-2 hover:text-app-pink">
                       Wishlist
                     </a>
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href="/profile/notifications">
                     <a className="block px-4 py-2 hover:text-app-pink">
                       Notifications
@@ -183,7 +185,7 @@ const DropDownMenu: React.ForwardRefRenderFunction<
                 </li> */}
               </ul>
               <ul className="py-1 text-sm text-black">
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href="/profile/accountsettings">
                     <a className="block px-4 py-2 hover:text-app-pink">
                       Account settings
@@ -197,12 +199,12 @@ const DropDownMenu: React.ForwardRefRenderFunction<
                   </a>
                 </Link>
               </li> */}
-                <li>
+                <li onClick={handleLinkClick}>
                   <Link href="/faqs">
                     <a className="block px-4 py-2 hover:text-app-pink">FAQs</a>
                   </Link>
                 </li>
-                <li>
+                <li onClick={handleLinkClick}>
                   <a
                     href="mailto:hello@certifications.unify.edu.ng"
                     className="block px-4 py-2 hover:text-app-pink"
@@ -211,7 +213,7 @@ const DropDownMenu: React.ForwardRefRenderFunction<
                   </a>
                 </li>
               </ul>
-              <div className="py-1">
+              <div className="py-1" onClick={handleLinkClick}>
                 <Link href="/auth/logout">
                   <a className="block px-4 py-2 text-sm text-black hover:text-app-pink">
                     Log out

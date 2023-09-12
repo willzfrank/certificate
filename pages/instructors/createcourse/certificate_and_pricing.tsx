@@ -34,6 +34,7 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
     useUpdateModuleMutation();
 
   const [checkboxes, setCheckboxes] = React.useState<boolean[]>([]);
+  const [inputValue, setInputValue] = React.useState('');
 
   const router = useRouter();
   const { courseId } = router.query;
@@ -49,9 +50,11 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
     let priceValue = parseFloat(value);
 
     updatePricings(
-      pricings.map((price: any, index: number) =>
-        index === 0 ? { ...price, price: priceValue } : price
-      )
+      pricings.map((price: any, index: number) => ({
+        ...price,
+        price: index === 0 ? priceValue : price.price, // Corrected
+        subscriptionType: priceValue === 0 ? 'Free' : 'Standard',
+      }))
     );
   };
 
@@ -178,7 +181,7 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
           </h5>
           <div>
             <input
-              className="w-[285px] h-[37px] bg-white border-2 border-black text-neutral-300 text-[14px] font-normal px-2 py-1 rounded"
+              className="w-[285px] h-[37px] bg-white border-2 border-black text-neutral-900 text-[14px] font-normal px-2 py-1 rounded"
               value={pricings[0]?.price}
               onChange={handlePriceChange}
               min="0"

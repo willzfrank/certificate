@@ -6,8 +6,8 @@ const IS_TESTING = true;
 export const API_URL =
   process.env.NODE_ENV !== 'development' && !IS_TESTING
     ? 'https://api-certifications.unifyedu.ng/api/v1'
-    : 'https://unify-stg-cert-api.azurewebsites.net/api/v1';
-// ' https://unify-dev-cert-api.azurewebsites.net/api/v1';
+    : // 'https://unify-stg-cert-api.azurewebsites.net/api/v1';
+      ' https://unify-dev-cert-api.azurewebsites.net/api/v1';
 
 // export const API_URL = 'https://api-certifications.unifyedu.ng/api/v1'
 

@@ -1,130 +1,225 @@
-import React, { useState, useEffect, Fragment, ReactNode, useMemo } from "react";
-import { Checkbox, Image, StarRating, Modal, VideoPlayer, Button, CustomizedLottie, FallbackImage } from "app/components";
-import { CheckDiscountCodeValidityResponse, ExternalCourse, SingleCourseDetailsResponse } from "app/types";
-import { useAddSubscriptionMutation, useCheckDiscountCodeValidityMutation } from "app/api/subscriptionApi";
-import { useAppSelector, useScriptLoaded, useNotify } from "app/hooks";
-import { useRouter } from "next/router";
-import useFreeModulesAvailable from "app/hooks/useFreeModulesAvailable";
+import React, {
+  useState,
+  useEffect,
+  Fragment,
+  ReactNode,
+  useMemo,
+} from 'react';
+import {
+  Checkbox,
+  Image,
+  StarRating,
+  Modal,
+  VideoPlayer,
+  Button,
+  CustomizedLottie,
+  FallbackImage,
+} from 'app/components';
+import {
+  CheckDiscountCodeValidityResponse,
+  ExternalCourse,
+  SingleCourseDetailsResponse,
+} from 'app/types';
+import {
+  useAddSubscriptionMutation,
+  useCheckDiscountCodeValidityMutation,
+} from 'app/api/subscriptionApi';
+import { useAppSelector, useScriptLoaded, useNotify } from 'app/hooks';
+import { useRouter } from 'next/router';
+import useFreeModulesAvailable from 'app/hooks/useFreeModulesAvailable';
 
-import checkLottie from "app/lotties/check.json";
-import { motion } from "framer-motion";
-import { useLazyGetSingleCoursePreviewQuery } from "app/api/courseApi";
-import { USER as USERMODEL, PricingPlan } from "app/types";
-import { selectUser } from "app/redux/slices/userSlice";
-import Link from "next/link";
-import { useLazyPaymentConfirmQuery, usePaymentConfirmQuery } from "app/api/confirmPaymentApi";
-import { getTime } from "app/utils";
-import FullAccess from "../watchcourse/FullAccess";
+import checkLottie from 'app/lotties/check.json';
+import { motion } from 'framer-motion';
+import { useLazyGetSingleCoursePreviewQuery } from 'app/api/courseApi';
+import { USER as USERMODEL, PricingPlan } from 'app/types';
+import { selectUser } from 'app/redux/slices/userSlice';
+import Link from 'next/link';
+import {
+  useLazyPaymentConfirmQuery,
+  usePaymentConfirmQuery,
+} from 'app/api/confirmPaymentApi';
+import { getTime } from 'app/utils';
+import FullAccess from '../watchcourse/FullAccess';
 
 const freePlan: PricingPlan = {
-	id: `${Number.MAX_SAFE_INTEGER}`,
-	offers: [],
-	name: "Free",
-	subscriptionType: "Free",
-	price: 0,
+  id: `${Number.MAX_SAFE_INTEGER}`,
+  offers: [],
+  name: 'Free',
+  subscriptionType: 'Free',
+  price: 0,
 };
 
 const memoizedCheckLottieConfig = {
-	loop: false,
-	autoplay: true,
-	animationData: checkLottie,
+  loop: false,
+  autoplay: true,
+  animationData: checkLottie,
 };
 
 const CourseDetailsHero = (props: ExternalCourse) => {
-	const [pricingPlan, setPricingPlan] = useState<PricingPlan>(props.pricings[0] ?? freePlan);
+  const [pricingPlan, setPricingPlan] = useState<PricingPlan>(
+    props.pricings[0] ?? freePlan
+  );
 
-	const status = useScriptLoaded("https://checkout.flutterwave.com/v3.js");
-	const [videoModalOpen, setVideoModalOpen] = useState(false);
-	const [accessModal, setAccessModal] = useState(false);
-	const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
-	const [addSubscription, { isLoading, error, isError, isSuccess }] = useAddSubscriptionMutation();
-	const [accessCourse, setAccessCourse] = useState(false);
-	const [showAccessButton, setShowAccessButton] = useState(true);
+  const status = useScriptLoaded('https://checkout.flutterwave.com/v3.js');
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [accessModal, setAccessModal] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
+  const [addSubscription, { isLoading, error, isError, isSuccess }] =
+    useAddSubscriptionMutation();
+  const [accessCourse, setAccessCourse] = useState(false);
+  const [showAccessButton, setShowAccessButton] = useState(true);
 
-	const handleAccessCourse = () => {
-		setShowAccessButton(false);
-		setAccessCourse(true);
-	};
+  const handleAccessCourse = () => {
+    setShowAccessButton(false);
+    setAccessCourse(true);
+  };
 
-	const [trigger, { isLoading: confirmingPurchase }] = useLazyPaymentConfirmQuery();
+  const [trigger, { isLoading: confirmingPurchase }] =
+    useLazyPaymentConfirmQuery();
 
-	const notify = useNotify();
-	const { token } = useAppSelector((store) => store.user);
-	const freeModulesAvailable = useFreeModulesAvailable(props?.modules);
+  const notify = useNotify();
+  const { token } = useAppSelector((store) => store.user);
+  const freeModulesAvailable = useFreeModulesAvailable(props?.modules);
 
-	const [getCourseDetails, { isFetching: isLoadingCourseDetails }] = useLazyGetSingleCoursePreviewQuery();
+  const [getCourseDetails, { isFetching: isLoadingCourseDetails }] =
+    useLazyGetSingleCoursePreviewQuery();
 
-	const router = useRouter();
-	const { asPath } = useRouter();
+  const router = useRouter();
+  const { asPath } = useRouter();
 
-	type DiscountDetailsType = {
-		value: number;
-		type: "DiscountByPercentage" | "DiscountByAbsoluteValue";
-		hasAppliedDiscount: boolean;
-		discountCode: string;
-	};
+  type DiscountDetailsType = {
+    value: number;
+    type: 'DiscountByPercentage' | 'DiscountByAbsoluteValue';
+    hasAppliedDiscount: boolean;
+    discountCode: string;
+  };
 
-	const [discountDetails, setDiscountDetails] = React.useState<DiscountDetailsType>({
-		value: 0,
-		type: "DiscountByPercentage",
-		hasAppliedDiscount: false,
-		discountCode: "",
-	});
+  const [discountDetails, setDiscountDetails] =
+    React.useState<DiscountDetailsType>({
+      value: 0,
+      type: 'DiscountByPercentage',
+      hasAppliedDiscount: false,
+      discountCode: '',
+    });
 
-	React.useEffect(() => {
-		if (discountDetails.hasAppliedDiscount) {
-			setPricingPlan((pricingPlan) => ({
-				...pricingPlan,
-				price: discountDetails.type === "DiscountByAbsoluteValue" ? discountDetails.value : pricingPlan.price - Math.floor(pricingPlan.price * (discountDetails.value / 100)),
-			}));
-		}
-	}, [discountDetails.hasAppliedDiscount, discountDetails.value, discountDetails.type]);
+  React.useEffect(() => {
+    if (discountDetails.hasAppliedDiscount) {
+      setPricingPlan((pricingPlan) => ({
+        ...pricingPlan,
+        price:
+          discountDetails.type === 'DiscountByAbsoluteValue'
+            ? discountDetails.value
+            : pricingPlan.price -
+              Math.floor(pricingPlan.price * (discountDetails.value / 100)),
+      }));
+    }
+  }, [
+    discountDetails.hasAppliedDiscount,
+    discountDetails.value,
+    discountDetails.type,
+  ]);
 
-	useEffect(() => {
-		(async () => {
-			if (token) {
-				try {
-					const res = await getCourseDetails({
-						courseId: props.id,
-						token: token,
-					}).unwrap();
+  useEffect(() => {
+    (async () => {
+      if (token) {
+        try {
+          const res = await getCourseDetails({
+            courseId: props.id,
+            token: token,
+          }).unwrap();
 
-					setIsSubscribed(res.isSubscribed);
-				} catch (err) {
-					console.log(err);
-				}
-			}
-		})();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [token]);
+          setIsSubscribed(res.isSubscribed);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
-	useEffect(() => {
-		if (error || isError) {
-			// @ts-ignore
-			if (error?.status === 401) {
-				router.push(`/auth/register?redirectTo=${asPath}`);
-			}
-		}
-	}, [error, isError, router, asPath]);
+  useEffect(() => {
+    if (error || isError) {
+      // @ts-ignore
+      if (error?.status === 401) {
+        router.push(`/auth/register?redirectTo=${asPath}`);
+      }
+    }
+  }, [error, isError, router, asPath]);
 
-	const user = useAppSelector(selectUser);
-	const [profile, setProfile] = useState<USERMODEL | null>(null);
+  const user = useAppSelector(selectUser);
+  const [profile, setProfile] = useState<USERMODEL | null>(null);
 
-	useEffect(() => {
-		if (user?.id) {
-			setProfile({ ...user });
-		}
-	}, [user]);
+  useEffect(() => {
+    if (user?.id) {
+      setProfile({ ...user });
+    }
+  }, [user]);
 
-	const closeModal = () => {
-		setAccessModal(false);
-	};
+  const closeModal = () => {
+    setAccessModal(false);
+  };
 
-	const openModal = () => {
-		setAccessModal(true);
-	};
+  const openModal = () => {
+    setAccessModal(true);
+  };
 
-	return (
+  const handlePay =
+    (
+      price: number,
+      subscriptionType: string | number,
+      title: string,
+      pricingId: string
+    ) =>
+    async () => {
+      if (price !== 0) {
+        return; // Don't execute if price is not zero
+      }
+
+      try {
+        const {
+          data: { id, referenceNumber },
+        } = await addSubscription({
+          studentId: profile?.id as string,
+          courseId: props.id,
+          amountPaid: price,
+          subscriptionType,
+          channel: 'Card',
+          source: 'Web',
+          discountCode: discountDetails.hasAppliedDiscount
+            ? discountDetails.discountCode
+            : undefined,
+          coursePricingId: pricingId,
+        }).unwrap();
+
+        await trigger({ tx_ref: referenceNumber }).unwrap();
+
+        setIsSubscribed(true);
+
+        // router.push(`/paymentProcess?tx_ref=${referenceNumber}`)
+      } catch (error) {
+        //@ts-ignore
+        if (error?.status === 400 || error?.status === 401) {
+          router.push('/auth/register');
+          notify({
+            title: "Couldn't enroll for this course.",
+            description: 'Please create an account to enrol for this course.',
+            type: 'error',
+          });
+        }
+
+        //@ts-ignore
+        if (error?.status >= 500) {
+          notify({
+            title: 'Could not enroll for this course',
+            description:
+              'The fault is on us. Please reach out to our customer support',
+            type: 'error',
+          });
+        }
+      }
+    };
+
+  return (
     <React.Fragment>
       <div className="min-h-[65vh] lg:px-14 lg:py-20 lg:bg-app-dark-500 lg:text-white flex flex-col overflow-y-auto no-scrollbar">
         <div className="flex flex-col lg:flex-row lg:divide-x-2 lg:divide-[#2E284A] h-full items-stretch flex-1">
@@ -201,83 +296,68 @@ const CourseDetailsHero = (props: ExternalCourse) => {
           <div className="lg:w-[37%] lg:h-[calc(65vh-4rem)] h-full pl-14 lg:pt-4 bg-app-dark-500 px-6 py-10 text-white flex flex-col justify-between">
             <div>
               <p className="text-xl font-semibold mb-3">Pricing</p>
-              {props.pricings.map((plan) => (
+              {props.pricings.length > 0 && (
                 <div
-                  key={plan.name}
                   className="flex gap-[12px] my-4 items-start"
-                  onClick={() =>
-                    discountDetails.hasAppliedDiscount
-                      ? setPricingPlan({
-                          ...plan,
+                  onClick={() => {
+                    const selectedPrice = discountDetails.hasAppliedDiscount
+                      ? {
+                          ...props.pricings[props.pricings.length - 1], // Use the last price in the array
                           price:
                             discountDetails.type === 'DiscountByAbsoluteValue'
                               ? discountDetails.value
-                              : plan.price -
+                              : props.pricings[props.pricings.length - 1]
+                                  .price -
                                 Math.floor(
-                                  plan.price * (discountDetails.value / 100)
+                                  props.pricings[props.pricings.length - 1]
+                                    .price *
+                                    (discountDetails.value / 100)
                                 ),
-                        })
-                      : setPricingPlan(plan)
-                  }
+                        }
+                      : props.pricings[props.pricings.length - 1]; // Use the last price in the array
+
+                    setPricingPlan(selectedPrice);
+                  }}
                 >
-                  <Checkbox value={pricingPlan?.name === plan.name} />
+                  <Checkbox
+                    value={
+                      pricingPlan?.name ===
+                      props.pricings[props.pricings.length - 1].name
+                    }
+                  />
                   <div className="flex-1">
                     <p className="font-semibold">
-                      {/* {plan.name}{' '} */}
                       {discountDetails.hasAppliedDiscount ? (
                         <div className="inline-flex gap-4 ml-2">
                           <span className="text-white line-through">
-                            ₦ {plan.price}
+                            ₦ {props.pricings[props.pricings.length - 1].price}
                           </span>
                           <span className="text-white">
                             ₦
                             {discountDetails.type === 'DiscountByAbsoluteValue'
                               ? discountDetails.value
-                              : plan.price -
+                              : props.pricings[props.pricings.length - 1]
+                                  .price -
                                 Math.floor(
-                                  plan.price * (discountDetails.value / 100)
+                                  props.pricings[props.pricings.length - 1]
+                                    .price *
+                                    (discountDetails.value / 100)
                                 )}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-white">₦ {plan.price}</span>
+                        <span className="text-white">
+                          ₦ {props.pricings[props.pricings.length - 1].price}
+                        </span>
                       )}
                     </p>
                     <div className="ml-0">
-                      {/* {plan.offers.map((perk) => (
-                        <div
-                          key={perk}
-                          className="flex gap-2 flex-col items-start text-[#A29FAE] my-[6px] "
-                        >
-                          <div className="flex items-center gap-2 ">
-                            <svg
-                              width="9"
-                              height="8"
-                              viewBox="0 0 9 8"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M1 3.99995L3.374 6.37295L8.12 1.62695"
-                                stroke="#A29FAE"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                            <p className="lg:text-sm">{perk}</p>
-                          </div>
-                          
-                        </div>
-                      ))} */}
-
                       <p
                         className="text-left underline cursor-pointer text-sm text-app-pink mb-2"
                         onClick={openModal}
                       >
                         Get Full Access
                       </p>
-
                       {(!isSubscribed || !props.isSubscribed) && (
                         <div
                           className={`${
@@ -302,7 +382,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                     </div>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
 
             <div className="space-y-4 w-5/6">
@@ -341,7 +421,14 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                       }}
                     >
                       {pricingPlan.price === 0 ? (
-                        <div>
+                        <div
+                          onClick={handlePay(
+                            pricingPlan?.price,
+                            pricingPlan?.subscriptionType,
+                            pricingPlan?.name,
+                            pricingPlan?.id
+                          )}
+                        >
                           <div>
                             <p>Enroll For Free</p>
                             <p className="text-xs">Start now</p>
@@ -368,23 +455,22 @@ const CourseDetailsHero = (props: ExternalCourse) => {
               {/* BUY NOW BUTTON */}
               {(accessCourse || !freeModulesAvailable) && (
                 <div className="space-y-2">
-                  {!isSubscribed &&
-                    (!props.isSubscribed && (
-                      <div className="w-full h-[56px] flex items-center justify-center bg-red-600 rounded-[35.06px]">
-                        <Button
-                          className="text-white text-[12.88px] font-semibold cursor-pointer"
-                          // onClick={handlePay(pricingPlan?.price, pricingPlan?.subscriptionType, pricingPlan?.name, pricingPlan?.id)}
-                          onClick={openModal}
-                          loading={
-                            confirmingPurchase ||
-                            isLoading ||
-                            isLoadingCourseDetails
-                          }
-                        >
-                          Buy Now
-                        </Button>
-                      </div>
-                    ))}
+                  {!isSubscribed && !props.isSubscribed && (
+                    <div className="w-full h-[56px] flex items-center justify-center bg-red-600 rounded-[35.06px]">
+                      <Button
+                        className="text-white text-[12.88px] font-semibold cursor-pointer"
+                        // onClick={handlePay(pricingPlan?.price, pricingPlan?.subscriptionType, pricingPlan?.name, pricingPlan?.id)}
+                        onClick={openModal}
+                        loading={
+                          confirmingPurchase ||
+                          isLoading ||
+                          isLoadingCourseDetails
+                        }
+                      >
+                        Buy Now
+                      </Button>
+                    </div>
+                  )}
 
                   {freeModulesAvailable && (
                     <Link

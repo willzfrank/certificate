@@ -11,6 +11,7 @@ import wishListSlice from './slices/wishlistSlice';
 import subscriptionApi from 'app/api/subscriptionApi';
 import confirmPaymentApi from 'app/api/confirmPaymentApi';
 import ratingsApi from 'app/api/ratingsApi';
+import settlementApi from 'app/api/settlementsApi';
 
 const middlewares: Array<Middleware> = [
   authApi.middleware,
@@ -23,6 +24,7 @@ const middlewares: Array<Middleware> = [
   subscriptionApi.middleware,
   confirmPaymentApi.middleware,
   ratingsApi.middleware,
+  settlementApi.middleware,
 ];
 
 const makeStore = () =>
@@ -42,11 +44,11 @@ const makeStore = () =>
       [subscriptionApi.reducerPath]: subscriptionApi.reducer,
       [confirmPaymentApi.reducerPath]: confirmPaymentApi.reducer,
       [ratingsApi.reducerPath]: ratingsApi.reducer,
+      [settlementApi.reducerPath]: settlementApi.reducer,
     },
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware().concat(middlewares),
-  }
-  );
+  });
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore['getState']>;

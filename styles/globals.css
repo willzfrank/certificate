@@ -329,10 +329,52 @@ input {
 
 /* SLICK SLIDER */
 
+.slick-dots li {
+  margin: 0 !important;
+}
+
 .slick-dots li button:before {
   color: #d9d9d9 !important;
 }
 
 .slick-dots li.slick-active button:before {
   color: #d60049 !important;
+}
+
+/* PDF */
+
+.rpv-toolbar__right .rpv-core__display--hidden:nth-child(3),
+.rpv-toolbar__right .rpv-core__display--hidden:nth-child(4),
+.rpv-toolbar__right .rpv-core__display--hidden:nth-child(5),
+.rpv-core__display--block:nth-child(1),
+/* .rpv-core__display--block:nth-child(2), */
+.rpv-core__display--block:nth-child(3),
+.rpv-core__display--block:nth-child(4),
+.rpv-core__display--block:nth-child(5) {
+  display: none !important;
+}
+
+@media screen and (max-width: 768px) {
+  .rpv-toolbar__right .rpv-core__display--hidden:nth-child(1),
+  .rpv-toolbar__right .rpv-core__display--hidden:nth-child(2) {
+    display: block !important;
+  }
+}
+
+/* TABLE STUDENTS */
+
+.MuiDataGrid-cellContent {
+  text-align: center !important;
+  width: 100% !important;
+  font-size: 16px !important;
+}
+
+.MuiDataGrid-main {
+  font-family: 'Montserrat', serif !important;
+}
+
+.MuiDataGrid-columnHeaderTitle {
+  color: rgb(137 137 137/1);
+  font-weight: 500;
+  font-size: 16px !important;
 }

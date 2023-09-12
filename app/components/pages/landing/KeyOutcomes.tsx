@@ -22,7 +22,7 @@ const KeyOutcomes = () => {
   };
 
   return (
-    <div className="bg-zinc-100 p-5">
+    <div className="bg-zinc-100 px-5 py-10">
       <Slider {...settings}>
         <div className=" p-3  h-[200px] w-full border ml-1 border-black border-opacity-25 bg-white shadow ">
           <p className=" leading-5 text-xl pt-1">

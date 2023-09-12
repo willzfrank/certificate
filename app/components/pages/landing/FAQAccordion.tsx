@@ -51,7 +51,7 @@ const FAQAccordion = () => {
             className="w-full h-12 border border-rose-600 flex items-center justify-between px-5 cursor-pointer"
             onClick={() => toggleSection(category.index)}
           >
-            <p className="text-center text-black md:text-xl text-[15px] font-semibold">
+            <p className="text-left w-[90%] text-black md:text-xl text-[15px] font-semibold">
               {category.title}
             </p>
             <svg
