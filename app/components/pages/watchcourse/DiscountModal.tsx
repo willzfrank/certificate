@@ -47,7 +47,7 @@ const freePlan: PricingPlan = {
 //   pricingPlan: PricingPlan;
 // }
 
-const FullAccess = (props: Props) => {
+const DiscountModal = (props: Props) => {
   const { closeModal, pricings, courseId, setIsSubscribed, isExternal } = props;
   const status = useScriptLoaded('https://checkout.flutterwave.com/v3.js');
   const [isApplyingDiscountCode, setIsApplyingDiscountCode] =
@@ -258,78 +258,42 @@ const FullAccess = (props: Props) => {
         </div>
         <div className="flex mt-10 items-center gap-2">
           {/* DISCOUNT HERE */}
-          <div className="space-y-4 w-full">
-            {!isApplyingDiscountCode && user.id && (
-              <button
-                className=" md:w-[138px] h-11 bg-white rounded-[10px] border  border-red-600"
-                onClick={() => HideSubscriptionButtonFunction()}
-              >
-                <span className="text-red-600 text-[13px] md:px-0 px-2 font-medium font-['Inter']">
-                  Use Discount Code
-                </span>{' '}
-              </button>
-            )}
-            {isApplyingDiscountCode &&
-              !props.discountDetails.hasAppliedDiscount && (
-                <div className="overflow-clip ">
-                  <motion.div
-                    className=" space-x-1 rounded-lg p-1 text-muted h-14 flex"
-                    animate={{ opacity: 1, y: 0 }}
-                    initial={{ opacity: 0, y: 60 }}
-                  >
-                    <input
-                      className="h-full px-2 flex-1 uppercase border bg-white rounded-[10px]  border-red-600"
-                      maxLength={8}
-                      placeholder="Enter Discount Code"
-                      readOnly={props.discountDetails.hasAppliedDiscount}
-                      onChange={(e) =>
-                        props.setDiscountDetails({
-                          ...(props.discountDetails as DiscountDetailsType), // Cast discountDetails to the correct type
-                          discountCode: e.target.value,
-                        })
-                      }
-                    />
+          {!props.discountDetails.hasAppliedDiscount ? (
+            <div className="space-y-4 w-full">
+              <div className="overflow-clip ">
+                <motion.div
+                  className=" space-x-1 rounded-lg p-1 text-muted h-14 flex"
+                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 60 }}
+                >
+                  <input
+                    className="h-full px-2 flex-1 uppercase border bg-white rounded-[10px]  border-red-600"
+                    maxLength={8}
+                    placeholder="Enter Discount Code"
+                    readOnly={props.discountDetails.hasAppliedDiscount}
+                    onChange={(e) =>
+                      props.setDiscountDetails({
+                        ...(props.discountDetails as DiscountDetailsType), // Cast discountDetails to the correct type
+                        discountCode: e.target.value,
+                      })
+                    }
+                  />
 
-                    <Button
-                      className="border border-muted h-full text-sm px-4  bg-red-600 rounded-[10px]"
-                      onClick={applyDiscountCode}
-                      loading={isCheckingCodeValidity}
-                      disabled={props.discountDetails.hasAppliedDiscount}
-                    >
-                      <span className="md:w-[60px] text-white text-lg font-semibold font-['Inter']">
-                        APPLY
-                      </span>{' '}
-                    </Button>
-                  </motion.div>
-                </div>
-              )}
-          </div>
-          {hideSubscribeButton && (
-            <div className=" flex items-center justify-center  ">
-              <Button
-                className="bg-red-600 px-7 md:w-[219px] flex items-center justify-center flex-col  py-1 rounded-lg cursor-pointer shadow-md "
-                onClick={handlePay(
-                  props.pricingPlan?.price,
-                  props.pricingPlan?.subscriptionType,
-                  props.pricingPlan?.name,
-                  props.pricingPlan?.id
-                )}
-                loading={isCheckingSubscription}
-              >
-                <div>
-                  <button className=" text-white md:text-lg text-[18px] font-semibold rounded font-['Inter']">
-                    Subscribe
-                  </button>
-                </div>
-                <div className="  text-white text-center md:text-xs text-[12px] font-medium font-['Inter']">
-                  {props.pricingPlan.price > 0 ? (
-                    <span>₦{props.pricingPlan.price.toLocaleString()}</span>
-                  ) : (
-                    <span>₦0</span>
-                  )}
-                </div>
-              </Button>
+                  <Button
+                    className="border border-muted h-full text-sm px-4  bg-red-600 rounded-[10px]"
+                    onClick={applyDiscountCode}
+                    loading={isCheckingCodeValidity}
+                    disabled={props.discountDetails.hasAppliedDiscount}
+                  >
+                    <span className="md:w-[60px] text-white text-lg font-semibold font-['Inter']">
+                      APPLY
+                    </span>{' '}
+                  </Button>
+                </motion.div>
+              </div>
             </div>
+          ) : (
+            ''
           )}
         </div>
         <>
@@ -349,44 +313,45 @@ const FullAccess = (props: Props) => {
                   <span className=" text-white text-lg font-semibold font-['Inter']">
                     Pay
                   </span>
-                  <div className="  text-white text-center md:text-lg text-[12px] font-medium font-['Inter']">
-                    {props.pricings.length > 0 && (
-                      <div
-                        className="flex gap-[12px] items-start"
-                        onClick={() => {
-                          const selectedPrice = props.calculateDiscountedPrice(
-                            props.pricings[0].price, // Original price
-                            props.discountDetails
-                          );
+                  {props.pricings.length > 0 && (
+                    <div
+                      className="flex gap-[12px] items-start"
+                      onClick={() => {
+                        const selectedPrice = props.calculateDiscountedPrice(
+                          props.pricings[0].price, // Original price
+                          props.discountDetails
+                        );
 
-                          props.setPricingPlan({
-                            ...props.pricings[0], // Use the last price in the array
-                            price: selectedPrice,
-                          });
-                        }}
-                      >
-                        <div className="flex-1">
-                          <p className="font-semibold">
-                            <div className="inline-flex gap-4 ml-2">
-                              <span className="text-white">
-                                ₦
-                                {props.discountDetails.type ===
-                                'DiscountByAbsoluteValue'
-                                  ? props.discountDetails.value.toLocaleString()
-                                  : (
-                                      props.pricings[0].price -
-                                      Math.floor(
-                                        props.pricings[0].price *
-                                          (props.discountDetails.value / 100)
-                                      )
-                                    ).toLocaleString()}
-                              </span>
-                            </div>
-                          </p>
-                        </div>
+                        props.setPricingPlan({
+                          ...props.pricings[0], // Use the last price in the array
+                          price: selectedPrice,
+                        });
+                      }}
+                    >
+                      <div className="flex-1">
+                        <p className="font-semibold">
+                          <span className="inline-flex gap-4 ml-2">
+                            {/* <span className="text-white line-through">
+                              ₦ {props.pricings[0].price}
+                            </span> */}
+                            <span className="text-white">
+                              ₦
+                              {props.discountDetails.type ===
+                              'DiscountByAbsoluteValue'
+                                ? props.discountDetails.value.toLocaleString()
+                                : (
+                                    props.pricings[0].price -
+                                    Math.floor(
+                                      props.pricings[0].price *
+                                        (props.discountDetails.value / 100)
+                                    )
+                                  ).toLocaleString()}
+                            </span>
+                          </span>
+                        </p>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </Button>
             </div>
@@ -397,4 +362,4 @@ const FullAccess = (props: Props) => {
   );
 };
 
-export default FullAccess;
+export default DiscountModal;

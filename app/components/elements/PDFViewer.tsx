@@ -8,6 +8,7 @@ import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { fullScreenPlugin } from '@react-pdf-viewer/full-screen';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import { SpecialZoomLevel } from '@react-pdf-viewer/core';
 
 // Import styles
 import '@react-pdf-viewer/full-screen/lib/styles/index.css';
@@ -83,16 +84,26 @@ const PDFViewer = (props: PDFViewerProps) => {
     event.preventDefault(); // Prevent the default right-click menu
   };
 
+
   const fullScreenPluginInstance = fullScreenPlugin({
-    // Specify the properties you want to configure
-    enableShortcuts: true, // Enable shortcuts (optional)
-    getFullScreenTarget: (element) => element, // Custom full screen element (optional)
+    // Zoom to fit the screen after entering and exiting the full screen mode
     onEnterFullScreen: (zoom) => {
-      // Code to handle entering full screen
+      zoom(SpecialZoomLevel.PageFit);
     },
     onExitFullScreen: (zoom) => {
-      // Code to handle exiting full screen
+      zoom(SpecialZoomLevel.PageFit);
     },
+    // renderExitFullScreenButton: (props) => (
+    //   <div
+    //     style={{
+    //       bottom: '1rem',
+    //       position: 'fixed',
+    //       right: '1rem',
+    //     }}
+    //   >
+    //     <button onClick={props.onClick}>Exit full screen</button>
+    //   </div>
+    // ),
   });
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();

@@ -89,13 +89,10 @@ const UnCoursePreview = (props: PreviewProps) => {
             {instructorsList}
           </div>
           <div className="font-medium text-base mt-1">
-            {props.maximumPrice === 0 && props.minumumPrice === 0 ? (
+            {props.setPricing === 0 ? (
               <p>Free</p>
             ) : (
-              <>
-                {/* {formatCurrency(props.minumumPrice)} -{' '} */}
-                {formatCurrency(props.maximumPrice)}
-              </>
+              <>{formatCurrency(props.setPricing)}</>
             )}
           </div>
         </a>

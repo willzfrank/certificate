@@ -129,9 +129,9 @@ const Footer = ({ withSignUpPromotion }: FooterProps) => {
               Unify
             </a>
           </div>
-          <p className="mb-4 leading-9 tracking-wide text-app-stroke">
+          {/* <p className="mb-4 leading-9 tracking-wide text-app-stroke">
             <Link href="https://forms.unifyedu.ng">Unify Forms</Link>
-          </p>
+          </p> */}
         </div>
         <div>
           <p className="mb-6 text-lg font-bold">About</p>

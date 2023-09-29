@@ -56,8 +56,7 @@ const subscriptionApi = createApi({
         params: args,
       }),
       transformResponse: (res: any) => res.data.pagedList,
-    }
-    ),
+    }),
 
     getCompletedCourses: builder.query<
       InProgressCoursesResponse[],
@@ -204,6 +203,17 @@ const subscriptionApi = createApi({
         method: 'POST',
       }),
     }),
+
+    getCourseSubscriptionStatus: builder.query<
+      InProgressCoursesResponse[],
+      { studentId: string; page: number; perPage: number }
+    >({
+      query: (args) => ({
+        url: `/get-course-subscription-status`,
+        params: args,
+      }),
+      transformResponse: (res: any) => res.data.pagedList,
+    }),
   }),
 });
 
@@ -211,6 +221,7 @@ export default subscriptionApi;
 
 export const {
   useAddSubscriptionMutation,
+  useGetCourseSubscriptionStatusQuery,
   useGetInProgressCoursesQuery,
   useGetCourseModuleContentQuery,
   useLazyGetCourseModuleContentQuery,

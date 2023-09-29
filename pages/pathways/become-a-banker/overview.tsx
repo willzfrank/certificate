@@ -774,9 +774,9 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                   Certifications by Unify
                 </a>
               </li>
-              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
+              {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 <Link href="https://forms.unifyedu.ng">Unify Forms</Link>
-              </li>
+              </li> */}
               {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 Learning Labs
               </li> */}
@@ -822,9 +822,15 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                   Youtube
                 </a>
               </li>
-              {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
-                Tiktok
-              </li> */}
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
+                <a
+                  href="https://www.facebook.com/unifyng"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Facebook
+                </a>
+              </li>
             </ul>
           </div>
           <Modal isOpen={modalOpen} closeModal={() => setModalOpen(false)}>

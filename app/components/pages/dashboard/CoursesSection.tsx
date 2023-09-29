@@ -8,10 +8,12 @@ import { useGetWishlistQuery } from 'app/api/wishlistApi';
 import { useAppSelector } from 'app/redux/hooks';
 import { selectUser } from 'app/redux/slices/userSlice';
 import { USERTYPES } from 'app/types';
-import {
-  useGetInProgressCoursesQuery,
-  useGetCompletedCoursesQuery,
-} from 'app/api/subscriptionApi';
+// import {
+//   useGetInProgressCoursesQuery,
+//   useGetCompletedCoursesQuery,
+// } from 'app/api/subscriptionApi';
+
+import { useGetCourseSubscriptionStatusQuery } from 'app/api/subscriptionApi';
 
 interface NextArrowProps {
   onClick: () => void;
@@ -127,30 +129,23 @@ const CoursesSection = () => {
     { skip: user.roleName?.toLowerCase() !== USERTYPES.STUDENT.toLowerCase() }
   );
 
-  const {
-    data: inProgressCourses,
-    isLoading: loadingInProgressCourses,
-    isError: inProgressCoursesError,
-  } = useGetInProgressCoursesQuery(
-    {
-      page: 1,
-      perPage: 1000,
-      studentId: user.id as string,
-    },
-    {
-      pollingInterval: 1000,
-    }
-  );
-
-  const {
-    data: completedCourses,
-    isLoading: loadingCompletedCourses,
-    isError: completedCoursesError,
-  } = useGetCompletedCoursesQuery({
+  // Use the new endpoint to fetch student progress
+  const { data: studentStatusData } = useGetCourseSubscriptionStatusQuery({
+    studentId: user.id as string,
     page: 1,
     perPage: 1000,
-    studentId: user.id as string,
   });
+
+  console.log('studentStatusData', studentStatusData);
+
+  // Filter courses based on subscriptionStatus
+  const inProgressCourses =
+    studentStatusData?.filter((course) => course.courseCompleted === false) ||
+    [];
+
+  const completedCourses =
+    studentStatusData?.filter((course) => course.courseCompleted === true) ||
+    [];
 
   return (
     <div className="coursesSection px-6 mt-10  md:px-14">
@@ -192,6 +187,7 @@ const CoursesSection = () => {
                 module={'One'}
                 percentageCompleted={course.percentCompleted}
                 certificateRequired={course.certificateRequired}
+                courseCompleted={course.courseCompleted}
               />
             ))}
           </Slider>
@@ -209,6 +205,7 @@ const CoursesSection = () => {
                 module={'One'}
                 percentageCompleted={course.percentCompleted}
                 certificateRequired={course.certificateRequired}
+                courseCompleted={course.courseCompleted}
               />
             ))}
           </Slider>

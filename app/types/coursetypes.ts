@@ -38,7 +38,7 @@ export interface CourseModules {
   description: string;
   isExtra: boolean;
   position: number;
-  paymentRequired?: boolean
+  paymentRequired?: boolean;
 }
 
 export interface CourseResponse {
@@ -78,7 +78,7 @@ export interface SingleCourseDetailsResponse {
   isSubscribed: boolean;
   categories: Category[];
   subTitle: string | null;
-  isExternal: boolean
+  isExternal: boolean;
 }
 
 export interface ExternalCourse extends SingleCourseDetailsResponse {
@@ -98,6 +98,7 @@ export interface Course {
   maximumPrice: number;
   dateCreated: string;
   isSubscribed: string;
+  setPricing: number;
 }
 
 export type InProgressCoursesResponse = Omit<
@@ -107,6 +108,8 @@ export type InProgressCoursesResponse = Omit<
   percentCompleted: number;
   courseId: string;
   certificateRequired?: boolean;
+  subscriptionId: number;
+  courseCompleted: boolean;
 };
 
 export type AssessmentType = {
@@ -209,9 +212,9 @@ export enum CourseApprovalStatus {
 
 export type AllModuleResources =
   | ModuleContentResponse['data'][keyof Omit<
-    ModuleContentResponse['data'],
-    'totalSeconds' | 'thisOrThatInteractiveTypes'
-  >]
+      ModuleContentResponse['data'],
+      'totalSeconds' | 'thisOrThatInteractiveTypes'
+    >]
   | ThisOrThatInteractives[];
 
 export type ThisOrThatInteractives = {

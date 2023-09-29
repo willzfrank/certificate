@@ -1,10 +1,10 @@
-import React from 'react'
-import { InstructorHeading, Loader } from 'app/components'
-import { InstructorVerificationButtonProps } from './types'
+import React from 'react';
+import { InstructorHeading, Loader } from 'app/components';
+import { InstructorVerificationButtonProps } from './types';
 import {
   useAddIntructorProfessionsMutation as useAddInstructorProfessionsMutation,
   useGetProfessionsQuery,
-} from 'app/api/userApi'
+} from 'app/api/userApi';
 
 const SetProfession = ({
   goNext,
@@ -15,7 +15,7 @@ const SetProfession = ({
     data: professionsList = [],
     isLoading: isLoadingProfessionsList,
     error: loadProfessionsListError,
-  } = useGetProfessionsQuery()
+  } = useGetProfessionsQuery();
 
   const [
     addInstructorProfession,
@@ -23,20 +23,18 @@ const SetProfession = ({
       isLoading: isAddingInstructorProfession,
       isError: addInstructorProfessionError,
     },
-  ] = useAddInstructorProfessionsMutation()
+  ] = useAddInstructorProfessionsMutation();
 
-
-  const [professions, setProfessions] = React.useState<string[]>([])
-  
+  const [professions, setProfessions] = React.useState<string[]>([]);
 
   const onChangeProfession = (
     e: React.ChangeEvent<HTMLSelectElement>,
-    index: number,
+    index: number
   ) => {
-    const newProfessions = [...professions]
-    newProfessions[index] = e.currentTarget.value
-    setProfessions(newProfessions)
-  }
+    const newProfessions = [...professions];
+    newProfessions[index] = e.currentTarget.value;
+    setProfessions(newProfessions);
+  };
 
   return (
     <div>
@@ -186,7 +184,7 @@ const SetProfession = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export { SetProfession }
+export { SetProfession };

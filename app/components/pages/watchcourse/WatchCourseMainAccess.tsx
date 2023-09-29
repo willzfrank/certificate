@@ -47,7 +47,7 @@ const freePlan: PricingPlan = {
 //   pricingPlan: PricingPlan;
 // }
 
-const FullAccess = (props: Props) => {
+const WatchCourseMainAccess = (props: Props) => {
   const { closeModal, pricings, courseId, setIsSubscribed, isExternal } = props;
   const status = useScriptLoaded('https://checkout.flutterwave.com/v3.js');
   const [isApplyingDiscountCode, setIsApplyingDiscountCode] =
@@ -345,47 +345,48 @@ const FullAccess = (props: Props) => {
                 )}
                 loading={isCheckingSubscription}
               >
-                <div className="flex items-center">
-                  <span className=" text-white text-lg font-semibold font-['Inter']">
-                    Pay
-                  </span>
-                  <div className="  text-white text-center md:text-lg text-[12px] font-medium font-['Inter']">
-                    {props.pricings.length > 0 && (
-                      <div
-                        className="flex gap-[12px] items-start"
-                        onClick={() => {
-                          const selectedPrice = props.calculateDiscountedPrice(
-                            props.pricings[0].price, // Original price
-                            props.discountDetails
-                          );
+                <div>
+                  <div className="flex items-center">
+                    <span className=" text-white text-lg font-semibold font-['Inter']">
+                      Pay
+                    </span>
+                    <div className="  text-white text-center md:text-lg text-[12px] font-medium font-['Inter']">
+                      {props.pricings.length > 0 && (
+                        <div
+                          className="flex gap-[12px] items-start"
+                          onClick={() => {
+                            const selectedPrice =
+                              props.calculateDiscountedPrice(
+                                props.pricings[0].price, // Original price
+                                props.discountDetails
+                              );
 
-                          props.setPricingPlan({
-                            ...props.pricings[0], // Use the last price in the array
-                            price: selectedPrice,
-                          });
-                        }}
-                      >
-                        <div className="flex-1">
-                          <p className="font-semibold">
-                            <div className="inline-flex gap-4 ml-2">
-                              <span className="text-white">
-                                ₦
-                                {props.discountDetails.type ===
-                                'DiscountByAbsoluteValue'
-                                  ? props.discountDetails.value.toLocaleString()
-                                  : (
-                                      props.pricings[0].price -
+                            props.setPricingPlan({
+                              ...props.pricings[0], // Use the last price in the array
+                              price: selectedPrice,
+                            });
+                          }}
+                        >
+                          <div className="flex-1">
+                            <p className="font-semibold">
+                              <div className="inline-flex gap-4 ml-2">
+                                <span className="text-white">
+                                  ₦
+                                  {props.discountDetails.type ===
+                                  'DiscountByAbsoluteValue'
+                                    ? props.discountDetails.value
+                                    : props.pricings[0].price -
                                       Math.floor(
                                         props.pricings[0].price *
                                           (props.discountDetails.value / 100)
-                                      )
-                                    ).toLocaleString()}
-                              </span>
-                            </div>
-                          </p>
+                                      )}
+                                </span>
+                              </div>
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </Button>
@@ -397,4 +398,4 @@ const FullAccess = (props: Props) => {
   );
 };
 
-export default FullAccess;
+export default WatchCourseMainAccess;

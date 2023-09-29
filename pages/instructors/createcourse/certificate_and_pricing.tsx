@@ -58,6 +58,31 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
     );
   };
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+
+    // Set the course price to zero and subscriptionType to "Free" if checked
+    if (isChecked) {
+      updatePricings([
+        {
+          ...pricings[0],
+          price: 0,
+          subscriptionType: 'Free',
+        },
+        ...pricings.slice(1), // Keep the other pricing options unchanged
+      ]);
+    } else {
+      // If unchecked, use the previous price (pricings[0].price)
+      updatePricings([
+        {
+          ...pricings[0],
+          price: pricings[0].price,
+          subscriptionType: 'Standard',
+        },
+        ...pricings.slice(1), // Keep the other pricing options unchanged
+      ]);
+    }
+  };
   React.useEffect(() => {
     if (courseModules) {
       setCheckboxes(
@@ -189,6 +214,18 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
               placeholder="Enter Amount"
             />
           </div>
+          <div className="flex items-center gap-2 my-2">
+            <input
+              type="checkbox"
+              name=""
+              id=""
+              checked={pricings[0]?.price === 0} // Checked if the price is zero
+              onChange={handleCheckboxChange}
+            />
+            <div className="text-black text-sm font-normal font-['Inter']">
+              This course is free
+            </div>
+          </div>
         </div>{' '}
         <div className="mb-6 lg:w-full h-[189.08px] lg:h-full   md:w-[65%] overflow-x-auto no-scrollbar">
           <h5 className="text-black text-[15px] font-semibold mb-1 h-[50px]">
@@ -199,8 +236,8 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
             courseModules.map((module, index) => (
               <div key={index}>
                 <div className="flex">
-                  <div>
-                    <div className="border-[#EDEDED] border-t bg-[#F4F4F4] transition duration-500 cursor-pointer w-[491px] px-4 py-3 lg:pr-20">
+                  <div className="border-[#EDEDED] border-t bg-[#F4F4F4] transition duration-500 cursor-pointer w-[491px] px-4 py-3 lg:pr-20 gap-1">
+                    <div>
                       <div className="py-3">
                         <h5 className="text-app-dark-400 truncate">
                           Module {index} - {module.name}
@@ -227,7 +264,13 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
                             d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
                           />
                         </svg>
-                        <label className="relative inline-flex items-center mb-5 cursor-pointer">
+                        <label
+                          className="relative inline-flex items-center mb-5 cursor-pointer"
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-html="Unlocking this module will make it accessible <br md:block /> to learners  without having to pay for the course. <br />This can allow learners to experience a part <br md:block /> of the course before deciding to pay for it. 
+"
+                          data-tooltip-place="top"
+                        >
                           <input
                             type="checkbox"
                             value={''}
@@ -253,10 +296,6 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
                           strokeWidth="1.5"
                           stroke="currentColor"
                           className="w-6 h-6"
-                          data-tooltip-id="my-tooltip"
-                          data-tooltip-html="Unlocking this module will make it accessible <br md:block /> to learners  without having to pay for the course. <br />This can allow learners to experience a part <br md:block /> of the course before deciding to pay for it. 
-"
-                          data-tooltip-place="top"
                         >
                           <path
                             strokeLinecap="round"

@@ -1,20 +1,21 @@
 //@ts-nocheck
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import Image from "next/image";
-import { InstructorModel, USERTYPES, USER as USERMODEL } from "app/types";
-import { useAppSelector, useAppDispatch } from "app/redux/hooks";
-import { selectUser } from "app/redux/slices/userSlice";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import Image from 'next/image';
+import { InstructorModel, USERTYPES, USER as USERMODEL } from 'app/types';
+import { useAppSelector, useAppDispatch } from 'app/redux/hooks';
+import { selectUser } from 'app/redux/slices/userSlice';
 import {
   useGetProfessionsQuery,
   useUpdateInstructorPictureMutation,
   useUpdateInstructorProfileMutation,
   useAddIntructorProfessionsMutation,
   useRemoveIntructorProfessionsMutation,
-} from "app/api/userApi";
-import { userSlice } from "app/redux/slices";
-import { useNotify } from "app/hooks";
+} from 'app/api/userApi';
+import { userSlice } from 'app/redux/slices';
+import { useNotify } from 'app/hooks';
+import Select from 'react-select';
 
-interface UserForm extends Omit<USERMODEL, "profilePictureUrl"> {
+interface UserForm extends Omit<USERMODEL, 'profilePictureUrl'> {
   profilePictureUrl?: string;
   profileImageFile?: File;
   userName?: string;
@@ -40,7 +41,7 @@ const getUrl = (imageUrl?: string, imageFile?: File) => {
   }
   return (
     imageUrl ||
-    "https://certification-by-unify.s3.amazonaws.com/6787fce5-bfe2-46e2-8985-be6dfda5e5f8-imageKey?AWSAccessKeyId=AKIAWGSLF2G2J2TJ475M&Expires=1690031061&Signature=aNAzOTmiYYz2r%2F9xUiKt18Ix%2F78%3D"
+    'https://certification-by-unify.s3.amazonaws.com/6787fce5-bfe2-46e2-8985-be6dfda5e5f8-imageKey?AWSAccessKeyId=AKIAWGSLF2G2J2TJ475M&Expires=1690031061&Signature=aNAzOTmiYYz2r%2F9xUiKt18Ix%2F78%3D'
   );
 };
 
@@ -109,7 +110,7 @@ const BasicInfoTab = () => {
       e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
       if (profile) {
-        if (field === "profilePictureUrl") {
+        if (field === 'profilePictureUrl') {
           setFileError(false);
           const file = e?.target?.files ? e?.target.files[0] : null;
           if (validateImage(file as File)) {
@@ -134,12 +135,31 @@ const BasicInfoTab = () => {
     };
 
   const onChangeProfession =
-    (index: number) => (e: ChangeEvent<HTMLSelectElement>) => {
+    (selectedOption) => (e: ChangeEvent<HTMLSelectElement>) => {
       const updatedProfile = { ...profile };
       updatedProfile.professionIds = updatedProfile.professionIds ?? [];
       updatedProfile.professionIds[index] = e.target.value;
       setProfile(updatedProfile);
     };
+
+  // Map data to options
+  const professionListOptions = professionList?.map((item) => ({
+    value: item?.id, // Use "id" as the key
+    label: item?.name, // Use "name" as the label
+  }));
+
+  const handleProfessionSelect = (selectedOption, fieldName) => {
+    const selectedProfessionId = selectedOption || null;
+
+    const updatedProfile = { ...profile };
+
+    updatedProfile.professionIds = updatedProfile.professionIds ?? [];
+    updatedProfile.professionIds = selectedProfessionId;
+    setProfile(updatedProfile);
+  };
+
+  console.log('professionid', profile?.professions);
+  console.log('profile', profile);
 
   const discard = () => {
     if (user?.id) {
@@ -166,9 +186,9 @@ const BasicInfoTab = () => {
         .unwrap()
         .then(() => {
           notify({
-            title: "Profile update success",
-            type: "success",
-            description: "Profile updated",
+            title: 'Profile update success',
+            type: 'success',
+            description: 'Profile updated',
           });
         });
 
@@ -176,7 +196,7 @@ const BasicInfoTab = () => {
         const formData = new FormData();
 
         formData.append(
-          "imageFile",
+          'imageFile',
           profile.profileImageFile,
           profile.profileImageFile.name
         );
@@ -188,9 +208,9 @@ const BasicInfoTab = () => {
           .unwrap()
           .then(() => {
             notify({
-              title: "Profile image update success",
-              type: "success",
-              description: "Profile image updated",
+              title: 'Profile image update success',
+              type: 'success',
+              description: 'Profile image updated',
             });
           });
 
@@ -214,9 +234,9 @@ const BasicInfoTab = () => {
           .unwrap()
           .then(() => {
             notify({
-              title: "Professions update success",
-              type: "success",
-              description: "Professions updated",
+              title: 'Professions update success',
+              type: 'success',
+              description: 'Professions updated',
             });
           });
       }
@@ -229,17 +249,17 @@ const BasicInfoTab = () => {
           .unwrap()
           .then(() => {
             notify({
-              title: "Professions update success",
-              type: "success",
-              description: "Professions updated",
+              title: 'Professions update success',
+              type: 'success',
+              description: 'Professions updated',
             });
           });
       }
     } catch (error) {
       notify({
-        title: "Profile update failed",
-        type: "error",
-        description: "Unable to update profile",
+        title: 'Profile update failed',
+        type: 'error',
+        description: 'Unable to update profile',
       });
     }
   };
@@ -275,7 +295,7 @@ const BasicInfoTab = () => {
               disabled={isLoading}
               className="relative flex items-center justify-center w-full text-sm font-medium border border-transparent rounded-md group focus:outline-none m py-2.5 px-9 mr-2 mb-2 text-white bg-[#B61046] border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200 "
             >
-              {isLoading ? "Updating..." : "Save changes"}{" "}
+              {isLoading ? 'Updating...' : 'Save changes'}{' '}
             </button>
           </div>
         </div>
@@ -338,7 +358,7 @@ const BasicInfoTab = () => {
                 className="opacity-0"
                 id="file"
                 accept="image/*"
-                onChange={onChange("profilePictureUrl")}
+                onChange={onChange('profilePictureUrl')}
               />
 
               <label
@@ -368,7 +388,7 @@ const BasicInfoTab = () => {
             className="w-full md:min-w-[400px] px-3 py-2 leading-tight text-gray-700 border border-app-gray rounded"
             placeholder="First name"
             value={profile?.bio}
-            onChange={onChange("bio")}
+            onChange={onChange('bio')}
             id="bio"
             rows={4}
           ></textarea>
@@ -379,7 +399,7 @@ const BasicInfoTab = () => {
           Personal data
         </div>
         <div>
-          {" "}
+          {' '}
           <form className="bg-white rounded w-full">
             <div className="mb-5 form-inputs mt-4 md:mt-0">
               <label className="block mb-2 font-normal text-base">
@@ -392,7 +412,7 @@ const BasicInfoTab = () => {
                 className="w-full md:min-w-[400px] px-3 py-2 leading-tight text-gray-700 border border-app-gray rounded"
                 placeholder="First name"
                 value={profile?.firstName}
-                onChange={onChange("firstName")}
+                onChange={onChange('firstName')}
               />
             </div>
             <div className="mb-5 form-inputs">
@@ -406,7 +426,7 @@ const BasicInfoTab = () => {
                 className="w-full px-3 md:min-w-[400px] py-2 leading-tight text-gray-700 border border-app-gray rounded"
                 placeholder="Last name"
                 value={profile?.lastName}
-                onChange={onChange("lastName")}
+                onChange={onChange('lastName')}
               />
             </div>
             <div className="mb-5 form-inputs mt-4 md:mt-0">
@@ -417,7 +437,7 @@ const BasicInfoTab = () => {
                 name="text"
                 className="w-full md:min-w-[400px] px-3 py-2 leading-tight text-gray-700 border border-app-gray rounded"
                 placeholder="Alias"
-                onChange={onChange("userName")}
+                onChange={onChange('userName')}
               />
             </div>
           </form>
@@ -426,8 +446,8 @@ const BasicInfoTab = () => {
       <div className="mt-10 w-full md:space-x-32 md:flex">
         <p className="text-lg font-medium md:min-w-[153px]">Profession</p>
         <div>
-          {professionListLoading ? "Loading profs..." : null}
-          {professionListErr ? "Loading profs failed..." : null}
+          {professionListLoading ? 'Loading profs...' : null}
+          {professionListErr ? 'Loading profs failed...' : null}
           {professionList?.length ? (
             <div className="bg-white rounded w-full">
               <div className="mb-5 form-inputs mt-4 md:mt-0">
@@ -437,27 +457,17 @@ const BasicInfoTab = () => {
                 >
                   Profession 1
                 </label>
-                <select
+                <Select
                   id="prof1"
                   name="prof1"
-                  className="w-full capitalize md:min-w-[400px] px-3 py-2 leading-tight text-gray-700 border border-app-gray rounded"
+                  options={professionListOptions}
                   placeholder="Profession 1"
-                  onChange={onChangeProfession(0)}
-                  value={
-                    profile?.professionIds ? profile?.professionIds[0] : ""
+                  // onChange={onChangeProfession(0)}
+                  onChange={(selectedOption) =>
+                    handleProfessionSelect(selectedOption, prof1)
                   }
-                >
-                  <option value="">Choose a profession</option>
-                  {professionList?.map((profession) => (
-                    <option
-                      className="capitalize"
-                      key={profession.id}
-                      value={profession.id}
-                    >
-                      {profession.name.toLowerCase()}
-                    </option>
-                  ))}
-                </select>
+                  isClearable={true}
+                />
               </div>
               <div className="mb-5 form-inputs mt-4 md:mt-0">
                 <label
@@ -473,7 +483,7 @@ const BasicInfoTab = () => {
                   placeholder="Profession 2"
                   onChange={onChangeProfession(1)}
                   value={
-                    profile?.professionIds ? profile?.professionIds[1] : ""
+                    profile?.professionIds ? profile?.professionIds[1] : ''
                   }
                 >
                   <option value="">Choose a profession</option>
@@ -502,7 +512,7 @@ const BasicInfoTab = () => {
                   placeholder="Profession 3"
                   onChange={onChangeProfession(2)}
                   value={
-                    profile?.professionIds ? profile?.professionIds[2] : ""
+                    profile?.professionIds ? profile?.professionIds[2] : ''
                   }
                 >
                   <option value="">Choose a profession</option>
@@ -525,7 +535,7 @@ const BasicInfoTab = () => {
       <div className="md:hidden block">
         <div className="flex space-x-3">
           <div>
-            {" "}
+            {' '}
             <button
               onClick={discard}
               type="button"
@@ -535,13 +545,13 @@ const BasicInfoTab = () => {
             </button>
           </div>
           <div>
-            {" "}
+            {' '}
             <button
               type="submit"
               className="relative flex items-center justify-center w-full text-sm font-medium border border-transparent rounded-md group focus:outline-none m py-2.5 px-9 mr-2 mb-2 text-white bg-[#B61046] border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200 "
               disabled={isLoading}
             >
-              {isLoading ? "Updating..." : "Save changes"}
+              {isLoading ? 'Updating...' : 'Save changes'}
             </button>
           </div>
         </div>

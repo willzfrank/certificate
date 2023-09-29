@@ -40,6 +40,8 @@ import {
 } from 'app/api/confirmPaymentApi';
 import { getTime } from 'app/utils';
 import FullAccess from '../watchcourse/FullAccess';
+import { Disclosure } from '@headlessui/react';
+import DiscountModal from '../watchcourse/DiscountModal';
 
 const freePlan: PricingPlan = {
   id: `${Number.MAX_SAFE_INTEGER}`,
@@ -63,6 +65,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
   const status = useScriptLoaded('https://checkout.flutterwave.com/v3.js');
   const [videoModalOpen, setVideoModalOpen] = useState(false);
   const [accessModal, setAccessModal] = useState(false);
+  const [discountModal, setDiscountModal] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
   const [addSubscription, { isLoading, error, isError, isSuccess }] =
     useAddSubscriptionMutation();
@@ -161,6 +164,37 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 
   const openModal = () => {
     setAccessModal(true);
+  };
+
+  const closeDiscountModal = () => {
+    setDiscountModal(false);
+  };
+
+  const openDiscountModal = () => {
+    setDiscountModal(true);
+  };
+
+  const calculateDiscountedPrice = (
+    price: number,
+    discountDetails: DiscountDetailsType
+  ) => {
+    let updatedPrice = props.pricings[0].price;
+
+    if (discountDetails.hasAppliedDiscount) {
+      updatedPrice =
+        discountDetails.type === 'DiscountByAbsoluteValue'
+          ? discountDetails.value
+          : props.pricings[0].price -
+            Math.floor(props.pricings[0].price * (discountDetails.value / 100));
+    }
+
+    // Update the pricing plan with the updated price
+    setPricingPlan((prevPricingPlan) => ({
+      ...prevPricingPlan,
+      price: updatedPrice,
+    }));
+
+    return updatedPrice;
   };
 
   const handlePay =
@@ -295,69 +329,60 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 
           <div className="lg:w-[37%] lg:h-[calc(65vh-4rem)] h-full pl-14 lg:pt-4 bg-app-dark-500 px-6 py-10 text-white flex flex-col justify-between">
             <div>
-              <p className="text-xl font-semibold mb-3">Pricing</p>
+              <p className="text-xl font-semibold">Pricing</p>
               {props.pricings.length > 0 && (
                 <div
-                  className="flex gap-[12px] my-4 items-start"
+                  className="flex gap-[12px] items-start"
                   onClick={() => {
-                    const selectedPrice = discountDetails.hasAppliedDiscount
-                      ? {
-                          ...props.pricings[props.pricings.length - 1], // Use the last price in the array
-                          price:
-                            discountDetails.type === 'DiscountByAbsoluteValue'
-                              ? discountDetails.value
-                              : props.pricings[props.pricings.length - 1]
-                                  .price -
-                                Math.floor(
-                                  props.pricings[props.pricings.length - 1]
-                                    .price *
-                                    (discountDetails.value / 100)
-                                ),
-                        }
-                      : props.pricings[props.pricings.length - 1]; // Use the last price in the array
+                    const selectedPrice = calculateDiscountedPrice(
+                      props.pricings[0].price, // Original price
+                      discountDetails
+                    );
 
-                    setPricingPlan(selectedPrice);
+                    console.log('selectedPrice:', selectedPrice); // Log the selected price
+                    console.log('discountDetails:', discountDetails); // Lo
+
+                    setPricingPlan({
+                      ...props.pricings[0], // Use the last price in the array
+                      price: selectedPrice,
+                    });
                   }}
                 >
-                  <Checkbox
-                    value={
-                      pricingPlan?.name ===
-                      props.pricings[props.pricings.length - 1].name
-                    }
-                  />
                   <div className="flex-1">
                     <p className="font-semibold">
                       {discountDetails.hasAppliedDiscount ? (
-                        <div className="inline-flex gap-4 ml-2">
+                        <span className="inline-flex gap-4 ml-2">
                           <span className="text-white line-through">
-                            ₦ {props.pricings[props.pricings.length - 1].price}
+                            ₦ {props.pricings[0].price}
                           </span>
                           <span className="text-white">
                             ₦
                             {discountDetails.type === 'DiscountByAbsoluteValue'
                               ? discountDetails.value
-                              : props.pricings[props.pricings.length - 1]
-                                  .price -
+                              : props.pricings[0].price -
                                 Math.floor(
-                                  props.pricings[props.pricings.length - 1]
-                                    .price *
+                                  props.pricings[0].price *
                                     (discountDetails.value / 100)
                                 )}
                           </span>
-                        </div>
+                        </span>
                       ) : (
                         <span className="text-white">
-                          ₦ {props.pricings[props.pricings.length - 1].price}
+                          ₦ {props.pricings[0].price.toLocaleString()}
                         </span>
                       )}
                     </p>
                     <div className="ml-0">
-                      <p
-                        className="text-left underline cursor-pointer text-sm text-app-pink mb-2"
-                        onClick={openModal}
-                      >
-                        Get Full Access
-                      </p>
+                      {props.pricings[0].price === 0 ? (
+                        ''
+                      ) : (
+                        <p
+                          className=" h-3 cursor-pointer text-orange-500 text-[10px] md:text-[13px] font-medium font-['Inter'] underline"
+                          onClick={openDiscountModal}
+                        >
+                          Use Discount Code
+                        </p>
+                      )}
                       {(!isSubscribed || !props.isSubscribed) && (
                         <div
                           className={`${
@@ -374,9 +399,37 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                                 courseId={props?.id}
                                 setIsSubscribed={setIsSubscribed}
                                 isExternal={props?.isExternal}
+                                discountDetails={discountDetails}
+                                setDiscountDetails={setDiscountDetails}
+                                calculateDiscountedPrice={
+                                  calculateDiscountedPrice
+                                }
+                                setPricingPlan={setPricingPlan}
+                                pricingPlan={pricingPlan}
                               />
                             </Modal>
                           )}
+                          {/* For Dicount  */}
+                          {/* i know am supposed to refactor full access to fit it but am too lazy to think */}
+                          <Modal
+                            isOpen={discountModal}
+                            closeModal={closeDiscountModal}
+                          >
+                            <DiscountModal
+                              closeModal={closeDiscountModal}
+                              pricings={props?.pricings}
+                              courseId={props?.id}
+                              setIsSubscribed={setIsSubscribed}
+                              isExternal={props?.isExternal}
+                              discountDetails={discountDetails}
+                              setDiscountDetails={setDiscountDetails}
+                              calculateDiscountedPrice={
+                                calculateDiscountedPrice
+                              }
+                              setPricingPlan={setPricingPlan}
+                              pricingPlan={pricingPlan}
+                            />
+                          </Modal>
                         </div>
                       )}
                     </div>
@@ -385,7 +438,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
               )}
             </div>
 
-            <div className="space-y-4 w-5/6">
+            <div className="w-5/6">
               {isSubscribed || props.isSubscribed ? (
                 <Link href={`/course/${props.id}?slugName=${props.slugName}`}>
                   <div className="flex justify-center flex-1 gap-2 flex-col cursor-pointer">
@@ -415,7 +468,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                 <>
                   {showAccessButton && freeModulesAvailable && (
                     <button
-                      className={`bg-white text-[#4993ea] font-bold rounded-lg h-[56px] w-full mb-2 border-2 border-black`}
+                      className={`bg-white text-[#4993ea] font-bold rounded-lg h-[56px] w-full  border-2 border-black`}
                       onClick={() => {
                         handleAccessCourse();
                       }}
@@ -435,7 +488,9 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                           </div>
                         </div>
                       ) : (
-                        <p>Access Course</p>
+                        <p className="text-center text-blue-500 md:text-lg text-base font-bold font-['Inter']">
+                          Start Course
+                        </p>
                       )}
                     </button>
                   )}
@@ -453,37 +508,88 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                 </>
               )}
               {/* BUY NOW BUTTON */}
-              {(accessCourse || !freeModulesAvailable) && (
-                <div className="space-y-2">
-                  {!isSubscribed && !props.isSubscribed && (
-                    <div className="w-full h-[56px] flex items-center justify-center bg-red-600 rounded-[35.06px]">
-                      <Button
-                        className="text-white text-[12.88px] font-semibold cursor-pointer"
-                        // onClick={handlePay(pricingPlan?.price, pricingPlan?.subscriptionType, pricingPlan?.name, pricingPlan?.id)}
-                        onClick={openModal}
-                        loading={
-                          confirmingPurchase ||
-                          isLoading ||
-                          isLoadingCourseDetails
-                        }
-                      >
-                        Buy Now
-                      </Button>
-                    </div>
-                  )}
-
-                  {freeModulesAvailable && (
-                    <Link
-                      href={`/course/${props.id}?slugName=${props.slugName}`}
-                    >
-                      <div className="w-full h-[56px] flex items-center justify-center rounded-[35.06px] border border-red-600 cursor-pointer">
-                        <p className="text-white text-[12.88px] font-semibold">
-                          Start Free
-                        </p>
+              {(accessCourse || !freeModulesAvailable) &&
+                pricingPlan?.price > 0 && (
+                  <div className="space-y-2">
+                    {!isSubscribed && !props.isSubscribed && (
+                      <div className="w-full h-[56px] flex items-center justify-center bg-red-600 rounded-[35.06px] transition-transform hover:scale-105">
+                        <Button
+                          className="text-white  text-[12.88px] md:text-[15.88px] font-semibold cursor-pointer flex flex-col items-center justify-center"
+                          // onClick={handlePay(pricingPlan?.price, pricingPlan?.subscriptionType, pricingPlan?.name, pricingPlan?.id)}
+                          onClick={openModal}
+                          loading={
+                            confirmingPurchase ||
+                            isLoading ||
+                            isLoadingCourseDetails
+                          }
+                        >
+                          Buy Now
+                          <small className="text-white text-[10px] font-semibold font-['Inter']">
+                            Access all the contents of this course
+                          </small>
+                        </Button>
                       </div>
-                    </Link>
+                    )}
+
+                    {freeModulesAvailable && (
+                      <Link
+                        href={`/course/${props.id}?slugName=${props.slugName}`}
+                      >
+                        <div className="w-full h-[56px] flex items-center flex-col  justify-center gap-1 rounded-[35.06px] border border-red-600 cursor-pointer transition-transform hover:scale-105">
+                          <p className="text-white  text-[12.88px] md:text-[15.88px] font-semibold">
+                            Learn For Free
+                          </p>
+                          <small className="text-white text-[10px] font-semibold font-['Inter']">
+                            Access the free contents of this course
+                          </small>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
+                )}
+
+              {pricingPlan?.price === 0 && (
+                <>
+                  {!isSubscribed && (
+                    <button
+                      className={`bg-white text-[#4993ea] font-bold rounded-lg h-[56px] w-full  border-2 border-black`}
+                      onClick={() => {
+                        handleAccessCourse();
+                      }}
+                    >
+                      {pricingPlan.price === 0 ? (
+                        <div
+                          onClick={handlePay(
+                            pricingPlan?.price,
+                            pricingPlan?.subscriptionType,
+                            pricingPlan?.name,
+                            pricingPlan?.id
+                          )}
+                        >
+                          <div>
+                            <p>Enroll For Free</p>
+                            <p className="text-xs">Start now</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-center text-blue-500 md:text-lg text-base font-bold font-['Inter']">
+                          Start Course
+                        </p>
+                      )}
+                    </button>
                   )}
-                </div>
+                  {!isSubscribed && (
+                    <p
+                      className={`text-center text-xs text-zinc-100 mb-2 ${
+                        pricingPlan.price === 0 ? '' : 'font-bold'
+                      }`}
+                    >
+                      {pricingPlan.price === 0
+                        ? 'Enroll now to access the free contents in this course'
+                        : 'Start now to access the contents in this course'}
+                    </p>
+                  )}
+                </>
               )}
             </div>
           </div>
