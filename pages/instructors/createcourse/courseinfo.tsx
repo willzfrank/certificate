@@ -125,6 +125,7 @@ const CreateCourse_CourseInfo: NextPageWithLayout<{}> = () => {
 				isExternal: courseInfo.isExternal,
 				redirectURL: values.redirectUrl,
 				subTitle: values.subtitle as string,
+				certificateRequired: true,
 			}).unwrap();
 
 			if (data.errors.length !== 0) {
