@@ -4,6 +4,7 @@ import { USERTYPES } from 'app/types';
 import { useAppSelector } from 'app/hooks';
 import { Image } from 'app/components';
 import Link from 'next/link';
+import { API_URL } from 'app/constants';
 
 enum TabValues {
   inProgress = 'inProgress',
@@ -31,8 +32,8 @@ const DropDownMenu: React.ForwardRefRenderFunction<
   const isInstructor = user.roleName?.toLowerCase() === USERTYPES.INSTRUCTOR;
 
   const divRef = React.useRef<HTMLDivElement>(null);
-  
-   const handleLinkClick = () => {
+
+  const handleLinkClick = () => {
     close();
   };
   /// I should extract this too a hook or a higher order component but i'm too lazy to... lol 🫠
@@ -57,6 +58,12 @@ const DropDownMenu: React.ForwardRefRenderFunction<
 
     return () => document.body.removeEventListener('click', clickOutListener);
   }, []);
+
+  const href =
+    API_URL === 'https://api-certifications.unifyedu.ng/api/v1'
+      ? 'https://blog.unifyedu.ng/'
+      : 'https://unify-prod-blog.azurewebsites.net/';
+      
 
   return (
     <AnimatePresence>
@@ -200,8 +207,14 @@ const DropDownMenu: React.ForwardRefRenderFunction<
                 </Link>
               </li> */}
                 <li onClick={handleLinkClick}>
-                  <Link href="/faqs">
-                    <a className="block px-4 py-2 hover:text-app-pink">FAQs</a>
+                  <Link href={href}>
+                    <a
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block px-4 py-2 hover:text-app-pink"
+                    >
+                      Blog
+                    </a>
                   </Link>
                 </li>
                 <li onClick={handleLinkClick}>

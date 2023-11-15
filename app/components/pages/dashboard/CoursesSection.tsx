@@ -13,7 +13,12 @@ import { USERTYPES } from 'app/types';
 //   useGetCompletedCoursesQuery,
 // } from 'app/api/subscriptionApi';
 
-import { useGetCourseSubscriptionStatusQuery } from 'app/api/subscriptionApi';
+import {
+  useGetCourseSubscriptionStatusQuery,
+  useGetStudentsLearningReportQuery,
+} from 'app/api/subscriptionApi';
+import NotFoundCompleted from 'app/components/elements/NotFoundCompleted';
+import NotFoundInProgress from 'app/components/elements/NotFoundInProgress';
 
 interface NextArrowProps {
   onClick: () => void;
@@ -129,14 +134,15 @@ const CoursesSection = () => {
     { skip: user.roleName?.toLowerCase() !== USERTYPES.STUDENT.toLowerCase() }
   );
 
-  // Use the new endpoint to fetch student progress
   const { data: studentStatusData } = useGetCourseSubscriptionStatusQuery({
     studentId: user.id as string,
     page: 1,
     perPage: 1000,
   });
 
-  console.log('studentStatusData', studentStatusData);
+  const { data: learningReportData } = useGetStudentsLearningReportQuery({
+    studentId: user.id as string,
+  });
 
   // Filter courses based on subscriptionStatus
   const inProgressCourses =
@@ -175,54 +181,64 @@ const CoursesSection = () => {
 
       <div className="my-10">
         {!page || page === TabValues.inProgress ? (
-          <Slider {...sliderSettings}>
-            {inProgressCourses?.map((course) => (
-              <CourseTaken
-                key={course.courseId}
-                courseId={course.courseId}
-                slugName={course.slugName}
-                title={course.title}
-                imageUrl={course.imageUrl}
-                videoUrl={course.videoUrl}
-                module={'One'}
-                percentageCompleted={course.percentCompleted}
-                certificateRequired={course.certificateRequired}
-                courseCompleted={course.courseCompleted}
-              />
-            ))}
-          </Slider>
+          inProgressCourses && inProgressCourses.length > 0 ? (
+            <Slider {...sliderSettings}>
+              {inProgressCourses.map((course) => (
+                <CourseTaken
+                  key={course.courseId}
+                  courseId={course.courseId}
+                  slugName={course.slugName}
+                  title={course.title}
+                  imageUrl={course.imageUrl}
+                  videoUrl={course.videoUrl}
+                  module={'One'}
+                  percentageCompleted={course.percentCompleted}
+                  certificateRequired={course.certificateRequired}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <NotFoundInProgress />
+          )
         ) : null}
         {page === TabValues.completed ? (
-          <Slider {...sliderSettings}>
-            {completedCourses?.map((course) => (
-              <CourseTaken
-                courseId={course.courseId}
-                key={course.courseId}
-                title={course.title}
-                imageUrl={course.imageUrl}
-                slugName={course.slugName}
-                videoUrl={course.videoUrl}
-                module={'One'}
-                percentageCompleted={course.percentCompleted}
-                certificateRequired={course.certificateRequired}
-                courseCompleted={course.courseCompleted}
-              />
-            ))}
-          </Slider>
+          completedCourses && completedCourses.length > 0 ? (
+            <Slider {...sliderSettings}>
+              {completedCourses.map((course) => (
+                <CourseTaken
+                  courseId={course.courseId}
+                  key={course.courseId}
+                  title={course.title}
+                  imageUrl={course.imageUrl}
+                  slugName={course.slugName}
+                  videoUrl={course.videoUrl}
+                  module={'One'}
+                  percentageCompleted={course.percentCompleted}
+                  certificateRequired={course.certificateRequired}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <NotFoundCompleted />
+          )
         ) : null}
         {page === TabValues.wishlist ? (
-          <Slider {...sliderSettings}>
-            {data?.data.pagedList.map((course) => (
-              <CourseTaken
-                key={course.courseId}
-                courseId={course.courseId}
-                slugName={course.slugName}
-                title={course.title}
-                imageUrl={course.imageUrl}
-                videoUrl={course.videoUrl}
-              />
-            ))}
-          </Slider>
+          data && data.data.pagedList.length > 0 ? (
+            <Slider {...sliderSettings}>
+              {data.data.pagedList.map((course) => (
+                <CourseTaken
+                  key={course.courseId}
+                  courseId={course.courseId}
+                  slugName={course.slugName}
+                  title={course.title}
+                  imageUrl={course.imageUrl}
+                  videoUrl={course.videoUrl}
+                />
+              ))}
+            </Slider>
+          ) : (
+            <p>No courses in your wishlist.</p>
+          )
         ) : null}
       </div>
     </div>

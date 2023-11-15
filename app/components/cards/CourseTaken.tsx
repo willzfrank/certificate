@@ -11,7 +11,6 @@ interface CourseTakenType {
   courseId: string;
   certificateRequired?: boolean;
   slugName?: string;
-  courseCompleted?:boolean
   // courseId: string;
 }
 
@@ -34,26 +33,21 @@ const CourseTaken = function (props: CourseTakenType) {
           </div>
         </Link>
         <div>
-          {props.percentageCompleted !== undefined ? (
+          {props.percentageCompleted !== undefined &&
+          (props.percentageCompleted >= 0 ||
+            props.percentageCompleted === 0) ? (
             <div className="flex items-center justify-between">
-              {props.courseCompleted === true &&
-              props.certificateRequired === false ? (
-                <p>100%</p>
+              {props.percentageCompleted >= 100 &&
+              props.certificateRequired === true ? (
+                <DownloadCertificateButton
+                  title={props.title}
+                  courseId={props.courseId}
+                />
               ) : (
-                <>
-                  {props.courseCompleted === false ? (
-                    <p>{props.percentageCompleted}%</p>
-                  ) : (
-                    props.certificateRequired && (
-                      <DownloadCertificateButton
-                        title={props.title}
-                        courseId={props.courseId}
-                      />
-                    )
-                  )}
-                </>
+                <p>{props.percentageCompleted.toString() + '%'}</p>
               )}
-              {!props.courseCompleted && (
+
+              {props.percentageCompleted < 100 && (
                 <div className="px-3 py-1 rounded bg-blue-600 text-white text-sm">
                   In Progress
                 </div>

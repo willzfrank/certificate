@@ -131,7 +131,7 @@ const WatchCourseMainAccess = (props: Props) => {
           }).unwrap();
           // await trigger({ tx_ref: referenceNumber }).unwrap();
           setIsSubscribed(true);
-          router.push(`/paymentProcess?tx_ref=${referenceNumber}`);
+          router.push(`/paymentProcess/${courseId}?tx_ref=${referenceNumber}`);
         } catch (error) {
           //@ts-ignore
           if (error?.status === 400 || error?.status === 401) {

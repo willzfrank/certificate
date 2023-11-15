@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { API_URL } from 'app/constants';
 
 const categories = [
   {
@@ -34,6 +35,12 @@ function LangOfBankTab() {
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
   };
+
+  const href =
+    API_URL === 'https://api-certifications.unifyedu.ng/api/v1'
+      ? '/course/language-of-banking-0380/preview'
+      : '/course/language-of-banking-7961/preview';
+
 
   return (
     <div className="px-24 py-10">
@@ -84,7 +91,7 @@ function LangOfBankTab() {
                 {category.description}
               </p>
             </div>
-            <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
+            <Link href={href}>
               <button className="py-2 px-6 mt-5 text-white font-semibold rounded-[30px] jost bg-gradient-to-r from-[#d60049] to-[#ff8c40]">
                 Join Now
               </button>

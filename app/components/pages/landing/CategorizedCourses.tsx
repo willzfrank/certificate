@@ -62,8 +62,8 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
     <div className="py-10 md:py-28">
       <div className="p-20 mb-4 px-8">
         <h1 className="text-[28px] leading-10 text-center font-normal hidden md:block">
-          Over 500+ hours of course content taught by powerfully talented
-          individuals
+          Explore a lineup of exceptionally curated & professionally delivered
+          courses.
         </h1>
 
         <h1 className="text-[22px] leading-8 text-center font-normal md:hidden">
@@ -157,12 +157,12 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
         </div>
       ) : null}
       <Modal isOpen={modalOpen} closeModal={() => setModalOpen(false)}>
-          <VideoPlayer
-            title={courses[activeCarouselItemIndex]?.title}
-            src={courses[activeCarouselItemIndex]?.videoUrl}
-            posterUrl={courses[activeCarouselItemIndex]?.imageUrl}
-            className="h-[70vh] w-[90vw] lg:w-[60vw]"
-          />
+        <VideoPlayer
+          title={courses[activeCarouselItemIndex]?.title}
+          src={courses[activeCarouselItemIndex]?.videoUrl}
+          posterUrl={courses[activeCarouselItemIndex]?.imageUrl}
+          className="h-[70vh] w-[90vw] lg:w-[60vw]"
+        />
       </Modal>
     </div>
   );
@@ -176,6 +176,23 @@ const Course = ({
   courseId,
 }: Course & { openModal: (courseId: string) => void }) => {
   console.log({ imageUrl, title, instructors, openModal, courseId });
+
+/* The code block is assigning a value to the variable `href` based on the value of the `courseId`
+variable. If the `courseId` matches either `'03804b6c-1e6f-4f03-91e8-502ecd7e3333'` or
+`'7961c48d-5654-49be-9679-9b9c220ab36d'`, then `href` is set to
+`'/pathways/become-a-banker/overview'`. Otherwise, `href` is set to `'/course//preview'`,
+where `` is the actual value of the `courseId` variable. */
+  let href;
+
+  if (
+    courseId === '03804b6c-1e6f-4f03-91e8-502ecd7e3333' ||
+    courseId === '7961c48d-5654-49be-9679-9b9c220ab36d'
+  ) {
+    href = '/pathways/become-a-banker/overview';
+  } else {
+    href = `/course/${courseId}/preview`;
+  }
+
 
   return (
     <motion.div
@@ -214,7 +231,7 @@ const Course = ({
           </button>
         </div>
       </div>
-      <Link href={`/course/${courseId}/preview`}>
+      <Link href={href}>
         <div className="cursor-pointer">
           <h4 className="capitalize font-bold text-xl">{title}</h4>
           <p className="capitalize text-muted font-normal mt-1">

@@ -74,6 +74,9 @@ const ModuleDetailsAccordion = ({
     moduleId,
   });
 
+
+  // console.log('moduleId', moduleId);
+
   const notify = useNotify();
 
   const mergedList = React.useMemo(

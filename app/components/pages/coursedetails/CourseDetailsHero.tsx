@@ -229,7 +229,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 
         setIsSubscribed(true);
 
-        // router.push(`/paymentProcess?tx_ref=${referenceNumber}`)
+        // router.push(`/paymentProcess/${courseId}?tx_ref=${referenceNumber}`)
       } catch (error) {
         //@ts-ignore
         if (error?.status === 400 || error?.status === 401) {
@@ -348,7 +348,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                     });
                   }}
                 >
-                  <div className="flex-1">
+                  <div className="md:flex-1 flex md:items-start items-center justify-between w-[250px] flex-row md:flex-col">
                     <p className="font-semibold">
                       {discountDetails.hasAppliedDiscount ? (
                         <span className="inline-flex gap-4 ml-2">
@@ -377,7 +377,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                         ''
                       ) : (
                         <p
-                          className=" h-3 cursor-pointer text-orange-500 text-[10px] md:text-[13px] font-medium font-['Inter'] underline"
+                          className=" h-3 cursor-pointer text-orange-500 text-[10px] md:text-[13px] font-medium underline"
                           onClick={openDiscountModal}
                         >
                           Use Discount Code
@@ -488,7 +488,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-center text-blue-500 md:text-lg text-base font-bold font-['Inter']">
+                        <p className="text-center text-blue-500 md:text-lg text-base font-bold">
                           Start Course
                         </p>
                       )}
@@ -512,9 +512,9 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                 pricingPlan?.price > 0 && (
                   <div className="space-y-2">
                     {!isSubscribed && !props.isSubscribed && (
-                      <div className="w-full h-[56px] flex items-center justify-center bg-red-600 rounded-[35.06px] transition-transform hover:scale-105">
+                      <div className="w-full h-[56px] flex items-center justify-center bg-red-600 cursor-pointer rounded-[35.06px] transition-transform md:mt-0 mt-5 hover:scale-105">
                         <Button
-                          className="text-white  text-[12.88px] md:text-[15.88px] font-semibold cursor-pointer flex flex-col items-center justify-center"
+                          className="text-white  text-[12.88px] md:text-[15.88px] font-semibold  flex flex-col items-center justify-center"
                           // onClick={handlePay(pricingPlan?.price, pricingPlan?.subscriptionType, pricingPlan?.name, pricingPlan?.id)}
                           onClick={openModal}
                           loading={
@@ -524,7 +524,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                           }
                         >
                           Buy Now
-                          <small className="text-white text-[10px] font-semibold font-['Inter']">
+                          <small className="text-white text-[10px] font-semibold">
                             Access all the contents of this course
                           </small>
                         </Button>
@@ -539,7 +539,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                           <p className="text-white  text-[12.88px] md:text-[15.88px] font-semibold">
                             Learn For Free
                           </p>
-                          <small className="text-white text-[10px] font-semibold font-['Inter']">
+                          <small className="text-white text-[10px] font-semibold">
                             Access the free contents of this course
                           </small>
                         </div>
@@ -548,7 +548,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                   </div>
                 )}
 
-              {pricingPlan?.price === 0 && (
+              {pricingPlan?.price === 0 && !freeModulesAvailable && (
                 <>
                   {!isSubscribed && (
                     <button
@@ -572,7 +572,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-center text-blue-500 md:text-lg text-base font-bold font-['Inter']">
+                        <p className="text-center text-blue-500 md:text-lg text-base font-bold">
                           Start Course
                         </p>
                       )}

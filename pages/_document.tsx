@@ -21,6 +21,11 @@ export default function Document() {
         ></link>
 
         <Script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js" />
+        {/* NOT NEEDED IN DEV AND STAGING */}
+        {/* <script
+          defer
+          src="https://pixel.deepbux.io/pixel/6Dz68IFsJvwU7yj9"
+        ></script> */}
       </Head>
       <body>
         <div id="fixed" className="fixed z-50 w-screen"></div>

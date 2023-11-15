@@ -1,4 +1,4 @@
-import { Image } from 'app/components/elements'
+import { Image } from 'app/components/elements';
 
 const WhyChooseUs = () => {
   return (
@@ -11,9 +11,7 @@ const WhyChooseUs = () => {
         <Reason
           color="#7728DB26"
           title="Excellent Instructors"
-          description="With little or no experience and a membership, you can learn from talented
-            individuals. Whether you're trying to learn a trade,
-            advance your career, or simply get inspiration from industry's best."
+          description="With little to no experience, you can start learning from an array of reputable experts. Whether you're trying to learn a trade, advance your career, or simply get inspiration from the industry's best."
           iconUrl="/icons/youtuber.svg"
         />
         <Reason
@@ -25,19 +23,19 @@ const WhyChooseUs = () => {
         <Reason
           color="#A0B3F84D"
           title="Get Certified"
-          description="Watch, listen and learn from Industry's best and get internationally recognized certification. Give your career the boost it needs(some more filler text to make it visually similar to the other cards)"
+          description="Watch, listen and learn from Industry's best and get internationally recognized certification. Give your career the boost it needs today!"
           iconUrl="/icons/youtuber.svg"
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface ReasonProps {
-  color: string
-  title: string
-  description: string
-  iconUrl: string
+  color: string;
+  title: string;
+  description: string;
+  iconUrl: string;
 }
 
 const Reason = ({ color, title, description, iconUrl }: ReasonProps) => {
@@ -51,9 +49,11 @@ const Reason = ({ color, title, description, iconUrl }: ReasonProps) => {
       </div>
 
       <p className="font-semibold mt-5 mb-2">{title}</p>
-      <p className="text-muted leading-[1.7em] tracking-[0.01em]">{description}</p>
+      <p className="text-muted leading-[1.7em] tracking-[0.01em]">
+        {description}
+      </p>
     </div>
-  )
-}
+  );
+};
 
-export default WhyChooseUs
+export default WhyChooseUs;

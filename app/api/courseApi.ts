@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { API_URL } from "app/constants";
-import { PAGESIZE } from "app/utils/constants";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { API_URL } from 'app/constants';
+import { PAGESIZE } from 'app/utils/constants';
 import {
   RootState,
   CourseResponse,
@@ -17,10 +17,9 @@ import {
   ModuleContentTypes,
   CourseApprovalStatus,
   ExternalCourse,
-} from "app/types";
-import { HYDRATE } from "next-redux-wrapper";
-import { DragAndDropElemId } from "app/components/dnd/types";
-
+} from 'app/types';
+import { HYDRATE } from 'next-redux-wrapper';
+import { DragAndDropElemId } from 'app/components/dnd/types';
 
 interface GetCoursesRequest {
   page?: number;
@@ -119,8 +118,8 @@ const courseApi = createApi({
         };
       },
     }),
-    
-      getSingleCoursePreview: build.query<
+
+    getSingleCoursePreview: build.query<
       ExternalCourse,
       { courseId: string; token?: string }
     >({
@@ -469,12 +468,22 @@ const courseApi = createApi({
         })),
       }),
     }),
+    getAllModules: build.query<any, { courseId: string }>({
+      query: (args) => ({
+        url: `/${args.courseId}/Modules/get-all-modules`,
+        method: 'GET',
+        headers: {
+          accept: 'text/plain',
+        },
+      }),
+    }),
   }),
 });
 
 export default courseApi;
 
 export const {
+  useGetAllModulesQuery,
   useGetCoursesQuery,
   useGetSingleCoursePreviewQuery,
   useLazyGetSingleCoursePreviewQuery,

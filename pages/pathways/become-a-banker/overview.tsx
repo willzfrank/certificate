@@ -26,6 +26,7 @@ import TargetAudienceAccordion from 'app/components/pages/landing/TargetAudience
 import bankersImage from '../../../public/images/Banker Picture.png';
 import FAQAccordion from 'app/components/pages/landing/FAQAccordion';
 import KeyOutcomes from '../../../app/components/pages/landing/KeyOutcomes';
+import { API_URL } from 'app/constants';
 
 const BecomeABanker: NextPageWithLayout<{}> = function () {
   const [activeTab, setActiveTab] = React.useState(1);
@@ -36,6 +37,17 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
   };
+
+const href =
+  API_URL === 'https://api-certifications.unifyedu.ng/api/v1'
+    ? '/course/language-of-banking-0380/preview'
+    : '/course/language-of-banking-7961/preview';
+
+
+  const blogHref =
+    API_URL === 'https://api-certifications.unifyedu.ng/api/v1'
+      ? 'https://blog.unifyedu.ng/'
+      : 'https://unify-prod-blog.azurewebsites.net/';
 
   return (
     <SmoothScroll>
@@ -259,10 +271,12 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                 </li>
               </ul>
               <div className="md:w-[304px] md:ml-0 ml-5 md:py-0 md:h-16 bg-gradient-to-r from-rose-600 to-orange-400 rounded-[50px] flex items-center justify-center md:mb-0 mb-10">
-                <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
-                  <p className="text-white text-[15px] md:text-[20px] font-medium cursor-pointer jost">
-                    Start your Journey here
-                  </p>
+                <Link href={href}>
+                  <div>
+                    <p className="text-white text-[15px] md:text-[20px] font-medium cursor-pointer jost">
+                      Start your Journey here
+                    </p>
+                  </div>
                 </Link>
               </div>
             </div>
@@ -375,7 +389,7 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
               Who is the Course for?
             </h2>
             <p className="text-black text-[15px] font-normal">
-              The course is for 5 categories of people;
+              The course is for 4 categories of people;
             </p>
 
             <TargetAudienceAccordion />
@@ -681,11 +695,13 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
             <h3 className="block md:hidden text-center text-[10px] md:text-xl font-bold py-5 md:py-11 ">
               Helen O., Nigeria
             </h3>
-            <Link href="/course/caf6b233-dedc-4625-949a-bae5048c7aa7/preview">
+            <Link href={href}>
               <div className="flex items-center gap-2 justify-center md:my-[30px] cursor-pointer heading">
-                <h2 className="text-rose-600 text-[10px] md:text-[25px] font-semibold">
-                  Start your learning journey here
-                </h2>
+                <div>
+                  <h2 className="text-rose-600 text-[10px] md:text-[25px] font-semibold">
+                    Start your learning journey here
+                  </h2>
+                </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -774,9 +790,13 @@ const BecomeABanker: NextPageWithLayout<{}> = function () {
                   Certifications by Unify
                 </a>
               </li>
-              {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
-                <Link href="https://forms.unifyedu.ng">Unify Forms</Link>
-              </li> */}
+              <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
+                <Link href={blogHref}>
+                  <a target="_blank" rel="noopener noreferrer">
+                    Blog
+                  </a>
+                </Link>
+              </li>
               {/* <li className="text-white text-[13px] md:text-[15px] font-medium leading-8 cursor-pointer">
                 Learning Labs
               </li> */}

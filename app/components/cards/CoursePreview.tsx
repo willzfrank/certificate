@@ -35,9 +35,27 @@ const UnCoursePreview = (props: PreviewProps) => {
     props.inWishList ? props.remove(courseId) : props.add(courseId);
   };
 
+  type SlugName =
+    | 'language-of-banking-0380'
+    | 'language-of-banking-7961'
+    | '03804b6c-1e6f-4f03-91e8-502ecd7e3333'
+    | '7961c48d-5654-49be-9679-9b9c220ab36d';
+
+  const slugNameToHrefMap: Record<SlugName, string> = {
+    'language-of-banking-0380': '/pathways/become-a-banker/overview',
+    'language-of-banking-7961': '/pathways/become-a-banker/overview',
+    '03804b6c-1e6f-4f03-91e8-502ecd7e3333':
+      '/pathways/become-a-banker/overview',
+    '7961c48d-5654-49be-9679-9b9c220ab36d':
+      '/pathways/become-a-banker/overview',
+  };
+
+  const slugName = props.slugName as SlugName;
+  const href = slugNameToHrefMap[slugName] || `/course/${slugName}/preview`;
+
   return (
     <div className="" key={props.imageUrl}>
-      <Link href={`/course/${props.slugName}/preview`}>
+      <Link href={href}>
         <a>
           <div className="relative rounded-md overflow-hidden aspect-[8/5] md:aspect-[12/10]">
             <Image
@@ -51,9 +69,8 @@ const UnCoursePreview = (props: PreviewProps) => {
           </div>
         </a>
       </Link>
-
       <div className="grid grid-cols-[minmax(0,1fr),50px] items-center mt-4 ">
-        <Link href={`/course/${props.slugName}/preview`}>
+        <Link href={href}>
           <a>
             <div className="font-medium text-base ">{props.title}</div>
           </a>
@@ -83,7 +100,7 @@ const UnCoursePreview = (props: PreviewProps) => {
           </svg>
         </button>
       </div>
-      <Link href={`/course/${props.slugName}/preview`}>
+      <Link href={href}>
         <a>
           <div className="text-muted font-normal text-base">
             {instructorsList}

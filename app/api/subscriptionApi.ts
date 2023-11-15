@@ -204,6 +204,13 @@ const subscriptionApi = createApi({
       }),
     }),
 
+    getStudentsLearningReport: builder.query<any, { studentId: string }>({
+      query: (args) => ({
+        url: `/get-students-learning-report?studentId=${args.studentId}`,
+        method: 'GET',
+      }),
+    }),
+
     getCourseSubscriptionStatus: builder.query<
       InProgressCoursesResponse[],
       { studentId: string; page: number; perPage: number }
@@ -231,4 +238,5 @@ export const {
   useGetCompletedCoursesQuery,
   useSetInteractiveTypeAsTakenMutation,
   useCheckDiscountCodeValidityMutation,
+  useGetStudentsLearningReportQuery,
 } = subscriptionApi;

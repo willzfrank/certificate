@@ -1,83 +1,59 @@
-import * as React from 'react'
-import { useMarkCourseAsCompletedMutation } from 'app/api/courseApi'
-import { useAppSelector } from 'app/hooks'
-import Button from './Button'
-import { camelCase } from 'app/utils'
-import StopPropagation from './StopPropagation'
+import * as React from 'react';
+import { useMarkCourseAsCompletedMutation } from 'app/api/courseApi';
+import { useAppSelector } from 'app/hooks';
+import Button from './Button';
+import { camelCase } from 'app/utils';
+import StopPropagation from './StopPropagation';
 
 const DownloadCertificateButton = ({
   courseId,
   title,
 }: {
-  courseId: string
-  title: string
+  courseId: string;
+  title: string;
 }) => {
-  const [
-    markAsCompleted,
-    { isLoading: isMarkingAsCompleted },
-  ] = useMarkCourseAsCompletedMutation()
+  const [markAsCompleted, { isLoading: isMarkingAsCompleted }] =
+    useMarkCourseAsCompletedMutation();
+  const [certificateData, setCertificateData] = React.useState('');
 
-  const { firstName, lastName } = useAppSelector((store) => store.user)
+  const { firstName, lastName } = useAppSelector((store) => store.user);
 
-  const downloadCertificateAnchorRef = React.useRef<HTMLAnchorElement>(null)
-  const downloadCertificateButtonRef = React.useRef<
-    React.ComponentRef<typeof Button>
-  >(null)
+  const downloadCertificateAnchorRef = React.useRef<HTMLAnchorElement>(null);
+  const downloadCertificateButtonRef =
+    React.useRef<React.ComponentRef<typeof Button>>(null);
 
   const generateCertificate = React.useCallback(async () => {
     try {
-      const res = await markAsCompleted(courseId).unwrap()
+      const res = await markAsCompleted(courseId).unwrap();
+      const certificateData = res?.data;
+      setCertificateData(certificateData);
+      const certificateBlob = new Blob([certificateData], {
+        type: 'application/pdf',
+      });
 
-      if (downloadCertificateAnchorRef.current) {
-        // set the URL
-        downloadCertificateAnchorRef.current.href = res.data
+      const certificateURL = URL.createObjectURL(certificateBlob);
 
-        // trigger the download
-        downloadCertificateAnchorRef.current.click()
-      }
+      // if (downloadCertificateAnchorRef.current) {
+      //   downloadCertificateAnchorRef.current.href = certificateURL;
+      //   downloadCertificateAnchorRef.current.download = `${camelCase(
+      //     firstName,
+      //     true
+      //   )} ${camelCase(
+      //     lastName,
+      //     true
+      //   )}'s Certificate of Completion ${title}.pdf`;
+      //   downloadCertificateAnchorRef.current.click();
+      // }
+
+      URL.revokeObjectURL(certificateURL);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
+  }, [courseId, firstName, lastName, title]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseId])
-
-
-  // DOWNLOADABLE
-    // const generateCertificate = React.useCallback(async () => {
-    //   try {
-    //     const res = await markAsCompleted(courseId).unwrap();
-
-    //     if (downloadCertificateAnchorRef.current) {
-    //       const certificateData = res.data; // Assuming the response contains the certificate data, adjust if necessary
-
-    //       // Assuming that the response is already a binary representation of the image
-    //       // and it's in JPEG format (image/jpeg). If not, adjust the "type" accordingly.
-
-    //       // Create a Blob from the certificate data
-    //       const certificateBlob = new Blob([certificateData], {
-    //         type: 'image/png', // Correct MIME type for HTML files
-    //       });
-
-    //       // Create a temporary URL for the Blob
-    //       const certificateURL = URL.createObjectURL(certificateBlob);
-
-    //       // set the URL for download
-    //       downloadCertificateAnchorRef.current.href = certificateURL;
-
-    //       // trigger the download
-    //       downloadCertificateAnchorRef.current.click();
-
-    //       // Clean up the temporary URL after the download is initiated
-    //       URL.revokeObjectURL(certificateURL);
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [courseId]);
-
+  React.useEffect(() => {
+    generateCertificate(); // Automatically call generateCertificate on load SO THAT THE URL IS GENERATED
+  }, []);
 
   return (
     <>
@@ -90,19 +66,18 @@ const DownloadCertificateButton = ({
           className="px-3 py-1 border rounded mt-4 hover:border-green-600 hover:text-green-600 h-auto"
           loading={isMarkingAsCompleted}
         >
-          Click to Download Certificate
+          <a
+            ref={downloadCertificateAnchorRef}
+            href={certificateData}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Click to Download Certificate
+          </a>
         </Button>
       </StopPropagation>
-      <a
-        ref={downloadCertificateAnchorRef}
-        href=""
-        download={`${camelCase(firstName as string, true)} ${camelCase(
-          lastName as string,
-          true,
-        )}'s Certificate of Completion ${title}`}
-      ></a>
     </>
-  )
-}
+  );
+};
 
-export default DownloadCertificateButton
+export default DownloadCertificateButton;

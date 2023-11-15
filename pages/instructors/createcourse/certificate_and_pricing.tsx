@@ -33,6 +33,8 @@ const Certificate_and_pricing: NextPageWithLayout<{}> = () => {
   const [updateModule, { isLoading: moduleLoading }] =
     useUpdateModuleMutation();
 
+  console.log('certificateRequired', certificateRequired);
+
   const [checkboxes, setCheckboxes] = React.useState<boolean[]>([]);
   const [inputValue, setInputValue] = React.useState('');
 

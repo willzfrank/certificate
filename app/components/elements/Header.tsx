@@ -9,12 +9,18 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from 'app/hooks';
 import DropDownMenu from './DropDownMenu';
+import { API_URL } from 'app/constants';
 
 enum TabValues {
   inProgress = 'inProgress',
   wishlist = 'wishlist',
   completed = 'completed',
 }
+
+const href =
+  API_URL === 'https://api-certifications.unifyedu.ng/api/v1'
+    ? 'https://blog.unifyedu.ng/'
+    : 'https://unify-prod-blog.azurewebsites.net/';
 
 const Header = () => {
   const user = useAppSelector((store) => store.user);
@@ -114,8 +120,10 @@ const Header = () => {
               <a>Instructor Login</a>
             </Link>
           )}
-          <Link href="/faqs">
-            <a>FAQs</a>
+          <Link href={href}>
+            <a target="_blank" rel="noopener noreferrer">
+              Blog
+            </a>
           </Link>
           <Link href="/pathways/become-a-banker/overview">
             <div className="flex gap-1 items-center cursor-pointer">
@@ -541,15 +549,17 @@ const Header = () => {
                     About Us{' '}
                   </motion.a>
                 </Link>
-                <Link href="/faqs">
+                <Link href="#">
                   <motion.a
                     variants={children(6)}
                     initial={'hidden'}
                     animate={'show'}
                     exit={'exit'}
                     className="py-6"
+                    target="_blank"
+                    href={href}
                   >
-                    FAQs
+                    Blog
                   </motion.a>
                 </Link>
               </motion.div>

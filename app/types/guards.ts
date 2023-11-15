@@ -93,6 +93,6 @@ export function isInteractiveResource(resource: any): resource is AllInteractive
         resource?.value.type === ModuleContentTypes.clickAndMatch ||
         resource?.value.type === ModuleContentTypes.fillInTheBlank ||
         resource?.value.type === ModuleContentTypes.selectAnAnswer ||
-        resource?.value.type === ModuleContentTypes.thisOrThat
+        resource?.value.type === ModuleContentTypes.thisOrThat 
     );
 }
