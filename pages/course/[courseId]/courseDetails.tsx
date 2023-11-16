@@ -24,7 +24,7 @@ import CourseDetailsNavbar from "app/components/courseDetailsComponent/CourseDet
 type Course = SingleCourseDetailsResponse;
 
 const CourseDetails: NextPageWithLayout<Course> = (course) => {
-	// console.log("course", course);
+	console.log(course);
 	const [showAuthModal, setShowAuthModal] = React.useState(false);
 	const [accessModal, setAccessModal] = React.useState(false);
 	const [pricingPlan, setPricingPlan] = React.useState<PricingPlan>(course.pricings[0] ?? freePlan);
@@ -80,7 +80,7 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
 						<section className="lg:px-20 px-10">
 							<CourseDetailsHeader {...course} />
 							<AboutCourseDetails {...course} setShowAuthModal={setShowAuthModal} setAccessModal={setAccessModal} />
-							{/* <CourseDetailsModules {...course} /> */}
+							<CourseDetailsModules {...course} />
 						</section>
 						<FooterCourseDetails />
 						{accessModal && !isSubscribed && (
@@ -121,6 +121,17 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 				})
 			)
 			.unwrap();
+
+		// console.log(course);
+		// if (course?.modules?.length > 0) {
+		// 	const modules = await store
+		// 		.dispatch(
+		// 			courseApi.endpoints.getAllModulesOfCourse.initiate({
+		// 				courseId: params.courseId,
+		// 			})
+		// 		)
+		// 		.unwrap();
+		// }
 		return {
 			props: course,
 		};
