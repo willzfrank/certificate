@@ -8,6 +8,7 @@ import { TOKEN_KEY, USER_TYPE_KEY } from "app/constants";
 
 interface IAboutCourseDetails extends ExternalCourse {
 	setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>;
+	setAccessModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 // import { Image } from '../../components';
 
@@ -16,20 +17,18 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
 	const [videoModalOpen, setVideoModalOpen] = useState(false);
 	const [showMore, setShowMore] = useState(false);
 	const [cookie] = useCookies([TOKEN_KEY, USER_TYPE_KEY]);
-
 	const MAX_DESCRIPTION_LENGTH = 300;
 
 	const handleReadMore = () => {
 		setShowMore(!showMore);
 	};
-
 	function setUpPayment() {
 		if (!Boolean(user.id || cookie[TOKEN_KEY])) {
 			console.log("User is not logged in");
 			props.setShowAuthModal(true);
 			return;
 		}
-		console.log("User is logged in");
+		props.setAccessModal(true);
 	}
 	const displayDescription = showMore ? props?.description : `${props?.description?.slice(0, MAX_DESCRIPTION_LENGTH)}${props?.description?.length > MAX_DESCRIPTION_LENGTH ? "..." : ""}`;
 
@@ -136,7 +135,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
 											</div>
 										</div>
 									</div>
-									<div className="w-[130px] h-[17px] justify-start items-start gap-1.5 inline-flex my-5">
+									<div className="w-[150px] h-[17px] justify-between items-start gap-1.5 inline-flex my-5">
 										<div className="text-neutral-600 text-sm font-medium font-['Inter']">50% Disc.</div>
 										<div className="text-red-500 text-sm font-medium font-['Inter'] line-through">N10,000</div>
 									</div>
@@ -146,7 +145,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
 								<button
 									className="w-[299px] h-[41px] p-3 bg-gradient-to-r from-red-500 to-rose-600 rounded justify-center items-center gap-px inline-flex cursor-pointer"
 									onClick={setUpPayment}>
-									<div className="text-white text-sm font-medium font-['Inter']">Pay N5,000</div>
+									<div className="text-white text-sm font-medium font-['Inter']">Pay ₦{props.pricings[0].price}</div>
 								</button>
 							</div>
 						</div>

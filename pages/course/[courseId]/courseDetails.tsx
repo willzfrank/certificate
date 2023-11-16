@@ -9,9 +9,13 @@ import AboutCourseDetails from "app/components/courseDetailsComponent/AboutCours
 import CourseDetailsModules from "app/components/courseDetailsComponent/CourseDetailsModules";
 import FooterCourseDetails from "app/components/courseDetailsComponent/FooterCourseDetails";
 import AuthModal from "app/components/modalAuth/AuthModal";
-import { useAppSelector } from "app/hooks";
+import { Modal } from "app/components";
+import FullAccess from "app/components/pages/watchcourse/FullAccess";
+import { calculateDiscountedPrice } from "app/components/pages/coursedetails/CourseDetailsHero";
 
 import courseApi from "app/api/courseApi";
+import { DiscountDetailsType } from "app/components/pages/coursedetails/CourseDetailsHero";
+import { freePlan } from "app/components/pages/coursedetails/CourseDetailsHero";
 
 // wrapper to handle SSG rendering... links nextjs with redux
 import { wrapper } from "app/redux/store";
@@ -22,6 +26,24 @@ type Course = SingleCourseDetailsResponse;
 const CourseDetails: NextPageWithLayout<Course> = (course) => {
 	// console.log("course", course);
 	const [showAuthModal, setShowAuthModal] = React.useState(false);
+	const [accessModal, setAccessModal] = React.useState(false);
+	const [pricingPlan, setPricingPlan] = React.useState<PricingPlan>(course.pricings[0] ?? freePlan);
+	const [isSubscribed, setIsSubscribed] = React.useState<boolean | null>(null);
+
+	const [discountDetails, setDiscountDetails] = React.useState<DiscountDetailsType>({
+		value: 0,
+		type: "DiscountByPercentage",
+		hasAppliedDiscount: false,
+		discountCode: "",
+	});
+	React.useEffect(() => {
+		if (discountDetails.hasAppliedDiscount) {
+			setPricingPlan((pricingPlan) => ({
+				...pricingPlan,
+				price: discountDetails.type === "DiscountByAbsoluteValue" ? discountDetails.value : pricingPlan.price - Math.floor(pricingPlan.price * (discountDetails.value / 100)),
+			}));
+		}
+	}, [discountDetails.hasAppliedDiscount, discountDetails.value, discountDetails.type]);
 
 	return (
 		<>
@@ -57,10 +79,26 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
 						<DiscountHero />
 						<section className="lg:px-20 px-10">
 							<CourseDetailsHeader {...course} />
-							<AboutCourseDetails {...course} setShowAuthModal={setShowAuthModal} />
-							<CourseDetailsModules {...course} />
+							<AboutCourseDetails {...course} setShowAuthModal={setShowAuthModal} setAccessModal={setAccessModal} />
+							{/* <CourseDetailsModules {...course} /> */}
 						</section>
 						<FooterCourseDetails />
+						{accessModal && !isSubscribed && (
+							<Modal isOpen={accessModal} closeModal={() => setAccessModal(false)}>
+								<FullAccess
+									closeModal={() => setAccessModal(false)}
+									pricings={course?.pricings}
+									courseId={course?.id}
+									setIsSubscribed={setIsSubscribed}
+									isExternal={course?.isExternal}
+									discountDetails={discountDetails}
+									setDiscountDetails={setDiscountDetails}
+									calculateDiscountedPrice={calculateDiscountedPrice}
+									setPricingPlan={setPricingPlan}
+									pricingPlan={pricingPlan}
+								/>
+							</Modal>
+						)}
 					</>
 				)}
 			</main>
