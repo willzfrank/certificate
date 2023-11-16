@@ -132,6 +132,19 @@ const courseApi = createApi({
       transformResponse: (res: { data: ExternalCourse; error: Array<any> }) =>
         res.data,
     }),
+    getAllModulesOfCourse: build.query<
+      ExternalCourse,
+      { courseId: string; token?: string }
+    >({
+      query: ({ courseId, token }) => ({
+        url: `/${courseId}/modules/get-all-modules`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      transformResponse: (res: { data: ExternalCourse; error: Array<any> }) =>
+        res.data,
+    }),
     getAssessmentDetails: build.query<
       GetAssessmentDetailsResponse,
       {
@@ -486,6 +499,7 @@ export const {
   useGetAllModulesQuery,
   useGetCoursesQuery,
   useGetSingleCoursePreviewQuery,
+  useGetAllModulesOfCourseQuery,
   useLazyGetSingleCoursePreviewQuery,
   useLazyGetAssessmentDetailsQuery,
   useGetModuleContentQuery,
