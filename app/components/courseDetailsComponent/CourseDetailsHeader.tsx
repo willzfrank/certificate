@@ -1,12 +1,81 @@
-import { ExternalCourse } from 'app/types';
-import React from 'react';
-import { useAddSubscriptionMutation } from 'app/api/subscriptionApi';
+import { ExternalCourse } from "app/types";
+import React, { useEffect, useRef, useState } from "react";
+import { useAddSubscriptionMutation } from "app/api/subscriptionApi";
+import { useCookies } from "react-cookie";
+import { TOKEN_KEY, USER_TYPE_KEY } from "app/constants";
+import { useAppSelector } from "app/hooks";
 
-const CourseDetailsHeader = (props: ExternalCourse) => {
+interface IAboutCourseDetails extends ExternalCourse {
+  setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setAccessModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CourseDetailsHeader = (props: IAboutCourseDetails) => {
   const [
     addSubscription,
     { isLoading: isCheckingSubscription, error, isError, isSuccess },
   ] = useAddSubscriptionMutation();
+  const [cookie] = useCookies([TOKEN_KEY, USER_TYPE_KEY]);
+  const user = useAppSelector((store) => store.user);
+
+  function setUpPayment() {
+    if (!Boolean(user.id || cookie[TOKEN_KEY])) {
+      console.log("User is not logged in");
+      props.setShowAuthModal(true);
+      return;
+    }
+    props.setAccessModal(true);
+  }
+
+  // COUNTDOWN LOGIC
+
+  const [timerDays, setTimerDays] = useState("00");
+  const [timerHours, setTimerHours] = useState("00");
+  const [timerMinutes, setTimerMinutes] = useState("00");
+  const [timerSeconds, setTimerSeconds] = useState("00");
+
+  let interval = useRef<NodeJS.Timeout | null>(null);
+
+  const startTimer = () => {
+    const countdownDate = new Date("December 1, 2023 00:00:00").getTime();
+
+    interval.current = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+      if (distance < 0) {
+        // stop the timer
+        clearInterval(interval.current!);
+      } else {
+        // update timer
+        setTimerDays(String(days));
+        setTimerHours(String(hours));
+        setTimerMinutes(String(minutes));
+        setTimerSeconds(String(seconds));
+      }
+    }, 1000);
+  };
+
+  // componentDidMount
+  useEffect(() => {
+    startTimer();
+    return () => {
+      clearInterval(interval.current!);
+    };
+  }, []);
+
+  const countDown = {
+    days: timerDays,
+    // hours: timerHours,
+    // minutes: timerMinutes,
+  };
 
   return (
     <div className="flex items-center justify-between space-y-5 lg:flex-row flex-col">
@@ -28,11 +97,11 @@ const CourseDetailsHeader = (props: ExternalCourse) => {
           <div className="flex items-start flex-col w-full justify-start">
             {/* flex div here */}
             <div className="flex-col justify-start items-start gap-[9px] inline-flex">
-              <div className="text-neutral-700 text-base w-max md:text-2xl font-medium font-['Inter']">
+              <div className="text-neutral-700 text-lg w-max md:text-2xl font-medium font-['Inter']">
                 {props?.name}
               </div>
               <div className="justify-start items-center gap-1.5 inline-flex">
-                <div className="text-neutral-400 text-xs md:text-base font-medium font-['Inter']">
+                <div className="text-neutral-400 text-xs md:text-lg font-medium font-['Inter']">
                   Created by {props?.instructors[0]?.name}
                 </div>
                 <div className="w-[3px] h-[3px] bg-zinc-500 rounded-full" />
@@ -91,34 +160,22 @@ const CourseDetailsHeader = (props: ExternalCourse) => {
         <div className="text-neutral-600 text-xs font-medium font-['Inter']">
           THIS COURSE WILL BE AVAILABLE IN
         </div>
-        <div className="w-[204px] h-[55px] justify-start items-center gap-[9px] inline-flex">
-          <div className="w-[52px] h-[55px] relative bg-white rounded-lg shadow">
-            <div className="left-[6px] top-[-2px] absolute text-neutral-700 text-[32px] font-medium font-['Inter'] leading-[44.80px]">
-              10
+        <div className="w-[204px] h-[55px] justify-center items-center gap-[9px] inline-flex">
+          {Object.entries(countDown).map(([unit, value]) => (
+            <div
+              key={unit}
+              className="w-max h-[57px] px-2 flex items-center justify-center flex-col bg-white rounded-lg shadow"
+            >
+              <div className=" text-neutral-700 text-[32px] font-medium font-['Inter'] leading-[44.80px]">
+                {value}
+              </div>
+              <div className=" text-neutral-700 text-[10px] font-medium font-['Inter'] leading-[14px]">
+                {unit.toUpperCase()}
+              </div>
             </div>
-            <div className="left-[8px] top-[36px] absolute text-neutral-700 text-[10px] font-medium font-['Inter'] leading-[14px]">
-              DAYS
-            </div>
-          </div>
-          <div className="w-1.5 h-1.5 bg-neutral-700 rounded-full" />
-          <div className="w-[52px] h-[55px] relative flex items-center justify-center bg-white rounded-lg shadow">
-            <div className="left-[6px] top-[-2px] absolute text-neutral-700 text-[32px] font-medium font-['Inter'] leading-[44.80px]">
-              05
-            </div>
-            <div className="left-[13px] top-[36px] absolute text-neutral-700 text-[10px] font-medium font-['Inter'] leading-[14px]">
-              HOURS
-            </div>
-          </div>
-          <div className="w-1.5 h-1.5 bg-neutral-700 rounded-full" />
-          <div className="w-[52px] h-[55px] relative bg-white rounded-lg shadow">
-            <div className="left-[6px] top-[-2px] absolute text-neutral-700 text-[32px] font-medium font-['Inter'] leading-[44.80px]">
-              22
-            </div>
-            <div className="left-[13px] top-[36px] absolute text-neutral-700 text-[10px] font-medium font-['Inter'] leading-[14px]">
-              MINS
-            </div>
-          </div>
+          ))}
         </div>
+
         <div className="flex items-center gap-2">
           <svg
             width="14"
@@ -134,19 +191,22 @@ const CourseDetailsHeader = (props: ExternalCourse) => {
           </svg>
 
           <div className="text-red-500 text-sm font-medium font-['Inter']">
-            Pre-Launch Disc. 50% off{' '}
+            Pre-Launch Disc. 50% off{" "}
           </div>
         </div>
-        <div className="w-[325px] lg:w-[199px] h-[42px] lg:h-[33px] px-3 py-2  cursor-pointer rounded border justify-center lg:justify-start items-center gap-2 inline-flex hover:shadow hover:border-rose-600 border-rose-600">
+        <button
+          className="w-[325px] lg:w-[199px] h-[42px] lg:h-[33px] px-3 py-2  cursor-pointer rounded border justify-center lg:justify-start items-center gap-2 inline-flex hover:shadow hover:border-rose-600 border-rose-600"
+          onClick={setUpPayment}
+        >
           <div className="flex flex-row gap-1">
             <span className="text-neutral-600 w-max text-sm font-medium font-['Inter']">
-              Pay now N5,000{' '}
+              Pay now N5,000{" "}
             </span>
             <span className="text-red-500 text-sm font-medium font-['Inter'] line-through">
               (N10,000)
             </span>
           </div>
-        </div>
+        </button>
       </div>
     </div>
   );

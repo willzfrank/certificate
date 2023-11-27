@@ -6,7 +6,7 @@ const CourseDetailsRequirements = (props: Props) => {
   return (
     <div className="w-full md:w-[758px] my-5 h-[173px] p-4 bg-neutral-100 rounded-lg flex-col justify-start items-start gap-px inline-flex">
       <div className="flex-col justify-start items-start gap-4 flex">
-        <div className="text-neutral-700 text-sm font-medium font-['Inter']">
+        <div className="text-neutral-700 text-base font-medium font-['Inter']">
           Requirements
         </div>
         <div className="flex-col justify-start items-start gap-6 flex">
@@ -23,7 +23,7 @@ const CourseDetailsRequirements = (props: Props) => {
                 fill="#404040"
               />
             </svg>
-            <div className="text-neutral-600 text-sm font-medium font-['Inter'] leading-tight">
+            <div className="text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
               Basic Knowledge of Python
             </div>
           </div>
@@ -40,7 +40,7 @@ const CourseDetailsRequirements = (props: Props) => {
                 fill="#404040"
               />
             </svg>
-            <div className="text-neutral-600 text-sm font-medium font-['Inter'] leading-tight">
+            <div className="text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
               Ownership of a pc, desktop or laptop
             </div>
           </div>
@@ -57,7 +57,7 @@ const CourseDetailsRequirements = (props: Props) => {
                 fill="#404040"
               />
             </svg>
-            <div className="text-neutral-600 text-sm font-medium font-['Inter'] leading-tight">
+            <div className="text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
               Ownership of a pc, desktop or laptop
             </div>
           </div>

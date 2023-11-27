@@ -1,187 +1,189 @@
-import { ModuleContentResponse, ModuleContentTypes } from './apiresponses';
-import { Category } from './usertypes';
+import { ModuleContentResponse, ModuleContentTypes } from './apiresponses'
+import { Category } from './usertypes'
 
 export type CourseType = {
-  instructor: string;
-  title: string;
-  price: number;
-};
+  instructor: string
+  title: string
+  price: number
+}
 
 export interface CourseInstructor {
-  id: string;
-  name: string;
-  bio?: string;
-  profilePictureUrl?: string;
+  profileImageUrl: string
+  id: string
+  name: string
+  bio?: string
+  profilePictureUrl?: string
 }
 
 export interface Course {
-  courseId: string;
-  title: string;
-  imageUrl: string;
-  videoUrl: string;
-  approvalStatus?: CourseApprovalStatus;
-  instructors: CourseInstructor[];
-  minumumPrice: number;
-  maximumPrice: number;
-  dateCreated: string;
-  ratings?: 0;
-  revenue?: 0;
-  isActive: boolean;
-  isExternal: boolean;
-  redirectUrl?: string;
-  slugName?: string;
+  courseId: string
+  title: string
+  imageUrl: string
+  videoUrl: string
+  approvalStatus?: CourseApprovalStatus
+  instructors: CourseInstructor[]
+  minumumPrice: number
+  maximumPrice: number
+  dateCreated: string
+  ratings?: 0
+  revenue?: 0
+  isActive: boolean
+  isExternal: boolean
+  redirectUrl?: string
+  slugName?: string
 }
 
 export interface CourseModules {
-  moduleId: string;
-  name: string;
-  description: string;
-  isExtra: boolean;
-  position: number;
-  paymentRequired?: boolean;
+  moduleId: string
+  name: string
+  description: string
+  isExtra: boolean
+  position: number
+  paymentRequired?: boolean
 }
 
 export interface CourseResponse {
   data: {
     metaData: {
-      page: number;
-      perPage: number;
-      total: number;
-      totalPages: number;
-    };
-    pagedList: Course[];
-  };
-  errors: any[];
+      page: number
+      perPage: number
+      total: number
+      totalPages: number
+    }
+    pagedList: Course[]
+  }
+  errors: any[]
 }
 export interface PricingPlan {
-  id: string;
-  name: string;
-  subscriptionType: string;
-  price: number;
-  offers: string[];
+  id: string
+  name: string
+  subscriptionType: string
+  price: number
+  offers: string[]
 }
 
 export interface SingleCourseDetailsResponse {
-  id: string;
-  name: string;
-  description: string;
-  intendedUsers: string;
-  imageUrl: string;
-  previewVideoUrl: string;
-  totalNumberOfSeconds: number;
-  instructors: Array<CourseInstructor>;
-  modules: Array<CourseModules>;
-  pricings: PricingPlan[];
-  ratings: number;
-  ratingsCount: number;
-  lastSavePoint: LastSavedPointType;
-  isSubscribed: boolean;
-  categories: Category[];
-  subTitle: string | null;
-  isExternal: boolean;
+  id: string
+  name: string
+  description: string
+  intendedUsers: string
+  imageUrl: string
+  previewVideoUrl: string
+  totalNumberOfSeconds: number
+  instructors: Array<CourseInstructor>
+  modules: Array<CourseModules>
+  pricings: PricingPlan[]
+  ratings: number
+  ratingsCount: number
+  lastSavePoint: LastSavedPointType
+  isSubscribed: boolean
+  categories: Category[]
+  subTitle: string | null
+  isExternal: boolean
 }
 
 export interface ExternalCourse extends SingleCourseDetailsResponse {
-  slugName: string;
-  isExternal: boolean;
-  wouldRecommend: boolean;
-  redirectUrl: string;
+  slugName: string
+  isExternal: boolean
+  wouldRecommend: boolean
+  redirectUrl: string
 }
 
 export interface Course {
-  courseId: string;
-  title: string;
-  imageUrl: string;
-  videoUrl: string;
-  instructors: CourseInstructor[];
-  minumumPrice: number;
-  maximumPrice: number;
-  dateCreated: string;
-  isSubscribed: string;
-  setPricing: number;
+  courseId: string
+  title: string
+  imageUrl: string
+  videoUrl: string
+  instructors: CourseInstructor[]
+  minumumPrice: number
+  maximumPrice: number
+  dateCreated: string
+  isSubscribed: string
+  setPricing: number
 }
 
 export type InProgressCoursesResponse = Omit<
   Course,
   'minimumPrice' | 'maximumPrice'
 > & {
-  percentCompleted: number;
-  courseId: string;
-  certificateRequired?: boolean;
-  subscriptionId: number;
-  courseCompleted: boolean;
-};
+  percentCompleted: number
+  courseId: string
+  certificateRequired?: boolean
+  subscriptionId: number
+  courseCompleted: boolean
+}
 
 export type AssessmentType = {
-  id: string;
-  question: string;
-  optionOne: string;
-  optionTwo: string;
-  optionThree: string;
-  optionFour: string;
-  assessmentId: string;
-  assessmentGradeId: string;
-  moduleId: string;
-};
+  id: string
+  question: string
+  optionOne: string
+  optionTwo: string
+  optionThree: string
+  optionFour: string
+  assessmentId: string
+  assessmentGradeId: string
+  moduleId: string
+}
 
 export interface PreviewProps extends Course {
-  inWishList: boolean;
-  add: Function;
-  remove: Function;
+  inWishList: boolean
+  add: Function
+  remove: Function
+  pricings?: PricingPlan[]
 }
 
 export type VideoResourceType = {
   value: Omit<
     ModuleContentResponse['data']['videos'][number],
     'position' | 'type'
-  >;
-  isInputing: boolean;
-};
+  >
+  isInputing: boolean
+}
 
 export type AssessmentResourceType = {
-  value: ModuleContentResponse['data']['assessments'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['assessments'][number]
+  isInputing: boolean
+}
 
 export type DocumentResourceType = {
-  value: ModuleContentResponse['data']['documents'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['documents'][number]
+  isInputing: boolean
+}
 
 export type SelectAnAnswerInteractiveResourceType = {
-  value: ModuleContentResponse['data']['selectAnswerInteractiveTypes'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['selectAnswerInteractiveTypes'][number]
+  isInputing: boolean
+}
 
 export type ClickAndMatchInteractiveResourceType = {
-  value: ModuleContentResponse['data']['clickAndMatchInteractiveTypes'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['clickAndMatchInteractiveTypes'][number]
+  isInputing: boolean
+}
 
 export type FillInTheBlanksInteractiveResourceType = {
-  value: ModuleContentResponse['data']['fillInTheBlanksInteractiveTypes'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['fillInTheBlanksInteractiveTypes'][number]
+  isInputing: boolean
+}
 
 export type ThisOrThatInteractiveResourceType = {
-  value: ModuleContentResponse['data']['thisOrThatInteractiveTypes'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['thisOrThatInteractiveTypes'][number]
+  isInputing: boolean
+}
 
 export type SelectAllThatApplyInteractiveResourceType = {
-  value: ModuleContentResponse['data']['selectAllThatApplyInteractiveTypes'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['selectAllThatApplyInteractiveTypes'][number]
+  isInputing: boolean
+}
 
 export type ClickForMoreInteractiveResourceType = {
-  value: ModuleContentResponse['data']['clickForMoreInteractiveTypes'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['clickForMoreInteractiveTypes'][number]
+  isInputing: boolean
+}
 
 export type BoxWithOptionsInteractiveResourceType = {
-  value: ModuleContentResponse['data']['boxWithOptionsInteractiveTypes'][number];
-  isInputing: boolean;
-};
+  value: ModuleContentResponse['data']['boxWithOptionsInteractiveTypes'][number]
+  isInputing: boolean
+}
 
 export type AllInteractiveResourceTypes =
   | SelectAnAnswerInteractiveResourceType
@@ -190,15 +192,15 @@ export type AllInteractiveResourceTypes =
   | ClickAndMatchInteractiveResourceType
   | ThisOrThatInteractiveResourceType
   | BoxWithOptionsInteractiveResourceType
-  | ClickForMoreInteractiveResourceType;
+  | ClickForMoreInteractiveResourceType
 
 export type QuestionOptionType =
   | 'OptionOne'
   | 'OptionTwo'
   | 'OptionThree'
-  | 'OptionFour';
+  | 'OptionFour'
 
-export type LastSavedPointType = 0 | 1 | 2 | 3;
+export type LastSavedPointType = 0 | 1 | 2 | 3
 
 export enum CourseApprovalStatus {
   Approved = 'Approved',
@@ -215,12 +217,12 @@ export type AllModuleResources =
       ModuleContentResponse['data'],
       'totalSeconds' | 'thisOrThatInteractiveTypes'
     >]
-  | ThisOrThatInteractives[];
+  | ThisOrThatInteractives[]
 
 export type ThisOrThatInteractives = {
-  questions: ModuleContentResponse['data']['thisOrThatInteractiveTypes'];
-  position: number;
-  type: ModuleContentTypes.thisOrThat;
-};
+  questions: ModuleContentResponse['data']['thisOrThatInteractiveTypes']
+  position: number
+  type: ModuleContentTypes.thisOrThat
+}
 
-export type ExcludePositionAndType<T> = Omit<T, 'position' | 'type'>;
+export type ExcludePositionAndType<T> = Omit<T, 'position' | 'type'>

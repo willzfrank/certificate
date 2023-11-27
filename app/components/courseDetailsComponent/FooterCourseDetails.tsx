@@ -1,19 +1,19 @@
+import { ExternalCourse } from 'app/types';
 import React from 'react';
 
-type Props = {};
-
-const FooterCourseDetails = (props: Props) => {
+const FooterCourseDetails = (props: ExternalCourse) => {
   return (
     <footer className="px-10 py-20 lg:p-20">
       <div className="w-full md:w-[441px] h-[92px] justify-start items-start gap-5 inline-flex">
         <img
           className="w-[88px] h-[88px] rounded-full"
-          src="https://via.placeholder.com/88x88"
+          src={props?.instructors[0]?.profileImageUrl}
+          alt={props?.instructors[0]?.name}
         />
         <div className="flex-col justify-start items-start gap-4 inline-flex">
           <div className="flex-col justify-start items-start gap-2 flex">
             <div className="text-black text-2xl font-medium font-['Inter']">
-              Moses Esther
+              {props?.instructors[0]?.name}
             </div>
             <div className="justify-start items-center gap-1.5 inline-flex">
               <div className="text-neutral-600 text-base font-medium font-['Inter']">
@@ -83,12 +83,7 @@ const FooterCourseDetails = (props: Props) => {
         </div>
       </div>
       <p className="w-full lg:w-[746px] mt-10 h-max md:h-[125px] text-neutral-600 text-sm font-medium font-['Inter'] leading-tight">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi.
-        Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla,
-        mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis
-        tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non
-        suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus
-        ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales.{' '}
+        {props?.instructors[0]?.bio}
       </p>
       <div className="w-[241px] h-5 justify-start items-start md:my-0 my-5 gap-2 inline-flex">
         <p className="text-red-500 text-sm font-medium font-['Inter'] underline leading-tight">

@@ -1,37 +1,37 @@
-import React, { useMemo } from 'react';
-import { PricingPlan } from 'app/types';
-import { motion } from 'framer-motion';
-import { Button } from 'app/components';
-import { useNotify } from 'app/hooks';
-import { useAppSelector } from 'app/hooks';
-import { selectUser } from 'app/redux/slices/userSlice';
-import { useAddSubscriptionMutation } from 'app/api/subscriptionApi';
-import { useScriptLoaded } from 'app/hooks';
+import React, { useMemo } from 'react'
+import { PricingPlan } from 'app/types'
+import { motion } from 'framer-motion'
+import { Button } from 'app/components'
+import { useNotify } from 'app/hooks'
+import { useAppSelector } from 'app/hooks'
+import { selectUser } from 'app/redux/slices/userSlice'
+import { useAddSubscriptionMutation } from 'app/api/subscriptionApi'
+import { useScriptLoaded } from 'app/hooks'
 
-import { useCheckDiscountCodeValidityMutation } from 'app/api/subscriptionApi';
-import { useRouter } from 'next/router';
+import { useCheckDiscountCodeValidityMutation } from 'app/api/subscriptionApi'
+import { useRouter } from 'next/router'
 
 type DiscountDetailsType = {
-  value: number;
-  type: 'DiscountByPercentage' | 'DiscountByAbsoluteValue';
-  hasAppliedDiscount: boolean;
-  discountCode: string;
-};
+  value: number
+  type: 'DiscountByPercentage' | 'DiscountByAbsoluteValue'
+  hasAppliedDiscount: boolean
+  discountCode: string
+}
 
 interface Props {
-  closeModal: () => void;
-  pricings: any;
-  courseId: string;
-  setIsSubscribed: React.Dispatch<React.SetStateAction<boolean | null>>;
-  isExternal: boolean;
-  discountDetails: DiscountDetailsType;
-  setDiscountDetails: (details: DiscountDetailsType) => void;
+  closeModal: () => void
+  pricings: any
+  courseId: string
+  setIsSubscribed: React.Dispatch<React.SetStateAction<boolean | null>>
+  isExternal: boolean
+  discountDetails: DiscountDetailsType
+  setDiscountDetails: (details: DiscountDetailsType) => void
   calculateDiscountedPrice: (
     price: number,
     discountDetails: DiscountDetailsType
-  ) => number;
-  setPricingPlan: (plan: PricingPlan) => void;
-  pricingPlan: PricingPlan;
+  ) => number
+  setPricingPlan: (plan: PricingPlan) => void
+  pricingPlan: PricingPlan
 }
 
 const freePlan: PricingPlan = {
@@ -40,7 +40,7 @@ const freePlan: PricingPlan = {
   name: 'Free',
   subscriptionType: 'Free',
   price: 0,
-};
+}
 
 // interface Props {
 //   closeModal: () => void;
@@ -48,62 +48,62 @@ const freePlan: PricingPlan = {
 // }
 
 const WatchCourseMainAccess = (props: Props) => {
-  const { closeModal, pricings, courseId, setIsSubscribed, isExternal } = props;
-  const status = useScriptLoaded('https://checkout.flutterwave.com/v3.js');
+  const { closeModal, pricings, courseId, setIsSubscribed, isExternal } = props
+  const status = useScriptLoaded('https://checkout.flutterwave.com/v3.js')
   const [isApplyingDiscountCode, setIsApplyingDiscountCode] =
-    React.useState(false);
-  const notify = useNotify();
+    React.useState(false)
+  const notify = useNotify()
 
   const [checkCodeValidity, { isLoading: isCheckingCodeValidity }] =
-    useCheckDiscountCodeValidityMutation();
-  const user = useAppSelector(selectUser);
+    useCheckDiscountCodeValidityMutation()
+  const user = useAppSelector(selectUser)
   const [
     addSubscription,
     { isLoading: isCheckingSubscription, error, isError, isSuccess },
-  ] = useAddSubscriptionMutation();
+  ] = useAddSubscriptionMutation()
 
-  const [hideSubscribeButton, setIsHideSubscribeButton] = React.useState(true);
+  const [hideSubscribeButton, setIsHideSubscribeButton] = React.useState(true)
 
   const HideSubscriptionButtonFunction = () => {
-    setIsHideSubscribeButton(false);
-    setIsApplyingDiscountCode(true);
-  };
+    setIsHideSubscribeButton(false)
+    setIsApplyingDiscountCode(true)
+  }
 
-  const router = useRouter();
+  const router = useRouter()
 
   const applyDiscountCode = React.useCallback(async () => {
-    console.log(props.discountDetails);
+    console.log(props.discountDetails)
     try {
       const res = await checkCodeValidity(
         props.discountDetails.discountCode
-      ).unwrap();
+      ).unwrap()
       if (res.data.isValid) {
         props.setDiscountDetails({
           ...props.discountDetails,
           hasAppliedDiscount: true,
           value: res.data.value,
           type: res.data.discountType,
-        });
+        })
         notify({
           type: 'success',
           title: `Discount code ${res.data.code.toUpperCase()} applied successfully`,
           description: 'Please process to make payment',
-        });
+        })
       } else {
         notify({
           type: 'error',
           title: `Discount code ${res.data.code.toUpperCase()} not valid`,
-        });
+        })
       }
     } catch (error) {
       notify({
         type: 'error',
         title: 'Failed to apply discount code',
         description: (error as any).data.errors[0].errorMessages[0],
-      });
+      })
     }
     // eslint-disable-next-line
-  }, [props.discountDetails]);
+  }, [props.discountDetails])
 
   const handlePay =
     (
@@ -128,19 +128,20 @@ const WatchCourseMainAccess = (props: Props) => {
               ? props.discountDetails.discountCode
               : undefined,
             coursePricingId: pricingId,
-          }).unwrap();
+          }).unwrap()
           // await trigger({ tx_ref: referenceNumber }).unwrap();
-          setIsSubscribed(true);
-          router.push(`/paymentProcess/${courseId}?tx_ref=${referenceNumber}`);
+          setIsSubscribed(true)
+
+          router.push(`/paymentProcess/${courseId}?tx_ref=${referenceNumber}`)
         } catch (error) {
           //@ts-ignore
           if (error?.status === 400 || error?.status === 401) {
-            router.push('/auth/register');
+            router.push('/auth/register')
             notify({
               title: "Couldn't enroll for this course.",
               description: 'Please create an account to enrol for this course.',
               type: 'error',
-            });
+            })
           }
 
           //@ts-ignore
@@ -150,11 +151,11 @@ const WatchCourseMainAccess = (props: Props) => {
               description:
                 'The fault is on us. Please reach out to our customer support',
               type: 'error',
-            });
+            })
           }
         }
 
-        return;
+        return
       }
 
       if (status === 'ready' && window) {
@@ -176,7 +177,7 @@ const WatchCourseMainAccess = (props: Props) => {
             title: `${title} package`,
           },
           redirect_url: `${window?.location?.origin}/paymentProcess/${courseId}?isExternal=${isExternal}`,
-        };
+        }
 
         try {
           const {
@@ -192,7 +193,7 @@ const WatchCourseMainAccess = (props: Props) => {
             discountCode: props.discountDetails.hasAppliedDiscount
               ? props.discountDetails.discountCode
               : undefined,
-          }).unwrap();
+          }).unwrap()
 
           // Check if referenceNumber exists before proceeding
           if (!referenceNumber) {
@@ -201,36 +202,36 @@ const WatchCourseMainAccess = (props: Props) => {
               title: 'Reference number is missing',
               description: 'Please try again later or contact support.',
               type: 'error',
-            });
-            return; // Exit the function
+            })
+            return // Exit the function
           }
 
-          config.meta = { id, referenceNumber };
-          config.tx_ref = referenceNumber;
+          config.meta = { id, referenceNumber }
+          config.tx_ref = referenceNumber
           // console.log(config)
 
           // @ts-ignore
-          window.FlutterwaveCheckout(config);
+          window.FlutterwaveCheckout(config)
         } catch (error) {
           // @ts-ignore
           if (error?.status === 400 || error?.status === 401) {
-            router.push('/auth/register');
+            router.push('/auth/register')
             notify({
               title: "Couldn't enroll for this course.",
               description:
                 'Please create an account to enroll for this course.',
               type: 'error',
-            });
+            })
           } else {
             notify({
               title: "Couldn't process payment",
               description: JSON.stringify(error),
               type: 'error',
-            });
+            })
           }
         }
       }
-    };
+    }
 
   return (
     <div className="flex items-center flex-col relative  bg-zinc-300  rounded p-10 md:px-20 md:py-12">
@@ -359,12 +360,12 @@ const WatchCourseMainAccess = (props: Props) => {
                               props.calculateDiscountedPrice(
                                 props.pricings[0].price, // Original price
                                 props.discountDetails
-                              );
+                              )
 
                             props.setPricingPlan({
                               ...props.pricings[0], // Use the last price in the array
                               price: selectedPrice,
-                            });
+                            })
                           }}
                         >
                           <div className="flex-1">
@@ -395,7 +396,7 @@ const WatchCourseMainAccess = (props: Props) => {
         </>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default WatchCourseMainAccess;
+export default WatchCourseMainAccess

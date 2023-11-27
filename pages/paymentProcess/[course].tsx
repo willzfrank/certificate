@@ -1,42 +1,42 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { NextPageWithLayout, USERTYPES } from 'app/types';
-import { Loader, MainLayout } from 'app/components';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { usePaymentConfirmQuery } from 'app/api/confirmPaymentApi';
-import { useLazyGetSingleCoursePreviewQuery } from 'app/api/courseApi';
-import { useWatchSearchParams } from 'app/hooks';
+import React, { Fragment, useState, useEffect } from 'react'
+import { NextPageWithLayout, USERTYPES } from 'app/types'
+import { Loader, MainLayout } from 'app/components'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { usePaymentConfirmQuery } from 'app/api/confirmPaymentApi'
+import { useLazyGetSingleCoursePreviewQuery } from 'app/api/courseApi'
+import { useWatchSearchParams } from 'app/hooks'
 
 const PaymentProcess: NextPageWithLayout<any> = (props) => {
-  const router = useRouter();
+  const router = useRouter()
   const [tx_ref, isExternal] = useWatchSearchParams([
     'tx_ref',
     'isExternal',
-  ]) as [string, string];
+  ]) as [string, string]
 
   const [getCourseDetails, { isFetching: isLoadingCourseDetails, data }] =
-    useLazyGetSingleCoursePreviewQuery();
+    useLazyGetSingleCoursePreviewQuery()
 
-  const courseId = router?.query?.course as string;
+  const courseId = router?.query?.course as string
 
   const { isError, isFetching, isSuccess } = usePaymentConfirmQuery(
     {
       tx_ref: tx_ref as string,
     },
     { skip: !tx_ref }
-  );
+  )
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (courseId) {
         try {
           const res = await getCourseDetails({
             courseId,
-          }).unwrap();
+          }).unwrap()
         } catch (err) {}
       }
-    })();
-  }, [courseId, getCourseDetails]);
+    })()
+  }, [courseId, getCourseDetails])
 
   // useEffect(() => {
   //   if (isSuccess && courseId) {
@@ -50,11 +50,11 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
 
   const handleStartHereClick = () => {
     if (isExternal && data?.redirectUrl) {
-      window.open(data.redirectUrl, '_blank');
+      window.open(data.redirectUrl, '_blank')
     } else if (data?.id) {
-      window.location.href = `/course/${data.id}`;
+      window.location.href = `/course/${data.id}`
     }
-  };
+  }
 
   return (
     <div className="relative text-center md:mt-[120px] md:min-h-[500px]">
@@ -111,8 +111,7 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
                 confirmation email.
               </p>
               <p className="text-sm my-2">
-                Transaction reference:{' '}
-                <b>32b46941-23d5-4a35-955c-bb799dde750f.</b>
+                Transaction reference: <b>{tx_ref}</b>
               </p>
             </div>
             <div>
@@ -128,8 +127,8 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
         ) : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
 PaymentProcess.getLayout = (page) => {
   return (
@@ -139,7 +138,7 @@ PaymentProcess.getLayout = (page) => {
     >
       {page}
     </MainLayout>
-  );
-};
+  )
+}
 
-export default PaymentProcess;
+export default PaymentProcess

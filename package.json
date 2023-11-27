@@ -59,6 +59,7 @@
     "react-select": "^5.4.0",
     "react-slick": "^0.29.0",
     "react-table": "^7.8.0",
+    "react-timer-hook": "^3.0.7",
     "react-tooltip": "^5.18.0",
     "sharp": "^0.31.0",
     "slick-carousel": "^1.8.1",

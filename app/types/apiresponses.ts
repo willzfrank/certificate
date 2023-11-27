@@ -21,6 +21,7 @@ interface PaginatedResponse<T> {
 }
 
 export interface RegisterResponse {
+  data: { token: any; userId: any; };
   id: string;
   firstName: string;
   lastName: string;

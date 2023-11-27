@@ -27,8 +27,8 @@ const CourseDetailsModules = (props: Props) => {
 					</div>
 				</div>
 				<div>
-					<span className="text-neutral-400 text-sm font-medium font-['Inter'] leading-tight">Duration:</span>
-					<span className="text-neutral-700 text-sm font-medium font-['Inter'] leading-tight"> 4 Weeks</span>
+					<span className="text-neutral-400 text-base font-medium font-['Inter'] leading-tight">Duration:</span>
+					<span className="text-neutral-700 text-base font-medium font-['Inter'] leading-tight"> 4 Weeks</span>
 				</div>
 			</div>
 			<div className="md:hidden my-5 block">
@@ -46,7 +46,7 @@ const CourseDetailsModules = (props: Props) => {
 									fill="#CFCFCF"
 								/>
 							</svg>
-							<div className="text-neutral-600 w-max text-sm font-medium font-['Inter'] leading-tight">Certificate issued</div>
+							<div className="text-neutral-600 w-max text-base font-medium font-['Inter'] leading-tight">Certificate issued</div>
 						</div>
 						<div className="flex items-center space-x-1">
 							<svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,7 +55,7 @@ const CourseDetailsModules = (props: Props) => {
 									fill="#CFCFCF"
 								/>
 							</svg>
-							<div className="text-neutral-600 w-max text-sm font-medium font-['Inter'] leading-tight">Free Mentorship</div>
+							<div className="text-neutral-600 w-max text-base font-medium font-['Inter'] leading-tight">Free Mentorship</div>
 						</div>
 						<div className="flex items-center space-x-1">
 							<svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -64,7 +64,7 @@ const CourseDetailsModules = (props: Props) => {
 									fill="#CFCFCF"
 								/>
 							</svg>
-							<div className="text-neutral-600 w-max text-sm font-medium font-['Inter'] leading-tight">Certificate issued</div>
+							<div className="text-neutral-600 w-max text-base font-medium font-['Inter'] leading-tight">Certificate issued</div>
 						</div>{" "}
 						<div className="flex items-center space-x-1">
 							<svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,7 +73,7 @@ const CourseDetailsModules = (props: Props) => {
 									fill="#CFCFCF"
 								/>
 							</svg>
-							<div className="text-neutral-600 w-max text-sm font-medium font-['Inter'] leading-tight">Certificate issued</div>
+							<div className="text-neutral-600 w-max text-base font-medium font-['Inter'] leading-tight">Certificate issued</div>
 						</div>
 					</div>
 				</div>

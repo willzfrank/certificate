@@ -1,16 +1,16 @@
-import React from 'react';
-import { formatCurrency } from 'app/utils/formatCurrency';
-import Link from 'next/link';
-import { Course, PreviewProps } from 'app/types';
-import { Image } from '../elements';
-import { useWishList } from 'app/hooks';
+import React from 'react'
+import { formatCurrency } from 'app/utils/formatCurrency'
+import Link from 'next/link'
+import { Course, PreviewProps } from 'app/types'
+import { Image } from '../elements'
+import { useWishList } from 'app/hooks'
 
 interface CourseProps {
-  courses: Course[];
+  courses: Course[]
 }
 
 const UnCoursePreviewGrid = ({ courses }: CourseProps) => {
-  const { wishlist, addToWishList, removeFromWishList } = useWishList();
+  const { wishlist, addToWishList, removeFromWishList } = useWishList()
 
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 m-0 gap-y-8">
@@ -24,22 +24,22 @@ const UnCoursePreviewGrid = ({ courses }: CourseProps) => {
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
 const UnCoursePreview = (props: PreviewProps) => {
   const instructorsList =
-    props.instructors?.map((person) => person.name).join(', ') || '';
+    props.instructors?.map((person) => person.name).join(', ') || ''
 
   const onClick = (courseId: string) => (e: React.SyntheticEvent) => {
-    props.inWishList ? props.remove(courseId) : props.add(courseId);
-  };
+    props.inWishList ? props.remove(courseId) : props.add(courseId)
+  }
 
   type SlugName =
     | 'language-of-banking-0380'
     | 'language-of-banking-7961'
     | '03804b6c-1e6f-4f03-91e8-502ecd7e3333'
-    | '7961c48d-5654-49be-9679-9b9c220ab36d';
+    | '7961c48d-5654-49be-9679-9b9c220ab36d'
 
   const slugNameToHrefMap: Record<SlugName, string> = {
     'language-of-banking-0380': '/pathways/become-a-banker/overview',
@@ -48,10 +48,10 @@ const UnCoursePreview = (props: PreviewProps) => {
       '/pathways/become-a-banker/overview',
     '7961c48d-5654-49be-9679-9b9c220ab36d':
       '/pathways/become-a-banker/overview',
-  };
+  }
 
-  const slugName = props.slugName as SlugName;
-  const href = slugNameToHrefMap[slugName] || `/course/${slugName}/preview`;
+  const slugName = props.slugName as SlugName
+  const href = slugNameToHrefMap[slugName] || `/course/${slugName}/preview`
 
   return (
     <div className="" key={props.imageUrl}>
@@ -106,20 +106,58 @@ const UnCoursePreview = (props: PreviewProps) => {
             {instructorsList}
           </div>
           <div className="font-medium text-base mt-1">
-            {props.setPricing === 0 ? (
+            {props?.pricings?.[0]?.price === 0 ? (
               <p>Free</p>
+            ) : props.courseId === '563472fa-9f47-43b6-b640-6ce14f53656c' ||
+              props.courseId === '12cb7e57-ad78-400b-8069-324939ec6e0b' ||
+              props.courseId === '1cb7dc8a-3e57-48b2-bf9e-f1db481a25b4' ? (
+              <div className="flex items-center gap-1">
+                <> ₦ {props?.pricings?.[0]?.price.toLocaleString()}</>
+                <p className="text-center h-full relative -top-[2px] font-[600]  text-[9px] ">
+                  .
+                </p>
+                <p
+                  className="font-[600] "
+                  style={{
+                    textDecoration: 'line-through',
+                  }}
+                >
+                  N10,000
+                </p>
+              </div>
+            ) : props.courseId === '921e02f9-efe3-4ced-af6d-c086812bde36' ||
+              props.courseId === '3e0ace38-a0fa-4e5b-84cc-03b440c897bd' ||
+              props.courseId === '4a59b479-5135-4250-8adf-7fb1a8ee4e0b' ||
+              props.courseId === 'dea1fd6b-f336-474a-82e4-f3f5ae087ec9' ? (
+              <div className="flex items-center gap-1">
+                <> ₦ {props?.pricings?.[0]?.price.toLocaleString()}</>
+                <p className="text-center h-full relative -top-[2px] font-[600]  text-[9px] ">
+                  .
+                </p>
+                <p
+                  className="font-[600] "
+                  style={{
+                    textDecoration: 'line-through',
+                  }}
+                >
+                  N5,000
+                </p>
+              </div>
             ) : (
-              <>{formatCurrency(props.setPricing)}</>
+              <div className="flex items-center gap-2">
+                <> ₦ {props?.pricings?.[0]?.price.toLocaleString()}</>
+                {/* No line-through element for prices greater than or equal to 3000 */}
+              </div>
             )}
           </div>
         </a>
       </Link>
     </div>
-  );
-};
+  )
+}
 
-const CoursePreviewGrid = React.memo(UnCoursePreviewGrid);
+const CoursePreviewGrid = React.memo(UnCoursePreviewGrid)
 
-const CoursePreview = React.memo(UnCoursePreview);
+const CoursePreview = React.memo(UnCoursePreview)
 
-export { CoursePreviewGrid, CoursePreview };
+export { CoursePreviewGrid, CoursePreview }

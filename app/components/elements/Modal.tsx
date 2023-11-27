@@ -27,7 +27,7 @@ const Modal = ({ children, className, isOpen, closeModal }: ModalProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={_closeModal}
-            className={`min-h-screen min-w-full bg-[#202020] bg-opacity-50 flex items-center justify-center ${className}`}
+            className={`min-h-screen min-w-full bg-[#202020] bg-opacity-90 flex items-center justify-center ${className}`}
           >
             <div className="modalcontent">{children}</div>
           </motion.div>

@@ -384,3 +384,8 @@ input {
   -webkit-appearance: none;
   appearance: none;
 }
+
+.promo-code {
+background: linear-gradient(90deg, #FF8F3E 12.56%, #D54546 94.67%);
+  
+}
