@@ -10,6 +10,7 @@ import { useWatchSearchParams } from "app/hooks";
 const PaymentProcess: NextPageWithLayout<any> = (props) => {
 	const router = useRouter();
 	const [tx_ref, isExternal] = useWatchSearchParams(["tx_ref", "isExternal"]) as [string, string];
+	// let [count , ]
 
 	const [getCourseDetails, { isFetching: isLoadingCourseDetails, data }] = useLazyGetSingleCoursePreviewQuery();
 
@@ -20,10 +21,15 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
 
 	useEffect(() => {
 		if (!data) return;
-		console.log(data.isExternal);
 		data.isExternal ? verifyExternalCourse({ tx_ref: tx_ref as string }) : confirmPayment({ tx_ref: tx_ref as string });
 	}, [data, confirmPayment, tx_ref, verifyExternalCourse]);
 
+	useEffect(() => {
+		if (!isExternal) return;
+		if (typeof externalCourseHasError !== "boolean" || !externalCourseHasError) return;
+
+		verifyExternalCourse({ tx_ref: tx_ref as string });
+	}, [externalCourseHasError, isExternal, verifyExternalCourse, tx_ref]);
 	// Fetch course data
 	useEffect(() => {
 		(async () => {
