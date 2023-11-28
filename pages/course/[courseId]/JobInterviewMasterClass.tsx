@@ -24,6 +24,7 @@ import { freePlan } from 'app/components/pages/coursedetails/CourseDetailsHero'
 // wrapper to handle SSG rendering... links nextjs with redux
 import { wrapper } from 'app/redux/store'
 import CourseDetailsNavbar from 'app/components/courseDetailsComponent/CourseDetailsNavbar'
+import InterviewCourseModules from 'app/components/courseDetailsComponent/InterviewCourseModules'
 
 type Course = SingleCourseDetailsResponse
 
@@ -105,19 +106,20 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
         )}
         <>
           <CourseDetailsNavbar {...course} />
-          <DiscountHero isAvailable={true} />
+          <DiscountHero isAvailable={false} />
           <section className="lg:px-20 px-10">
             <CourseDetailsHeader
               {...course}
               setShowAuthModal={setShowAuthModal}
               setAccessModal={setAccessModal}
+              isAvailable={false}
             />
             <AboutCourseDetails
               {...course}
               setShowAuthModal={setShowAuthModal}
               setAccessModal={setAccessModal}
             />
-            <CourseDetailsModules {...course} />
+            <InterviewCourseModules {...course} />
           </section>
           <FooterCourseDetails {...course} />
           {accessModal && !isSubscribed && (

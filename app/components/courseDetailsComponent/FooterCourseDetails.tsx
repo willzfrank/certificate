@@ -1,5 +1,5 @@
-import { ExternalCourse } from 'app/types';
-import React from 'react';
+import { ExternalCourse } from 'app/types'
+import React from 'react'
 
 const FooterCourseDetails = (props: ExternalCourse) => {
   return (
@@ -42,7 +42,10 @@ const FooterCourseDetails = (props: ExternalCourse) => {
                 />
               </svg>
               <div className="text-neutral-700 text-sm font-medium font-['Inter']">
-                4.5 <span className="hidden md:inline-flex">ratings</span>
+                {(props.ratings / Math.max(props.ratingsCount, 1)).toPrecision(
+                  2
+                )}{' '}
+                <span className="hidden md:inline-flex">ratings</span>
               </div>
             </div>
             <div className="justify-start items-center gap-2 flex">
@@ -103,7 +106,7 @@ const FooterCourseDetails = (props: ExternalCourse) => {
         </svg>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default FooterCourseDetails;
+export default FooterCourseDetails

@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 type Props = {
-  mobile: boolean;
-};
+  mobile: boolean
+}
 
 const CourseDetailsModulesTiles = (props: Props) => {
-  const containerClass = props.mobile ? 'w-full md:w-[237px]' : 'w-[237px]';
+  const containerClass = props.mobile ? 'w-full md:w-[237px]' : 'w-[237px]'
   return (
     <div
       className={`${containerClass} h-7 px-4 py-1 rounded-2xl border border-neutral-100 justify-between md:justify-start items-start gap-4 inline-flex`}
@@ -41,11 +41,11 @@ const CourseDetailsModulesTiles = (props: Props) => {
           />
         </svg>
         <span className="text-neutral-700 w-max text-base font-medium font-['Inter']">
-          20 topics{' '}
+          23 topics{' '}
         </span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CourseDetailsModulesTiles;
+export default CourseDetailsModulesTiles
