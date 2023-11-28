@@ -24,10 +24,17 @@ export const confirmPaymentApi = createApi({
         }),
         providesTags: (result, error, id) => [{ type: 'PAYMENT' }],
       }),
+      verifyExternalCourse: builder.query<any, { tx_ref: string }>({
+        query: (arg) => ({
+          url: `/Transactions/verify-transaction?transactionReference=${arg.tx_ref}`,
+          method: 'GET',
+        }),
+        providesTags: (result, error, id) => [{ type: 'PAYMENT' }],
+      }),
     };
   },
 });
 
-export const { usePaymentConfirmQuery, useLazyPaymentConfirmQuery } =
+export const { usePaymentConfirmQuery, useLazyPaymentConfirmQuery, useLazyVerifyExternalCourseQuery } =
   confirmPaymentApi;
 export default confirmPaymentApi;
