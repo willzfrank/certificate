@@ -1,16 +1,16 @@
-import * as React from 'react';
-import Link from 'next/link';
-import { DownloadCertificateButton, Image } from '../elements';
+import * as React from 'react'
+import Link from 'next/link'
+import { DownloadCertificateButton, Image } from '../elements'
 
 interface CourseTakenType {
-  title: string;
-  imageUrl: string;
-  videoUrl: string;
-  percentageCompleted?: number;
-  module?: string;
-  courseId: string;
-  certificateRequired?: boolean;
-  slugName?: string;
+  title: string
+  imageUrl: string
+  videoUrl: string
+  percentageCompleted?: number
+  module?: string
+  courseId: string
+  certificateRequired?: boolean
+  slugName?: string
   // courseId: string;
 }
 
@@ -28,8 +28,8 @@ const CourseTaken = function (props: CourseTakenType) {
       <div className="p-4 space-y-4">
         <Link href={`/course/${props.courseId}?slugName=${props.slugName}`}>
           <div>
-            <p className="font-medium truncate">Module One: {props.title}</p>
-            <p className="text-muted truncate">{props.title}</p>
+            <p className="font-medium truncate">{props.title}</p>
+            {/* <p className="text-muted truncate">{props.title}</p> */}
           </div>
         </Link>
         <div>
@@ -61,7 +61,7 @@ const CourseTaken = function (props: CourseTakenType) {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CourseTaken;
+export default CourseTaken

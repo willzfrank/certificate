@@ -7,7 +7,22 @@ type Props = {
 const DiscountHero = (props: Props) => {
   return (
     <div>
-      <div className="w-screen h-14 pt-5 pb-[19px] bg-neutral-900 justify-center items-center inline-flex">
+      <div className="w-screen h-14 pt-5 pb-[19px] bg-neutral-900 md:text-[13px] lg:text-base text-[9px] justify-start md:justify-center items-center inline-flex marquee-container uppercase overflow-x-hidden">
+        <h3 className="text-white">
+          <span className="lg:pr-[200px] md:pr-2 pr-0 font-['Montserrat']">
+            Your dream job is on the other side of a great interview.
+          </span>
+          <span className="lg:pr-[200px] md:pr-2 pr-0 hidden md:inline-block font-['Montserrat']">
+            Don&apos;t miss out!
+          </span>
+          <span className="text-red-500 font-black pl-2 md:text-[13px] lg:text-base text-[9px] font-['Montserrat']">
+            Sign up
+            <span className="hidden md:inline-block pl-1 font-['Montserrat']">
+              {' '}
+              now!
+            </span>
+          </span>
+        </h3>
         {props.isAvailable && (
           <div className="self-stretch justify-start items-center gap-2 inline-flex">
             <svg
@@ -65,13 +80,13 @@ const DiscountHero = (props: Props) => {
       ) : (
         <div className="w-full flex items-center justify-center my-5">
           <div className="w-[184px] h-[29px] p-0.5 bg-green-50 rounded-[32px] flex-col justify-start items-start gap-px inline-flex">
-            <div className="w-[180px] px-3 py-1 bg-green-50 rounded-[32px] border border-emerald-200 justify-center items-center gap-2 inline-flex">
+            <div className="w-[180px] md:w-[280px] px-3 py-1 bg-green-50 rounded-[32px] border border-emerald-200 justify-center items-center gap-2 inline-flex">
               <div className="w-2.5 h-2.5 relative">
                 <div className="w-2.5 h-2.5 left-0 top-0 absolute bg-green-100 rounded-full" />
                 <div className="w-[7px] h-[7px] left-[1.50px] top-[1.50px] absolute bg-gradient-to-b from-green-300 to-lime-800 rounded-full" />
               </div>
-              <div className="text-green-900 text-sm font-medium font-['Inter']">
-                Available Now{' '}
+              <div className="text-green-900 text-sm md:text-2xl font-medium font-['Inter']">
+                Available Soon
               </div>
             </div>
           </div>

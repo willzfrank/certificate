@@ -1,35 +1,34 @@
 import React from 'react'
 
-const ModuleTwo = () => {
+const ModuleFive = () => {
   return (
-    <div className="flex items-start justify-start flex-col">
+    <div className="flex items-start justify-start flex-col pt-10">
       <div className="w-[305px] h-[57px] pb-3 border-b border-neutral-100 justify-between items-center inline-flex">
         <div className="justify-start items-center gap-[9px] flex">
           {/* <div className="w-[45px] h-[45px] relative">
             <div className="w-[45px] h-[45px] left-0 top-0 absolute bg-rose-50 rounded-full" />
             <div className="left-[11px] top-[13px] absolute text-red-900 text-base font-medium font-['Inter']">
-              M2
+              M3
             </div>
           </div> */}
           <div className="text-neutral-700 text-base font-medium font-['Inter']">
-            The Secret ABC&rsquo;s of Communication
+            Bonus
           </div>
         </div>
         <div className="justify-start items-center gap-1 flex">
           <div className="w-3.5 h-3.5 relative" />
           <div className="text-neutral-700 text-sm w-max font-medium font-['Inter']">
-            4 topics
+            5 topics
           </div>
         </div>
       </div>
       <div className="w-[286px] h-[335px] flex-col justify-start items-start gap-2 inline-flex">
         <div className="flex-col justify-start items-start gap-2 flex">
-          <div className="text-neutral-700 text-sm font-medium font-['Inter']">
+          <div className="text-neutral-700 text-sm  font-medium font-['Inter']">
             Description:
           </div>
-          <div className="w-[300px] text-justify h-max text-neutral-400 mb-3 text-sm font-medium font-['Inter'] leading-tight">
-            Our exclusive formula - 6A&apos;s, 4B&apos;s, and 2C&apos;s -
-            unveils strategies you won&apos;t find on Google.
+          <div className="w-[300px] h-[69px] text-neutral-400 text-justify text-sm font-medium font-['Inter'] leading-tight">
+            Preparations before Interview day
           </div>
         </div>
 
@@ -42,7 +41,7 @@ const ModuleTwo = () => {
               </div>
             </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
-              Introduction to 6 A&apos;s, 4 B&apos;s, and 2 C&apos;s{' '}
+              Imagine talking to a friend
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
@@ -53,7 +52,7 @@ const ModuleTwo = () => {
               </div>
             </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
-              6 A&apos;s of Communication
+              Use simple language
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
@@ -64,7 +63,7 @@ const ModuleTwo = () => {
               </div>
             </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
-              4 B&apos;s of Communication
+              Internet backup
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
@@ -75,7 +74,18 @@ const ModuleTwo = () => {
               </div>
             </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
-              2 C&apos;s of Communication{' '}
+              Conducive environment
+            </div>
+          </div>
+          <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
+            <div className="w-[26px] h-[26px] relative">
+              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
+              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
+                T5
+              </div>
+            </div>
+            <div className="text-neutral-700 text-sm font-medium font-['Inter']">
+              Journal & pen
             </div>
           </div>
         </div>
@@ -84,4 +94,4 @@ const ModuleTwo = () => {
   )
 }
 
-export default ModuleTwo
+export default ModuleFive

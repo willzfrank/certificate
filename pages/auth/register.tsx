@@ -1,35 +1,37 @@
-import * as React from 'react';
-import { MainLayout } from 'app/components/layouts';
-import type { NextPageWithLayout } from 'app/types';
-import Link from 'next/link';
-import { Tabs, Button, BlurPasswordInput } from 'app/components';
-import { useWatchSearchParams } from 'app/hooks';
-import { USERTYPES } from 'app/types';
-import { useRegisterMutation, RegisterBody } from 'app/api/authApi';
-import { useNotify } from 'app/hooks';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
+// @ts-nocheck
+      
+import * as React from 'react'
+import { MainLayout } from 'app/components/layouts'
+import type { NextPageWithLayout } from 'app/types'
+import Link from 'next/link'
+import { Tabs, Button, BlurPasswordInput } from 'app/components'
+import { useWatchSearchParams } from 'app/hooks'
+import { USERTYPES } from 'app/types'
+import { useRegisterMutation, RegisterBody } from 'app/api/authApi'
+import { useNotify } from 'app/hooks'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 type FormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirm_password: string;
-  userType: USERTYPES;
-  userGroupId?: string;
-};
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  confirm_password: string
+  userType: USERTYPES
+  userGroupId?: string
+}
 
 const Register: NextPageWithLayout<{}> = () => {
   const [register, { isLoading, isError, error, isSuccess, data }] =
-    useRegisterMutation();
+    useRegisterMutation()
 
   const [searchParam, userGroupId] = useWatchSearchParams([
     'as',
     'userGroupId',
-  ]) as [string, string];
-  const router = useRouter();
+  ]) as [string, string]
+  const router = useRouter()
 
   const {
     register: rhfregister,
@@ -42,18 +44,22 @@ const Register: NextPageWithLayout<{}> = () => {
     defaultValues: {
       userGroupId: userGroupId || undefined,
     },
-  });
+  })
+
+  const handleLoginClick = () => {
+    router.push('/auth/login')
+  }
 
   React.useEffect(() => {
-    if (userGroupId) setValue('userGroupId', userGroupId);
+    if (userGroupId) setValue('userGroupId', userGroupId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userGroupId]);
+  }, [userGroupId])
 
-  const isInstructor = searchParam === USERTYPES.INSTRUCTOR;
+  const isInstructor = searchParam === USERTYPES.INSTRUCTOR
   const [hasRegisteredSuccessfully, setHasRegisteredSuccessfully] =
-    React.useState(false);
+    React.useState(false)
 
-  const notify = useNotify();
+  const notify = useNotify()
 
   React.useEffect(() => {
     reset({
@@ -64,45 +70,47 @@ const Register: NextPageWithLayout<{}> = () => {
       confirm_password: '',
       userGroupId: undefined,
       userType: isInstructor ? USERTYPES.INSTRUCTOR : USERTYPES.STUDENT,
-    });
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInstructor, reset, router]);
+  }, [isInstructor, reset, router])
 
   React.useEffect(() => {
     if (isSuccess) {
-      setHasRegisteredSuccessfully(true);
+      setHasRegisteredSuccessfully(true)
       notify({
         title: 'Success',
         description: 'Your account has been created successfully',
         type: 'success',
-      });
+      })
     }
 
-    if (isError)
+    if (isError) {
+      const errorMessage = error?.data?.errors[0]?.errorMessages || 'Something went wrong';
+
       notify({
         title: 'Error',
-        description:
-          'Error creating account. Please check if account already exists',
+        description: errorMessage,
         type: 'error',
-      });
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, isError, data, error]);
+  }, [isSuccess, isError, data, error])
 
   const handleFormSubmission = (data: FormData) => {
-    register(data);
-  };
+    register(data)
+  }
 
   React.useEffect(() => {
     if (hasRegisteredSuccessfully) {
-      window.scrollTo(0, 0); // Scroll to the top of the page
+      window.scrollTo(0, 0) // Scroll to the top of the page
     }
-  }, [hasRegisteredSuccessfully]);
+  }, [hasRegisteredSuccessfully])
 
   if (hasRegisteredSuccessfully) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center  text-center">
         <p className="flex gap-3 items-center text-app-dark-500 text-3xl">
-          You&apos;ve got a mail{' '}
+          You made it!
           <svg
             width="24"
             height="25"
@@ -134,23 +142,27 @@ const Register: NextPageWithLayout<{}> = () => {
           </svg>
         </p>
 
-        <p className="text-black w-full md:w-1/3 mt-4 text-base mb-12 leading-6">
-          Email verification. Follow the link sent to your email to verify your
-          email address and log in to your account
+        <p className="text-black w-max mt-4 text-xl mb-12 leading-6">
+          <span className="w-max  flex items-center">
+            Log in and get a head start on the future{' '}
+            <br className="block md:hidden" /> you desire .🚀
+          </span>
+          <br />
+          We&apos;ll send you an email shortly.
         </p>
 
-        <p className="text-sm">
-          Already verified?{' '}
-          <Link href="/auth/login">
-            <a className="text-app-pink">Login</a>
-          </Link>
-        </p>
+        <div
+          className="w-max h-[59px] px-5 py-5 bg-gradient-to-r  from-red-500 to-rose-600 rounded-lg justify-center items-center gap-px inline-flex text-white cursor-pointer"
+          onClick={handleLoginClick}
+        >
+          Log in now
+        </div>
       </div>
-    );
+    )
   }
 
-  const password = watch('password');
-  const formValues = watch();
+  const password = watch('password')
+  const formValues = watch()
   return (
     <div className="flex flex-wrap items-center justify-center min-h-[75vh] my-16">
       <div className="flex-wrap items-center justify-center w-full max-w-[475px]">
@@ -186,7 +198,13 @@ const Register: NextPageWithLayout<{}> = () => {
                 First name
               </label>
               <input
-                {...rhfregister('firstName', { required: true })}
+                {...rhfregister('firstName', {
+                  required: 'First name is required',
+                  minLength: {
+                    value: 2,
+                    message: 'First name must be at least 2 characters long',
+                  },
+                })}
                 id="text"
                 type="text"
                 name="firstName"
@@ -194,7 +212,9 @@ const Register: NextPageWithLayout<{}> = () => {
                 placeholder="First name"
               />
               {errors.firstName && (
-                <p className="text-xs text-app-pink">First name required</p>
+                <p className="text-xs text-app-pink">
+                  {errors.firstName.message}
+                </p>
               )}
             </div>
             <div className="mb-5 form-inputs">
@@ -202,7 +222,13 @@ const Register: NextPageWithLayout<{}> = () => {
                 Last name
               </label>
               <input
-                {...rhfregister('lastName', { required: true })}
+                {...rhfregister('lastName', {
+                  required: 'Last name is required',
+                  minLength: {
+                    value: 2,
+                    message: 'Last name must be at least 2 characters long',
+                  },
+                })}
                 id="lastName"
                 type="text"
                 name="lastName"
@@ -210,7 +236,9 @@ const Register: NextPageWithLayout<{}> = () => {
                 placeholder="Last name"
               />
               {errors.lastName && (
-                <p className="text-xs text-app-pink">Last name required</p>
+                <p className="text-xs text-app-pink">
+                  {errors.lastName.message}
+                </p>
               )}
             </div>
           </div>
@@ -239,6 +267,10 @@ const Register: NextPageWithLayout<{}> = () => {
                   <input
                     {...rhfregister('password', {
                       required: 'You must specify a password',
+                      minLength: {
+                        value: 6,
+                        message: 'Password must be at least 6 characters long',
+                      },
                     })}
                     id="password"
                     name="password"
@@ -267,7 +299,7 @@ const Register: NextPageWithLayout<{}> = () => {
                       //@ts-ignore
                       validate: (val: string) => {
                         if (password != val || !val?.trim()) {
-                          return 'Your passwords do not match';
+                          return 'Your passwords do not match'
                         }
                       },
                     })}
@@ -336,10 +368,10 @@ const Register: NextPageWithLayout<{}> = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register
 
 Register.getLayout = (page) => (
   <MainLayout
@@ -351,4 +383,4 @@ Register.getLayout = (page) => (
     </Head>
     {page}
   </MainLayout>
-);
+)

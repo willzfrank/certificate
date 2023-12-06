@@ -6,11 +6,11 @@ import ModuleOne from '../JobInterviewCourse/Modules/ModuleOne'
 import ModuleTwo from '../JobInterviewCourse/Modules/ModuleTwo'
 import ModuleThree from '../JobInterviewCourse/Modules/ModuleThree'
 import ModuleFour from '../JobInterviewCourse/Modules/ModuleFour'
+import ModuleFive from '../JobInterviewCourse/Modules/ModuleFive'
 
 type Props = {}
 
 const InterviewCourseModules = (props: Props) => {
-  console.log(props)
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -55,9 +55,9 @@ const InterviewCourseModules = (props: Props) => {
       <div className="flex flex-col my-5 ">
         <div className="w-full h-[0px] md:border border-neutral-200" />
         <div className="w-full p-3 space-x-5 md:border-l-2 md:border-neutral-700 justify-start items-start md:items-center gap-px inline-flex flex-col md:flex-row">
-          <div className="text-neutral-700 md:mb-0 mb-2 text-base font-medium font-['Inter']">
+          {/* <div className="text-neutral-700 md:mb-0 mb-2 text-base font-medium font-['Inter']">
             Objectives:
-          </div>
+          </div> */}
           <div className="flex items-start md:items-center space-y-2 md:space-y-0  md:space-x-2 flex-col md:flex-row">
             <div className="flex md:items-center space-x-1">
               <svg
@@ -116,11 +116,12 @@ const InterviewCourseModules = (props: Props) => {
       </div>
 
       {/* CARD MODULES */}
-      <div className="items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 space-y-4 mb-10  md:mb-[100px] ">
+      <div className="items-center justify-start grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 space-y-10 mb-10  md:mb-[100px] ">
         <ModuleOne />
         <ModuleTwo />
         <ModuleThree />
         <ModuleFour />
+        <ModuleFive />
       </div>
     </div>
   )

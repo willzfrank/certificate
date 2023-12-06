@@ -58,6 +58,7 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
     discountDetails.value,
     discountDetails.type,
   ])
+  
 
   return (
     <>
@@ -116,6 +117,8 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
               {...course}
               setShowAuthModal={setShowAuthModal}
               setAccessModal={setAccessModal}
+              isUserSubscribed={isSubscribed}
+              setIsUserSubscribed={setIsSubscribed}
             />
             <CourseDetailsModules {...course} />
           </section>
@@ -170,19 +173,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
           )
           .unwrap()
 
-        // console.log(course);
-        // if (course?.modules?.length > 0) {
-        // 	const modules = await store
-        // 		.dispatch(
-        // 			courseApi.endpoints.getAllModulesOfCourse.initiate({
-        // 				courseId: params.courseId,
-        // 			})
-        // 		)
-        // 		.unwrap();
-        // }
         return {
           props: course,
         }
       }
     }
+    
 )

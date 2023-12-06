@@ -2,7 +2,7 @@ import React from 'react'
 
 const ModuleThree = () => {
   return (
-    <div className="flex items-start justify-start flex-col pt-20">
+    <div className="flex items-start justify-start flex-col pt-20 md:pt-0">
       <div className="w-[305px] h-[57px] pb-3 border-b border-neutral-100 justify-between items-center inline-flex">
         <div className="justify-start items-center gap-[9px] flex">
           {/* <div className="w-[45px] h-[45px] relative">

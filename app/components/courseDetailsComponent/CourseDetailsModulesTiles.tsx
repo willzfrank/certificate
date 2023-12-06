@@ -24,7 +24,7 @@ const CourseDetailsModulesTiles = (props: Props) => {
           />
         </svg>
         <span className="text-neutral-700 w-max text-base font-medium font-['Inter']">
-          4 modules
+          5 modules
         </span>
       </div>
       <div className="justify-start items-center gap-2 flex">
@@ -41,7 +41,7 @@ const CourseDetailsModulesTiles = (props: Props) => {
           />
         </svg>
         <span className="text-neutral-700 w-max text-base font-medium font-['Inter']">
-          23 topics{' '}
+          28 topics{' '}
         </span>
       </div>
     </div>

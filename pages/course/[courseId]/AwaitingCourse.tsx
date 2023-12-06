@@ -1,25 +1,18 @@
-import Link from 'next/link'
-import React, { useState, useRef } from 'react'
+import CourseDetailsNavbar from 'app/components/courseDetailsComponent/CourseDetailsNavbar'
+import React, { useEffect, useState } from 'react'
+import { useCookies } from 'react-cookie'
+import { useAppSelector } from 'app/hooks'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ExternalCourse, USERTYPES } from 'app/types'
-import { useAppSelector } from 'app/hooks'
-import { DropDownMenu } from '../elements'
-import { useCookies } from 'react-cookie'
 import { TOKEN_KEY, USER_TYPE_KEY } from 'app/constants'
+import Link from 'next/link'
+import { USERTYPES } from 'app/types'
 
-interface ICourseDetailsNavbar extends ExternalCourse {
-  setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
+const AwaitingCourse = () => {
   const [cookie] = useCookies([TOKEN_KEY, USER_TYPE_KEY])
   const user = useAppSelector((store) => store.user)
-
   const [mobileNavVisible, setMobileNavVisible] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
-
-  const dropdownOpenerRef = useRef<HTMLButtonElement>(null)
 
   const toggleMobileNav = () => {
     setMobileNavVisible(!mobileNavVisible)
@@ -28,10 +21,17 @@ const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
   function signUp() {
     if (!Boolean(user.id || cookie[TOKEN_KEY])) {
       console.log('User is not logged in')
-      props.setShowAuthModal(true)
       return
     }
   }
+
+  function navigateToCoursePage() {
+    window.location.href = '/courses/browseCourses'
+  }
+
+  useEffect(() => {
+    setTimeout(navigateToCoursePage, 3000)
+  }, [])
 
   // Render user section
   const renderUserSection = () => {
@@ -110,8 +110,7 @@ const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
           >
             <div className="flex flex-row gap-1">
               <span className="text-white w-max text-sm font-medium font-['Inter']">
-                
-                  Enroll Now 
+                Enroll Now
               </span>
             </div>
           </button>
@@ -228,8 +227,173 @@ const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* BODY */}
+
+      <div className="flex items-center justify-center w-full  h-[85vh] flex-col gap-5">
+        <svg
+          width="97"
+          height="78"
+          viewBox="0 0 97 78"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clipPath="url(#clip0_6554_20530)">
+            <rect
+              width="96.1395"
+              height="78"
+              rx="4.19137"
+              fill="url(#paint0_linear_6554_20530)"
+            />
+            <g filter="url(#filter0_d_6554_20530)">
+              <rect
+                x="21.7681"
+                y="23.5811"
+                width="53.178"
+                height="59.2031"
+                rx="4.19137"
+                fill="#FFCBDD"
+              />
+              <rect
+                x="25.0426"
+                y="31.0468"
+                width="46.367"
+                height="51.6062"
+                rx="1.9647"
+                stroke="#FEBCD2"
+                strokeWidth="0.261961"
+              />
+              <circle cx="68.9206" cy="26.9871" r="0.785882" fill="#FF6F9F" />
+              <circle cx="66.3015" cy="26.9871" r="0.785882" fill="#FF6F9F" />
+              <circle cx="63.4202" cy="26.9871" r="0.785882" fill="#FF6F9F" />
+              <rect
+                x="25.4355"
+                y="26.4626"
+                width="6.81097"
+                height="1.3098"
+                rx="0.654901"
+                fill="#FF6F9F"
+              />
+              <rect
+                x="26.7451"
+                y="34.3213"
+                width="15.1937"
+                height="1.83372"
+                rx="0.916862"
+                fill="#FF6F9F"
+              />
+              <rect
+                x="26.7451"
+                y="37.4648"
+                width="15.1937"
+                height="1.83372"
+                rx="0.916862"
+                fill="#FF6F9F"
+              />
+              <rect
+                x="26.7451"
+                y="40.6086"
+                width="22.2666"
+                height="1.83372"
+                rx="0.916862"
+                fill="#FF6F9F"
+              />
+              <rect
+                x="26.7451"
+                y="47.9438"
+                width="41.3898"
+                height="4.19137"
+                rx="2.09568"
+                fill="#A9033B"
+              />
+              <rect
+                x="26.7451"
+                y="54.7544"
+                width="41.3898"
+                height="4.19137"
+                rx="2.09568"
+                fill="#A9033B"
+              />
+              <rect
+                x="26.7451"
+                y="61.5649"
+                width="41.3898"
+                height="4.19137"
+                rx="2.09568"
+                fill="#A9033B"
+              />
+            </g>
+          </g>
+          <defs>
+            <filter
+              id="filter0_d_6554_20530"
+              x="14.5123"
+              y="23.5811"
+              width="67.6899"
+              height="73.7148"
+              filterUnits="userSpaceOnUse"
+              colorInterpolationFilters="sRGB"
+            >
+              <feFlood floodOpacity="0" result="BackgroundImageFix" />
+              <feColorMatrix
+                in="SourceAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                result="hardAlpha"
+              />
+              <feOffset dy="7.25581" />
+              <feGaussianBlur stdDeviation="3.62791" />
+              <feComposite in2="hardAlpha" operator="out" />
+              <feColorMatrix
+                type="matrix"
+                values="0 0 0 0 0.305713 0 0 0 0 0.0144895 0 0 0 0 0.112931 0 0 0 1 0"
+              />
+              <feBlend
+                mode="normal"
+                in2="BackgroundImageFix"
+                result="effect1_dropShadow_6554_20530"
+              />
+              <feBlend
+                mode="normal"
+                in="SourceGraphic"
+                in2="effect1_dropShadow_6554_20530"
+                result="shape"
+              />
+            </filter>
+            <linearGradient
+              id="paint0_linear_6554_20530"
+              x1="48.0698"
+              y1="0"
+              x2="89.1476"
+              y2="96.1395"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stopColor="#D60149" />
+              <stop offset="1" stopColor="#F97642" />
+            </linearGradient>
+            <clipPath id="clip0_6554_20530">
+              <rect width="96.1395" height="78" rx="4.19137" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+
+        <div>
+          <div className="text-center">
+            <span className="text-neutral-700 text-xl font-medium font-['Inter'] leading-[31px]">
+              This Course will be available shortly,
+              <br />
+              Explore other course on{' '}
+            </span>
+            <Link href="/courses/browseCourses">
+              <span className="text-rose-600 text-xl font-medium font-['Inter'] underline leading-[31px] cursor-pointer">
+                Certification by Unify
+              </span>
+            </Link>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
 
-export default CourseDetailsNavbar
+export default AwaitingCourse

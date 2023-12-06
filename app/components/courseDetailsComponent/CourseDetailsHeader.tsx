@@ -1,9 +1,10 @@
 import { ExternalCourse } from 'app/types'
 import React, { useEffect, useRef, useState } from 'react'
-import { useAddSubscriptionMutation } from 'app/api/subscriptionApi'
 import { useCookies } from 'react-cookie'
 import { TOKEN_KEY, USER_TYPE_KEY } from 'app/constants'
 import { useAppSelector } from 'app/hooks'
+import Link from 'next/link'
+import { useLazyGetSingleCoursePreviewQuery } from 'app/api/courseApi'
 
 interface IAboutCourseDetails extends ExternalCourse {
   setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -12,10 +13,10 @@ interface IAboutCourseDetails extends ExternalCourse {
 }
 
 const CourseDetailsHeader = (props: IAboutCourseDetails) => {
-  const [
-    addSubscription,
-    { isLoading: isCheckingSubscription, error, isError, isSuccess },
-  ] = useAddSubscriptionMutation()
+  const [courseSubscribed, setCourseSubscribed] = useState<boolean>()
+
+  const [getCourseDetails, { isFetching: isLoadingCourseDetails }] =
+    useLazyGetSingleCoursePreviewQuery()
   const [cookie] = useCookies([TOKEN_KEY, USER_TYPE_KEY])
   const user = useAppSelector((store) => store.user)
 
@@ -25,8 +26,25 @@ const CourseDetailsHeader = (props: IAboutCourseDetails) => {
       props.setShowAuthModal(true)
       return
     }
-    props.setAccessModal(true)
+    // props.setAccessModal(true)
   }
+  useEffect(() => {
+    ;(async () => {
+      if (user?.token) {
+        try {
+          const res = await getCourseDetails({
+            courseId: props.id,
+            token: user?.token,
+          }).unwrap()
+
+          setCourseSubscribed(res.isSubscribed)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.token])
 
   // COUNTDOWN LOGIC
 
@@ -38,7 +56,7 @@ const CourseDetailsHeader = (props: IAboutCourseDetails) => {
   let interval = useRef<NodeJS.Timeout | null>(null)
 
   const startTimer = () => {
-    const countdownDate = new Date('December 1, 2023 00:00:00').getTime()
+    const countdownDate = new Date('December 25, 2023 00:00:00').getTime()
 
     interval.current = setInterval(() => {
       const now = new Date().getTime()
@@ -113,7 +131,7 @@ const CourseDetailsHeader = (props: IAboutCourseDetails) => {
                 </div>
               </div>
             </div>
-            <div className="h-5 justify-start items-start gap-2 md:pt-0 pt-2  inline-flex">
+            {/* <div className="h-5 justify-start items-start gap-2 md:pt-0 pt-2  inline-flex">
               <div className="justify-start items-center gap-2 flex">
                 <svg
                   width="20"
@@ -150,7 +168,7 @@ const CourseDetailsHeader = (props: IAboutCourseDetails) => {
                   ).toPrecision(2)}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -158,65 +176,79 @@ const CourseDetailsHeader = (props: IAboutCourseDetails) => {
       {/* STOP WATCH FLEX END */}
 
       <div className="flex flex-col space-y-4 w-full md:w-max items-center justify-center">
-        {props.isAvailable && (
-          <>
-            <div className="text-neutral-600 text-xs font-medium font-['Inter']">
-              THIS COURSE WILL BE AVAILABLE IN
-            </div>
-            <div className="w-[204px] h-[55px] justify-center items-center gap-[9px] inline-flex">
-              {Object.entries(countDown).map(([unit, value]) => (
+        <>
+          <div className="text-neutral-600 text-xs font-medium font-['Inter']">
+            THIS COURSE WILL BE AVAILABLE IN
+          </div>
+          <div className="w-[204px] h-[55px] justify-center items-center gap-[9px] inline-flex">
+            {Object.entries(countDown).map(([unit, value]) => (
+              <>
                 <div
                   key={unit}
                   className="w-max h-[57px] px-2 flex items-center justify-center flex-col bg-white rounded-lg shadow"
                 >
-                  <div className=" text-neutral-700 text-[32px] font-medium font-['Inter'] leading-[44.80px]">
+                  <div className=" text-neutral-700 text-[40px] font-medium font-['Inter'] leading-[44.80px]">
                     {value}
                   </div>
-                  <div className=" text-neutral-700 text-[10px] font-medium font-['Inter'] leading-[14px]">
-                    {unit.toUpperCase()}
+                </div>
+                <div
+                  key={unit + 'AA'}
+                  className="w-max h-[57px] px-2 flex items-center justify-center flex-col bg-white rounded-lg shadow"
+                >
+                  <div className=" text-neutral-700 text-base font-medium font-['Inter'] leading-[44.80px]">
+                    DAYS
                   </div>
                 </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        <div className="flex items-center gap-2">
-          <svg
-            width="14"
-            height="15"
-            viewBox="0 0 14 15"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11.0833 1.08325L10.3483 2.68742L8.74998 3.41659L10.3483 4.15159L11.0833 5.74992L11.8125 4.15159L13.4166 3.41659L11.8125 2.68742M5.24998 2.83325L3.79165 6.04159L0.583313 7.49992L3.79165 8.95825L5.24998 12.1666L6.70831 8.95825L9.91665 7.49992L6.70831 6.04159M11.0833 9.24992L10.3483 10.8483L8.74998 11.5833L10.3483 12.3124L11.0833 13.9166L11.8125 12.3124L13.4166 11.5833L11.8125 10.8483"
-              fill="#DC1448"
-            />
-          </svg>
-          {props.isAvailable ? (
-            <div className="text-red-500 text-sm font-medium font-['Inter']">
-              Pre-Launch Disc. 50% off{' '}
-            </div>
-          ) : (
-            <div className="text-red-500 text-sm font-medium font-['Inter']">
-              Discount 50% off{' '}
-            </div>
-          )}
-        </div>
-        <button
-          className="w-[325px] lg:w-[199px] h-[42px] lg:h-[33px] px-3 py-2  cursor-pointer rounded border justify-center lg:justify-start items-center gap-2 inline-flex hover:shadow hover:border-rose-600 border-rose-600"
-          onClick={setUpPayment}
-        >
-          <div className="flex flex-row gap-1">
-            <span className="text-neutral-600 w-max text-sm font-medium font-['Inter']">
-              Pay now ₦{props.pricings[0].price}
-            </span>
-            <span className="text-red-500 text-sm font-medium font-['Inter'] line-through">
-              (N20,000)
-            </span>
+              </>
+            ))}
           </div>
-        </button>
+        </>
+        {!courseSubscribed && (
+          <div className="flex items-center gap-2">
+            <svg
+              width="14"
+              height="15"
+              viewBox="0 0 14 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.0833 1.08325L10.3483 2.68742L8.74998 3.41659L10.3483 4.15159L11.0833 5.74992L11.8125 4.15159L13.4166 3.41659L11.8125 2.68742M5.24998 2.83325L3.79165 6.04159L0.583313 7.49992L3.79165 8.95825L5.24998 12.1666L6.70831 8.95825L9.91665 7.49992L6.70831 6.04159M11.0833 9.24992L10.3483 10.8483L8.74998 11.5833L10.3483 12.3124L11.0833 13.9166L11.8125 12.3124L13.4166 11.5833L11.8125 10.8483"
+                fill="#DC1448"
+              />
+            </svg>
+            {props.isAvailable ? (
+              <div className="text-red-500 text-sm font-medium font-['Inter']">
+                Pre-Launch Disc. 50% off{' '}
+              </div>
+            ) : (
+              <div className="text-red-500 text-sm font-medium font-['Inter']">
+                Discount 50% off{' '}
+              </div>
+            )}
+          </div>
+        )}
+        {courseSubscribed ? (
+          <Link href="/course/b31c7954-faa3-4adb-9338-d19cda985861/AwaitingCourse">
+            <div className="w-[299px] h-[41px] p-3 bg-green-300  rounded justify-center items-center gap-px inline-flex cursor-pointer">
+              Go to Course
+            </div>
+          </Link>
+        ) : (
+          <button
+            className="w-[325px] lg:w-[210px] h-[42px] lg:h-[33px] px-3 py-2  cursor-pointer rounded border justify-center lg:justify-start items-center gap-2 inline-flex hover:shadow hover:border-rose-600 border-rose-600"
+            onClick={setUpPayment}
+          >
+            <div className="flex flex-row gap-1 items-center justify-center">
+              <span className="text-neutral-600 w-max text-sm font-medium font-['Inter']">
+                Pay now ₦{props?.pricings[0]?.price?.toLocaleString()}
+              </span>
+              <span className="text-red-500 text-sm font-medium font-['Inter'] line-through">
+                (N20,000)
+              </span>
+            </div>
+          </button>
+        )}
       </div>
     </div>
   )

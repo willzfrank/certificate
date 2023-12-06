@@ -101,11 +101,15 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
             <AuthModal
               setShowAuthModal={setShowAuthModal}
               setAccessModal={setAccessModal}
+              {...course}
             />
           </Modal>
         )}
         <>
-          <CourseDetailsNavbar {...course} />
+          <CourseDetailsNavbar
+            {...course}
+            setShowAuthModal={setShowAuthModal}
+          />
           <DiscountHero isAvailable={false} />
           <section className="lg:px-20 px-10">
             <CourseDetailsHeader

@@ -32,9 +32,9 @@ const Hero = () => {
 
   return (
     <>
-      <div className=" w-full flex items-center px-2">
+      {/* <div className=" w-full flex items-center px-2">
         <FlashSales />
-      </div>
+      </div> */}
       <div className="grid lg:grid-cols-[43%_1fr] space-x-12 mt-[5vh] lg:mt-[14vh] ">
         <div className="w-screen px-8 text-center lg:w-auto lg:text-left lg:pl-24">
           <h1 className="px-4 lg:px-0 text-3xl lg:text-5xl leading-[1.35] lg:leading-[1.25] font-medium md:font-normal">
