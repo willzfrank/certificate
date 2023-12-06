@@ -24,6 +24,7 @@ import { freePlan } from 'app/components/pages/coursedetails/CourseDetailsHero'
 // wrapper to handle SSG rendering... links nextjs with redux
 import { wrapper } from 'app/redux/store'
 import CourseDetailsNavbar from 'app/components/courseDetailsComponent/CourseDetailsNavbar'
+import InterviewCourseModules from 'app/components/courseDetailsComponent/InterviewCourseModules'
 
 type Course = SingleCourseDetailsResponse
 
@@ -58,7 +59,6 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
     discountDetails.value,
     discountDetails.type,
   ])
-  
 
   return (
     <>
@@ -101,26 +101,29 @@ const CourseDetails: NextPageWithLayout<Course> = (course) => {
             <AuthModal
               setShowAuthModal={setShowAuthModal}
               setAccessModal={setAccessModal}
+              {...course}
             />
           </Modal>
         )}
         <>
-          <CourseDetailsNavbar {...course} />
-          <DiscountHero isAvailable={true} />
+          <CourseDetailsNavbar
+            {...course}
+            setShowAuthModal={setShowAuthModal}
+          />
+          <DiscountHero isAvailable={false} />
           <section className="lg:px-20 px-10">
             <CourseDetailsHeader
               {...course}
               setShowAuthModal={setShowAuthModal}
               setAccessModal={setAccessModal}
+              isAvailable={false}
             />
             <AboutCourseDetails
               {...course}
               setShowAuthModal={setShowAuthModal}
               setAccessModal={setAccessModal}
-              isUserSubscribed={isSubscribed}
-              setIsUserSubscribed={setIsSubscribed}
             />
-            <CourseDetailsModules {...course} />
+            <InterviewCourseModules {...course} />
           </section>
           <FooterCourseDetails {...course} />
           {accessModal && !isSubscribed && (
@@ -173,10 +176,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
           )
           .unwrap()
 
+        // console.log(course);
+        // if (course?.modules?.length > 0) {
+        // 	const modules = await store
+        // 		.dispatch(
+        // 			courseApi.endpoints.getAllModulesOfCourse.initiate({
+        // 				courseId: params.courseId,
+        // 			})
+        // 		)
+        // 		.unwrap();
+        // }
         return {
           props: course,
         }
       }
     }
-    
 )

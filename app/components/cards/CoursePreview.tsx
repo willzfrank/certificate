@@ -7,13 +7,18 @@ import { useWishList } from 'app/hooks'
 
 interface CourseProps {
   courses: Course[]
+  isOpenSidebar?: boolean
 }
 
-const UnCoursePreviewGrid = ({ courses }: CourseProps) => {
+const UnCoursePreviewGrid = ({ courses, isOpenSidebar }: CourseProps) => {
   const { wishlist, addToWishList, removeFromWishList } = useWishList()
 
   return (
-    <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 m-0 gap-y-8">
+    <div
+      className={`grid ${
+        isOpenSidebar ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+      } md:grid-cols-2 grid-cols-1 gap-4 m-0 gap-y-8`}
+    >
       {courses.map((info) => (
         <CoursePreview
           add={addToWishList}
@@ -40,6 +45,8 @@ const UnCoursePreview = (props: PreviewProps) => {
     | 'language-of-banking-7961'
     | '03804b6c-1e6f-4f03-91e8-502ecd7e3333'
     | '7961c48d-5654-49be-9679-9b9c220ab36d'
+    | 'b31c7954-faa3-4adb-9338-d19cda985861'
+    | 'job-interview-masterclass-b31c'
 
   const slugNameToHrefMap: Record<SlugName, string> = {
     'language-of-banking-0380': '/pathways/become-a-banker/overview',
@@ -48,6 +55,10 @@ const UnCoursePreview = (props: PreviewProps) => {
       '/pathways/become-a-banker/overview',
     '7961c48d-5654-49be-9679-9b9c220ab36d':
       '/pathways/become-a-banker/overview',
+    'b31c7954-faa3-4adb-9338-d19cda985861':
+      '/course/b31c7954-faa3-4adb-9338-d19cda985861/JobInterviewMasterClass',
+    'job-interview-masterclass-b31c':
+      '/course/job-interview-masterclass-b31c/JobInterviewMasterClass',
   }
 
   const slugName = props.slugName as SlugName
@@ -106,46 +117,48 @@ const UnCoursePreview = (props: PreviewProps) => {
             {instructorsList}
           </div>
           <div className="font-medium text-base mt-1">
-            {props?.pricings?.[0]?.price === 0 ? (
+            {props.setPricing === 0 ? (
               <p>Free</p>
-            ) : props.courseId === '563472fa-9f47-43b6-b640-6ce14f53656c' ||
-              props.courseId === '12cb7e57-ad78-400b-8069-324939ec6e0b' ||
-              props.courseId === '1cb7dc8a-3e57-48b2-bf9e-f1db481a25b4' ? (
-              <div className="flex items-center gap-1">
-                <> ₦ {props?.pricings?.[0]?.price.toLocaleString()}</>
-                <p className="text-center h-full relative -top-[2px] font-[600]  text-[9px] ">
-                  .
-                </p>
-                <p
-                  className="font-[600] "
-                  style={{
-                    textDecoration: 'line-through',
-                  }}
-                >
-                  N10,000
-                </p>
-              </div>
-            ) : props.courseId === '921e02f9-efe3-4ced-af6d-c086812bde36' ||
-              props.courseId === '3e0ace38-a0fa-4e5b-84cc-03b440c897bd' ||
-              props.courseId === '4a59b479-5135-4250-8adf-7fb1a8ee4e0b' ||
-              props.courseId === 'dea1fd6b-f336-474a-82e4-f3f5ae087ec9' ? (
-              <div className="flex items-center gap-1">
-                <> ₦ {props?.pricings?.[0]?.price.toLocaleString()}</>
-                <p className="text-center h-full relative -top-[2px] font-[600]  text-[9px] ">
-                  .
-                </p>
-                <p
-                  className="font-[600] "
-                  style={{
-                    textDecoration: 'line-through',
-                  }}
-                >
-                  N5,000
-                </p>
-              </div>
             ) : (
+              // : props.courseId === '563472fa-9f47-43b6-b640-6ce14f53656c' ||
+              //   props.courseId === '12cb7e57-ad78-400b-8069-324939ec6e0b' ||
+              //   props.courseId === '1cb7dc8a-3e57-48b2-bf9e-f1db481a25b4' ? (
+              //   <div className="flex items-center gap-1">
+              //     <>{formatCurrency(props.setPricing)}</>
+              //     <p className="text-center h-full relative -top-[2px] font-[600]  text-[9px] ">
+              //       .
+              //     </p>
+              //     <p
+              //       className="font-[600] "
+              //       style={{
+              //         textDecoration: 'line-through',
+              //       }}
+              //     >
+              //       N10,000
+              //     </p>
+              //   </div>
+              // ) : props.courseId === '921e02f9-efe3-4ced-af6d-c086812bde36' ||
+              //   props.courseId === '3e0ace38-a0fa-4e5b-84cc-03b440c897bd' ||
+              //   props.courseId === '4a59b479-5135-4250-8adf-7fb1a8ee4e0b' ||
+              //   props.courseId === 'dea1fd6b-f336-474a-82e4-f3f5ae087ec9' ? (
+              //   <div className="flex items-center gap-1">
+              //     <>{formatCurrency(props.setPricing)}</>
+              //     <p className="text-center h-full relative -top-[2px] font-[600]  text-[9px] ">
+              //       .
+              //     </p>
+              //     <p
+              //       className="font-[600] "
+              //       style={{
+              //         textDecoration: 'line-through',
+              //       }}
+              //     >
+              //       N5,000
+              //     </p>
+              //   </div>
+              // )
+
               <div className="flex items-center gap-2">
-                <> ₦ {props?.pricings?.[0]?.price.toLocaleString()}</>
+                <>{formatCurrency(props.setPricing)}</>{' '}
                 {/* No line-through element for prices greater than or equal to 3000 */}
               </div>
             )}

@@ -3,21 +3,24 @@ import { NextPageWithLayout, USERTYPES } from "app/types";
 import { Loader, MainLayout } from "app/components";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useLazyPaymentConfirmQuery, useLazyVerifyExternalCourseQuery } from "app/api/confirmPaymentApi";
+import { usePaymentConfirmQuery } from "app/api/confirmPaymentApi";
 import { useLazyGetSingleCoursePreviewQuery } from "app/api/courseApi";
 import { useWatchSearchParams } from "app/hooks";
 
 const PaymentProcess: NextPageWithLayout<any> = (props) => {
 	const router = useRouter();
 	const [tx_ref, isExternal] = useWatchSearchParams(["tx_ref", "isExternal"]) as [string, string];
-	// let [count , ]
 
 	const [getCourseDetails, { isFetching: isLoadingCourseDetails, data }] = useLazyGetSingleCoursePreviewQuery();
 
 	const courseId = router?.query?.course as string;
 
-	const [confirmPayment, { isError, isFetching, isSuccess }] = useLazyPaymentConfirmQuery();
-	const [verifyExternalCourse, { isError: externalCourseHasError, isFetching: externalCourseIsFetching, isSuccess: externalCourseSuccess }] = useLazyVerifyExternalCourseQuery();
+	const { isError, isFetching, isSuccess } = usePaymentConfirmQuery(
+		{
+			tx_ref: tx_ref as string,
+		},
+		{ skip: !tx_ref }
+	);
 
 	useEffect(() => {
 		if (!data) return;
@@ -47,14 +50,21 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
 		if (isExternal && data?.redirectUrl) {
 			window.open(data.redirectUrl, "_blank");
 		} else if (data?.id) {
-			window.location.href = `/course/${data.id}`;
+			const courseId = data.id;
+			const awaitingCourseId = "b31c7954-faa3-4adb-9338-d19cda985861";
+
+			if (courseId === awaitingCourseId) {
+				window.location.href = `/course/${courseId}/AwaitingCourse`;
+			} else {
+				window.location.href = `/course/${courseId}`;
+			}
 		}
 	};
 
 	return (
 		<div className="relative text-center md:mt-[120px] md:min-h-[500px]">
 			<div className="pt-6 px-[50px]">
-				{isFetching || externalCourseIsFetching ? (
+				{isFetching ? (
 					<>
 						<div className="mt-2">Processing Payment...</div>
 						<div className="flex items-center justify-center aspect-square w-20 mx-auto">
@@ -62,7 +72,7 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
 						</div>
 					</>
 				) : null}
-				{isSuccess || externalCourseSuccess ? (
+				{isSuccess ? (
 					<>
 						<div className="mt-2">
 							<h3 className="text-xl font-bold">
@@ -87,7 +97,7 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
 						</div>
 					</>
 				) : null}
-				{isError || externalCourseHasError ? (
+				{isError ? (
 					<>
 						<div className="mt-2 text-lg">
 							<h3 className="text-xl font-bold">Oops! Something went wrong with your payment.</h3>

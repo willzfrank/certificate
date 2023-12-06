@@ -379,13 +379,85 @@ input {
   font-size: 16px !important;
 }
 
-[type="search"]::-webkit-search-cancel-button,
-[type="search"]::-webkit-search-decoration {
+[type='search']::-webkit-search-cancel-button,
+[type='search']::-webkit-search-decoration {
   -webkit-appearance: none;
   appearance: none;
 }
 
 .promo-code {
-background: linear-gradient(90deg, #FF8F3E 12.56%, #D54546 94.67%);
-  
+  background: linear-gradient(90deg, #ff8f3e 12.56%, #d54546 94.67%);
+}
+
+/* MARQUEE */
+
+.marquee-container {
+  height: 50px;
+  /* overflow: hidden; */
+  position: relative;
+}
+.marquee-container h3 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  line-height: 50px;
+  text-align: center;
+
+  /* Starting position */
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+
+  /* Apply animation to this element */
+  -moz-animation: marquee-container 25s linear infinite;
+  -webkit-animation: marquee-container 25s linear infinite;
+  animation: marquee-container 25s linear infinite;
+}
+
+/* Move it (define the animation) */
+@-moz-keyframes marquee-container {
+  0% {
+    -moz-transform: translateX(100%);
+  }
+  100% {
+    -moz-transform: translateX(-100%);
+  }
+}
+@-webkit-keyframes marquee-container {
+  0% {
+    -webkit-transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(-100%);
+  }
+}
+@keyframes marquee-container {
+  0% {
+    -moz-transform: translateX(100%); /* Firefox bug fix */
+    -webkit-transform: translateX(100%); /* Firefox bug fix */
+    transform: translateX(100%);
+  }
+  100% {
+    -moz-transform: translateX(-100%); /* Firefox bug fix */
+    -webkit-transform: translateX(-100%); /* Firefox bug fix */
+    transform: translateX(-100%);
+  }
+}
+
+/* SIDE BAR ANIMATION  */
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px); /* Adjust the distance as needed */
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide {
+  animation: slide 1s infinite;
 }

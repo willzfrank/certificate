@@ -1,45 +1,47 @@
-import React, { useState, Fragment, useEffect } from "react";
-import { Listbox, Transition, Dialog } from "@headlessui/react";
-import { CoursePreviewGrid } from "../../app/components/cards";
-import { NextPageWithLayout, USERTYPES } from "app/types";
-import { useRouter } from "next/router";
+import React, { useState, Fragment, useEffect } from 'react'
+import { Listbox, Transition, Dialog } from '@headlessui/react'
+import { CoursePreviewGrid } from '../../app/components/cards'
+import { NextPageWithLayout, USERTYPES } from 'app/types'
+import { useRouter } from 'next/router'
 import {
   DropDown,
   FilterSideBar,
   Loader,
   MainLayout,
   SearchBar,
-} from "../../app/components";
-import courseApi from "app/api/courseApi";
-import { usePaginatedQuery } from "app/hooks";
+} from '../../app/components'
+import courseApi from 'app/api/courseApi'
+import { usePaginatedQuery } from 'app/hooks'
 
-const sortOptions = ["Newest", "Oldest", "Price ascending", "Price descending"];
+const sortOptions = ['Newest', 'Oldest', 'Price ascending', 'Price descending']
 
 const priceMap: Record<string, string> = {
-  MostExpensive: "Price ascending",
-  LeastExpensive: "Price descending",
-  "Price ascending": "MostExpensive",
-  "Price descending": "LeastExpensive",
-};
+  MostExpensive: 'Price ascending',
+  LeastExpensive: 'Price descending',
+  'Price ascending': 'MostExpensive',
+  'Price descending': 'LeastExpensive',
+}
 
 const FilterCourses: NextPageWithLayout<{}> = () => {
-  const router = useRouter();
-  const params = router.query;
-  const [selected, setSelected] = useState("");
+  const router = useRouter()
+  const params = router.query
+  const [selected, setSelected] = useState('')
+  let [isOpenSidebar, setIsOpenSidebar] = useState(false)
+
 
   useEffect(() => {
     if (
-      params?.SortByDateCreated === "Newest" ||
-      params?.SortByDateCreated === "Oldest"
+      params?.SortByDateCreated === 'Newest' ||
+      params?.SortByDateCreated === 'Oldest'
     ) {
-      setSelected(params.SortByDateCreated);
+      setSelected(params.SortByDateCreated)
     } else if (
-      params?.PriceSort === "MostExpensive" ||
-      params?.PriceSort === "LeastExpensive"
+      params?.PriceSort === 'MostExpensive' ||
+      params?.PriceSort === 'LeastExpensive'
     ) {
-      setSelected(priceMap[params.PriceSort]);
+      setSelected(priceMap[params.PriceSort])
     }
-  }, [params]);
+  }, [params])
 
   const {
     results: courses,
@@ -47,35 +49,40 @@ const FilterCourses: NextPageWithLayout<{}> = () => {
     next,
     reset,
     isLast,
-  } = usePaginatedQuery(courseApi.endpoints.getFilteredCourses, params);
-  let [isOpen, setIsOpen] = useState(false);
+  } = usePaginatedQuery(courseApi.endpoints.getFilteredCourses, params)
+  let [isOpen, setIsOpen] = useState(false)
 
   function closeModal() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
 
   function openModal() {
-    setIsOpen(true);
+    setIsOpen(true)
   }
+
+  const toggleSideBar = () => {
+    setIsOpenSidebar((prev) => !prev)
+  }
+
   const onSelect = (param: string) => {
     // console.log(param);
 
-    if (param === "Newest" || param === "Oldest") {
+    if (param === 'Newest' || param === 'Oldest') {
       router.push({
-        pathname: "/courses/filterCourses",
+        pathname: '/courses/filterCourses',
         query: {
           SortByDateCreated: param,
         },
-      });
+      })
     } else {
       router.push({
-        pathname: "/courses/filterCourses",
+        pathname: '/courses/filterCourses',
         query: {
           PriceSort: priceMap[param],
         },
-      });
+      })
     }
-  };
+  }
 
   return (
     <>
@@ -85,27 +92,90 @@ const FilterCourses: NextPageWithLayout<{}> = () => {
         </div>
       </div>
       <div className="flex px-6 md:p-14 md:py-20 md:gap-8 w-full">
-        <div className="min-w-[27%] max-w-[24%] w-[24%] md:p-5 space-y-4 mt-0 m-0 border border-app-stroke rounded min-h-[500px] hidden md:block sticky top-2">
-          <div className="flex space-x-2">
-            <div className="">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="17"
-                fill="none"
-                viewBox="0 0 16 17"
-              >
-                <path
-                  stroke="#545454"
+        <div
+          className={`min-w-[27%] max-w-[24%] w-[24%] md:p-5 space-y-4 mt-0 m-0 border border-app-stroke rounded min-h-[500px] ${
+            isOpenSidebar ? 'md:block hidden' : 'md:hidden hidden'
+          } sticky top-2 transition-transform duration-300 ease-in-out`}
+        >
+          <div className="relative">
+            <div
+              className="absolute top-0 right-0 animate-slide cursor-pointer"
+              onClick={toggleSideBar}
+            >
+              {!isOpenSidebar ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   strokeWidth="1.5"
-                  d="M2 5.5h12M4 8.5h8M6 11.5h4"
-                ></path>
-              </svg>
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                  />
+                </svg>
+              )}
             </div>
-            <div>Filter</div>
+            <div className="flex space-x-2">
+              <div className="">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="17"
+                  fill="none"
+                  viewBox="0 0 16 17"
+                >
+                  <path
+                    stroke="#545454"
+                    strokeWidth="1.5"
+                    d="M2 5.5h12M4 8.5h8M6 11.5h4"
+                  ></path>
+                </svg>
+              </div>
+              <div className="mb-5">Filter</div>
+            </div>
+            <FilterSideBar reset={reset} />
           </div>
-          <FilterSideBar reset={reset} />
         </div>
+        {!isOpenSidebar && (
+          <div
+            className="animate-slide cursor-pointer hidden md:block"
+            onClick={toggleSideBar}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+        )}
         <div className="flex flex-col w-full">
           <SearchBar>
             <div className="flex space-x-2">
@@ -164,7 +234,10 @@ const FilterCourses: NextPageWithLayout<{}> = () => {
                   </div>
                 ) : (
                   <React.Fragment>
-                    <CoursePreviewGrid courses={courses} />
+                    <CoursePreviewGrid
+                      courses={courses}
+                      isOpenSidebar={isOpenSidebar}
+                    />
                     {!isLast ? (
                       <div className="text-center mt-5">
                         <button
@@ -216,8 +289,8 @@ const FilterCourses: NextPageWithLayout<{}> = () => {
         </Dialog>
       </Transition>
     </>
-  );
-};
+  )
+}
 
 // Browse.getLayout = function (page) {
 //   return <MainLayout>{page}</MainLayout>;
@@ -228,7 +301,7 @@ FilterCourses.getLayout = function (page) {
     <MainLayout allowedUserTypes={[USERTYPES.STUDENT, USERTYPES.INSTRUCTOR]}>
       {page}
     </MainLayout>
-  );
-};
+  )
+}
 
-export default FilterCourses;
+export default FilterCourses

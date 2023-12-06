@@ -316,7 +316,8 @@ const CourseDetailsHero = (props: ExternalCourse) => {
 
           <div className="lg:w-[37%] lg:h-[calc(65vh-4rem)] h-full pl-14 lg:pt-4 bg-app-dark-500 px-6 py-10 text-white flex flex-col justify-between">
             <div>
-              <span className="flex items-center gap-3">
+              {/* DISCOUNTED PRICE */}
+              {/* <span className="flex items-center gap-3">
                 <p className="text-xl font-semibold">Pricing</p>
                 {props.pricings[0].id ===
                   '603079ab-533a-4ef1-b6df-6d37832640dc' ||
@@ -325,9 +326,8 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                 props.pricings[0].id ===
                   '8a690247-5dbe-4574-8582-d6b172cc2fdf' ||
                 props.pricings[0].id ===
-                  '76f06153-68e1-4a1e-954a-f886de97f501' ||
-                props.pricings[0].id ===
-                  'd8a47c32-7ea2-401d-8d2c-7138eaecf95b' ? (
+                  '76f06153-68e1-4a1e-954a-f886de97f501' 
+                ? (
                   <p className="px-2 py-[2.25px] text-xs font-[500] rounded-full border border-[#D94B46] promo-code">
                     80% off
                   </p>
@@ -343,7 +343,7 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                     40% off
                   </p>
                 ) : null}
-              </span>
+              </span> */}
               {props.pricings.length > 0 && (
                 <div
                   className="flex gap-[12px] items-start"
@@ -372,58 +372,57 @@ const CourseDetailsHero = (props: ExternalCourse) => {
                                 )}
                           </span>
                         </span>
-                      ) : props.pricings[0].id ===
-                          '603079ab-533a-4ef1-b6df-6d37832640dc' ||
-                        props.pricings[0].id ===
-                          '643f2bf2-a3c4-45e0-ae94-403fccb4cad4' ||
-                        props.pricings[0].id ===
-                          '8a690247-5dbe-4574-8582-d6b172cc2fdf' ||
-                        props.pricings[0].id ===
-                          '76f06153-68e1-4a1e-954a-f886de97f501' ||
-                        props.pricings[0].id ===
-                          'd8a47c32-7ea2-401d-8d2c-7138eaecf95b' ||
-                        '' ? (
-                        <div className="flex items-center gap-2 relative">
-                          <span className="text-white">
-                            ₦ {props.pricings[0].price.toLocaleString()}
-                          </span>
-                          <p className="text-center h-full relative -top-[2px] text-[9px]">
-                            .
-                          </p>
-                          <p
-                            className="text-[#F68046] text-[12px] font-[600]"
-                            style={{
-                              textDecoration: 'line-through',
-                            }}
-                          >
-                            N10,000
-                          </p>
-                        </div>
-                      ) : props.pricings[0].id ===
-                          '0a09207f-44f4-42d4-911e-5e2567e24126' ||
-                        props.pricings[0].id ===
-                          '0715a64a-a219-4c40-991f-ee615892f8c2' ||
-                        props.pricings[0].id ===
-                          '7f084dee-fe5f-49c0-a70f-dbc9871b2de1' ||
-                        props.pricings[0].id ===
-                          '131e00bb-3503-4529-98a4-ead7df6cb0fd' ? (
-                        <div className="flex items-center gap-2 relative">
-                          <span className="text-white">
-                            ₦ {props.pricings[0].price.toLocaleString()}
-                          </span>
-                          <p className="text-center h-full relative -top-[2px] text-[9px]">
-                            .
-                          </p>
-                          <p
-                            className="text-[#F68046] text-[12px] font-[600]"
-                            style={{
-                              textDecoration: 'line-through',
-                            }}
-                          >
-                            N5,000
-                          </p>
-                        </div>
                       ) : (
+                        //  props.pricings[0].id ===
+                        //     '603079ab-533a-4ef1-b6df-6d37832640dc' ||
+                        //   props.pricings[0].id ===
+                        //     '643f2bf2-a3c4-45e0-ae94-403fccb4cad4' ||
+                        //   props.pricings[0].id ===
+                        //     '8a690247-5dbe-4574-8582-d6b172cc2fdf' ||
+                        //   props.pricings[0].id ===
+                        //     '76f06153-68e1-4a1e-954a-f886de97f501' ||
+                        //   '' ? (
+                        //   <div className="flex items-center gap-2 relative">
+                        //     <span className="text-white">
+                        //       ₦ {props.pricings[0].price.toLocaleString()}
+                        //     </span>
+                        //     <p className="text-center h-full relative -top-[2px] text-[9px]">
+                        //       .
+                        //     </p>
+                        //     <p
+                        //       className="text-[#F68046] text-[12px] font-[600]"
+                        //       style={{
+                        //         textDecoration: 'line-through',
+                        //       }}
+                        //     >
+                        //       N10,000
+                        //     </p>
+                        //   </div>
+                        // ) : props.pricings[0].id ===
+                        //     '0a09207f-44f4-42d4-911e-5e2567e24126' ||
+                        //   props.pricings[0].id ===
+                        //     '0715a64a-a219-4c40-991f-ee615892f8c2' ||
+                        //   props.pricings[0].id ===
+                        //     '7f084dee-fe5f-49c0-a70f-dbc9871b2de1' ||
+                        //   props.pricings[0].id ===
+                        //     '131e00bb-3503-4529-98a4-ead7df6cb0fd' ? (
+                        //   <div className="flex items-center gap-2 relative">
+                        //     <span className="text-white">
+                        //       ₦ {props.pricings[0].price.toLocaleString()}
+                        //     </span>
+                        //     <p className="text-center h-full relative -top-[2px] text-[9px]">
+                        //       .
+                        //     </p>
+                        //     <p
+                        //       className="text-[#F68046] text-[12px] font-[600]"
+                        //       style={{
+                        //         textDecoration: 'line-through',
+                        //       }}
+                        //     >
+                        //       N5,000
+                        //     </p>
+                        //   </div>
+                        // ) :
                         <span className="text-white">
                           ₦ {props.pricings[0].price.toLocaleString()}
                         </span>

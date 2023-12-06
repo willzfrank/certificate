@@ -1,103 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import CourseDetailsRequirements from './CourseDetailsRequirements';
-import { Image, Modal, VideoPlayer } from '../elements';
-import { ExternalCourse } from 'app/types';
-import { useAppSelector } from 'app/hooks';
-import { useCookies } from 'react-cookie';
-import { TOKEN_KEY, USER_TYPE_KEY } from 'app/constants';
-import Plyr from 'plyr-react';
-import Script from 'next/script';
+import React, { useEffect, useRef, useState } from 'react'
+import CourseDetailsRequirements from './CourseDetailsRequirements'
+import { CustomizedLottie, Image, Modal, VideoPlayer } from '../elements'
+import { ExternalCourse } from 'app/types'
+import { useAppSelector } from 'app/hooks'
+import { useCookies } from 'react-cookie'
+import { TOKEN_KEY, USER_TYPE_KEY } from 'app/constants'
+import Plyr from 'plyr-react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import checkLottie from 'app/lotties/check.json'
+import { useLazyGetSingleCoursePreviewQuery } from 'app/api/courseApi'
 
 interface IAboutCourseDetails extends ExternalCourse {
-  setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setAccessModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>
+  setAccessModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const YouTubeVideo = () => {
-  return (
-    <>
-      {/* Load YouTube iframe API script 
-      ABEG NO REMOVE AM OO ..CUZ IT WILL BREAK FOR VIDEOS 
-      */}
-
-      <Script
-        src="https://www.youtube.com/iframe_api"
-        strategy="beforeInteractive"
-      />
-
-      <Plyr
-        source={{
-          type: 'video',
-          sources: [
-            {
-              src: 'https://www.youtube-nocookie.com/embed/UY28LXU2M3Q',
-              provider: 'youtube',
-            },
-          ],
-        }}
-        options={{
-          controls: [
-            'play',
-            'progress',
-            'current-time',
-            'mute',
-            'volume',
-            'settings',
-            'fullscreen',
-          ],
-          ratio: '16:9',
-          autoplay: true,
-        }}
-        style={{ width: '100%', height: '100%', borderRadius: '10px' }}
-        onError={(event) => console.error('Plyr error:', event)}
-      />
-    </>
-  );
-};
 const AboutCourseDetails = (props: IAboutCourseDetails) => {
-  const user = useAppSelector((store) => store.user);
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const [showMore, setShowMore] = useState(false);
-  const [cookie] = useCookies([TOKEN_KEY, USER_TYPE_KEY]);
-  const MAX_DESCRIPTION_LENGTH = 300;
+  const user = useAppSelector((store) => store.user)
+  const [showMore, setShowMore] = useState(false)
+  const [cookie] = useCookies([TOKEN_KEY, USER_TYPE_KEY])
+  const MAX_DESCRIPTION_LENGTH = 300
+  const [courseSubscribed, setCourseSubscribed] = useState<boolean>()
+
+  const memoizedCheckLottieConfig = {
+    loop: false,
+    autoplay: true,
+    animationData: checkLottie,
+  }
+
+  const [getCourseDetails, { isFetching: isLoadingCourseDetails }] =
+    useLazyGetSingleCoursePreviewQuery()
 
   const handleReadMore = () => {
-    setShowMore(!showMore);
-  };
+    setShowMore(!showMore)
+  }
   function setUpPayment() {
     if (!Boolean(user.id || cookie[TOKEN_KEY])) {
-      console.log('User is not logged in');
-      props.setShowAuthModal(true);
-      return;
+      console.log('User is not logged in')
+      props.setShowAuthModal(true)
+      return
     }
-    props.setAccessModal(true);
+    // props.setAccessModal(true)
   }
+
   const displayDescription = showMore
     ? props?.description
     : `${props?.description?.slice(0, MAX_DESCRIPTION_LENGTH)}${
         props?.description?.length > MAX_DESCRIPTION_LENGTH ? '...' : ''
-      }`;
+      }`
 
+  useEffect(() => {
+    ;(async () => {
+      if (user?.token) {
+        try {
+          const res = await getCourseDetails({
+            courseId: props.id,
+            token: user?.token,
+          }).unwrap()
+
+          setCourseSubscribed(res.isSubscribed)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.token])
   return (
     <div className="py-10">
       <div>
-        <div className="w-[72px] h-[21px] px-2 pb-1 border-l-2 border-neutral-700 justify-center items-center gap-px inline-flex">
-          <div className="text-neutral-700 text-base font-medium font-['Inter']">
-            Courses
+        <div className="w-max h-[21px] px-2 pb-1 border-l-2 border-neutral-700 justify-center items-center gap-px inline-flex">
+          <div className="text-neutral-700 w-max text-base font-medium font-['Inter']">
+            {props?.name}
           </div>
         </div>
         <div className="w-full h-[0px] border border-neutral-200" />
       </div>
-
       {/* ABOUT US BODY HERO */}
       <div className="flex-col-reverse lg:block flex">
         <div className="flex items-center justify-between flex-col lg:flex-row">
-          <div className="aspect-video lg:w-[60%] w-full hidden lg:block h-[200px] lg:h-[472px] my-5 relative rounded-lg overflow-clip">
-            <YouTubeVideo />
+          <div className="aspect-video lg:w-[60%] w-full hidden h-auto lg:block lg:h-[472px] my-5 relative rounded-lg overflow-clip">
+            <Plyr
+              source={{
+                type: 'video',
+                sources: [
+                  {
+                    src: 'kkAfafNnqPc',
+                    provider: 'youtube',
+                  },
+                ],
+              }}
+              options={{
+                youtube: {
+                  muted: true,
+                  volume: 0,
+                },
+                muted: true,
+                volume: 0,
+                clickToPlay: true,
+              }}
+            />
           </div>
           <div className="">
             <div>
-              <div className="w-[330px] h-[381px] my-5 p-5 relative rounded-2xl border border-red-500 flex-col">
+              <div
+                className={`w-[330px] h-[381px] my-5 p-5 relative rounded-2xl border ${
+                  courseSubscribed ? 'border-[#9edab1]' : 'border-red-500'
+                } flex-col`}
+              >
                 <div className="flex items-center justify-between">
                   <svg
                     width="55"
@@ -111,16 +122,26 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                         width="55"
                         height="44.6226"
                         rx="2.39782"
-                        fill="url(#paint0_linear_6065_19016)"
+                        fill={
+                          courseSubscribed
+                            ? '#64C4AF'
+                            : 'url(#paint0_linear_6065_19016)'
+                        }
                       />
-                      <g filter="url(#filter0_d_6065_19016)">
+                      <g
+                        filter={
+                          courseSubscribed
+                            ? '#64C4AF'
+                            : 'url(#paint0_linear_6065_19016)'
+                        }
+                      >
                         <rect
                           x="12.4529"
                           y="13.4905"
                           width="30.4223"
                           height="33.8692"
                           rx="2.39782"
-                          fill="#FFCBDD"
+                          fill={courseSubscribed ? '#9edab1' : '#FFCBDD'}
                         />
                         <rect
                           x="14.3262"
@@ -128,26 +149,26 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="26.5259"
                           height="29.5232"
                           rx="1.12398"
-                          stroke="#FEBCD2"
+                          fill={courseSubscribed ? '#A3D9B6' : '#FEBCD2'}
                           strokeWidth="0.149864"
                         />
                         <circle
                           cx="39.4284"
                           cy="15.4388"
                           r="0.449591"
-                          fill="#FF6F9F"
+                          fill={courseSubscribed ? '#9EDAB1' : '#FF6F9F'}
                         />
                         <circle
                           cx="37.9296"
                           cy="15.4388"
                           r="0.449591"
-                          fill="#FF6F9F"
+                          fill={courseSubscribed ? '#9EDAB1' : '#FF6F9F'}
                         />
                         <circle
                           cx="36.2813"
                           cy="15.4388"
                           r="0.449591"
-                          fill="#FF6F9F"
+                          fill={courseSubscribed ? '#9EDAB1' : '#FF6F9F'}
                         />
                         <rect
                           x="14.551"
@@ -155,7 +176,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="3.89646"
                           height="0.749319"
                           rx="0.374659"
-                          fill="#FF6F9F"
+                          fill={courseSubscribed ? '#9EDAB1' : '#FF6F9F'}
                         />
                         <rect
                           x="15.3003"
@@ -163,7 +184,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="8.6921"
                           height="1.04905"
                           rx="0.524523"
-                          fill="#FF6F9F"
+                          fill={courseSubscribed ? '#9EDAB1' : '#FF6F9F'}
                         />
                         <rect
                           x="15.3003"
@@ -171,7 +192,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="8.6921"
                           height="1.04905"
                           rx="0.524523"
-                          fill="#FF6F9F"
+                          fill={courseSubscribed ? '#9EDAB1' : '#FF6F9F'}
                         />
                         <rect
                           x="15.3003"
@@ -179,7 +200,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="12.7384"
                           height="1.04905"
                           rx="0.524523"
-                          fill="#FF6F9F"
+                          fill={courseSubscribed ? '#9EDAB1' : '#FF6F9F'}
                         />
                         <rect
                           x="15.3003"
@@ -187,7 +208,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="23.6785"
                           height="2.39782"
                           rx="1.19891"
-                          fill="#A9033B"
+                          fill={courseSubscribed ? '#006442' : '#A9033B'}
                         />
                         <rect
                           x="15.3003"
@@ -195,7 +216,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="23.6785"
                           height="2.39782"
                           rx="1.19891"
-                          fill="#A9033B"
+                          fill={courseSubscribed ? '#006442' : '#A9033B'}
                         />
                         <rect
                           x="15.3003"
@@ -203,7 +224,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           width="23.6785"
                           height="2.39782"
                           rx="1.19891"
-                          fill="#A9033B"
+                          fill={courseSubscribed ? '#006442' : '#A9033B'}
                         />
                       </g>
                     </g>
@@ -265,7 +286,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                     </defs>
                   </svg>
                   {/* rating */}
-                  <div className="w-[50px] h-5 justify-start items-center gap-2 inline-flex">
+                  {/* <div className="w-[50px] h-5 justify-start items-center gap-2 inline-flex">
                     <svg
                       width="20"
                       height="20"
@@ -279,9 +300,11 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                       />
                     </svg>
                     <div className="text-neutral-600 text-base font-medium font-['Inter']">
-                      4.5
+                      {(
+                        props.ratings / Math.max(props.ratingsCount, 1)
+                      ).toPrecision(2)}{' '}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div>
                   <div className="w-[196px] flex-col justify-start items-start gap-3 inline-flex">
@@ -324,7 +347,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           />
                         </svg>
                         <div className="text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
-                          Free Mentorship
+                          Community Access
                         </div>
                       </div>
                       <div className="justify-start items-center gap-2 inline-flex">
@@ -343,33 +366,45 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                           />
                         </svg>
                         <div className="text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
-                          Lorem Ipsum dolor
+                          Exclusive Events Invitations
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="w-[150px] h-[17px] justify-between items-start gap-1.5 inline-flex my-5">
-                    <div className="text-neutral-600 text-base font-medium font-['Inter']">
-                      50% Disc.
+                  {!courseSubscribed ? (
+                    <div className="w-[150px] h-[17px] justify-between items-start gap-1.5 inline-flex my-5">
+                      <div className="text-neutral-600 text-base font-medium font-['Inter']">
+                        50% Disc.
+                      </div>
+                      <div className="text-red-500 text-base font-medium font-['Inter'] line-through">
+                        N20,000
+                      </div>
                     </div>
-                    <div className="text-red-500 text-base font-medium font-['Inter'] line-through">
-                      N10,000
-                    </div>
-                  </div>
+                  ) : (
+                    <div className="w-[150px] h-[17px] justify-between items-start gap-1.5 inline-flex my-5" />
+                  )}
                 </div>
                 <div className="w-full h-[0px] border border-neutral-200"></div>
                 {/* button */}
-                <button
-                  className="w-[299px] h-[41px] p-3 bg-gradient-to-r from-red-500 to-rose-600 rounded justify-center items-center gap-px inline-flex cursor-pointer"
-                  onClick={setUpPayment}
-                >
-                  <div className="text-white text-base font-medium font-['Inter']">
-                    Pay ₦{props.pricings[0].price}
-                  </div>
-                </button>
+                {courseSubscribed ? (
+                  <Link href="/course/b31c7954-faa3-4adb-9338-d19cda985861/AwaitingCourse">
+                    <div className="w-[299px] h-[41px] p-3 bg-green-300  rounded justify-center items-center gap-px inline-flex cursor-pointer">
+                      Go to Course
+                    </div>
+                  </Link>
+                ) : (
+                  <button
+                    className="w-[299px] h-[41px] p-3 bg-gradient-to-r from-red-500 to-rose-600 rounded justify-center items-center gap-px inline-flex cursor-pointer"
+                    onClick={setUpPayment}
+                  >
+                    <div className="text-white text-base font-medium font-['Inter']">
+                      Pay ₦{props?.pricings[0]?.price?.toLocaleString()}
+                    </div>
+                  </button>
+                )}
               </div>
             </div>
-            <div className="w-[348px] h-[130px] flex-col justify-start items-start gap-[17px] inline-flex">
+            {/* <div className="w-[348px] h-[130px] flex-col justify-start items-start gap-[17px] inline-flex">
               <div className="w-full py-1.5 border-b border-neutral-100 justify-between items-start inline-flex">
                 <div className="text-neutral-400 text-base font-medium font-['Inter'] leading-tight">
                   Total Reviews
@@ -394,24 +429,116 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                   50+
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* ABOUT US BODY CONTENT */}
         <div className="flex-col flex lg:block">
           <div>
-            <div className="lg:w-[60%] w-full lg:hidden block h-[200px] lg:h-[472px] my-5 relative rounded-lg overflow-clip">
-              <YouTubeVideo />
+            <div className="lg:w-[60%] w-full lg:hidden block h-auto lg:h-[472px] my-5 relative rounded-lg overflow-clip">
+              <Plyr
+                source={{
+                  type: 'video',
+                  sources: [
+                    {
+                      src: 'kkAfafNnqPc',
+                      provider: 'youtube',
+                    },
+                  ],
+                }}
+                options={{
+                  youtube: {
+                    autoplay: true,
+                  },
+                }}
+              />
             </div>
             <h2 className="text-neutral-700 my-2 text-2xl font-medium font-['Inter']">
-              About this Course{' '}
+              About this Course
             </h2>
+            <p className="w-full lg:w-[750px] h-max lg:h-max pb-5 text-justify text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
+              Step into career success with our &apos;Job Interview
+              Masterclass,&apos; a comprehensive guide meticulously crafted to
+              empower job seekers. This course not only imparts the skills to
+              captivate interviewers but also provides strategic insights to
+              navigate interviews with confidence, ensuring the path to landing
+              your dream job is paved with expertise and proficiency.
+            </p>
             <div>
-              <p className="w-full lg:w-[750px] h-[100px] lg:h-[189px] text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
-                {props?.description}
+              <h6 className="text-neutral-700 my-2 text-xl font-medium font-['Inter']">
+                Learning Outcome
+              </h6>
+              <p className="w-full lg:w-[750px] h-max lg:h-[189px] text-neutral-600 text-base font-medium font-['Inter'] leading-tight">
+                {/* {props?.description} */}
+                <span className="flex items-start justify-start gap-1">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M19.1667 10.0001L17.1334 7.68345L17.4167 4.61678L14.4084 3.93345L12.8334 1.28345L10 2.50011L7.16671 1.28345L5.59171 3.93345L2.58337 4.60845L2.86671 7.67511L0.833374 10.0001L2.86671 12.3168L2.58337 15.3918L5.59171 16.0751L7.16671 18.7251L10 17.5001L12.8334 18.7168L14.4084 16.0668L17.4167 15.3834L17.1334 12.3168L19.1667 10.0001ZM8.33337 14.1668L5.00004 10.8334L6.17504 9.65845L8.33337 11.8084L13.825 6.31678L15 7.50011L8.33337 14.1668Z"
+                      fill="#59FE8B"
+                    />
+                  </svg>
+                  Candidates learn the power of communication and perception
+                  management.
+                </span>
                 <br />
-                <br />{' '}
+                <span className="flex items-start justify-start gap-1">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M19.1667 10.0001L17.1334 7.68345L17.4167 4.61678L14.4084 3.93345L12.8334 1.28345L10 2.50011L7.16671 1.28345L5.59171 3.93345L2.58337 4.60845L2.86671 7.67511L0.833374 10.0001L2.86671 12.3168L2.58337 15.3918L5.59171 16.0751L7.16671 18.7251L10 17.5001L12.8334 18.7168L14.4084 16.0668L17.4167 15.3834L17.1334 12.3168L19.1667 10.0001ZM8.33337 14.1668L5.00004 10.8334L6.17504 9.65845L8.33337 11.8084L13.825 6.31678L15 7.50011L8.33337 14.1668Z"
+                      fill="#59FE8B"
+                    />
+                  </svg>
+                  They understand what job interviewers are looking for and
+                  learn how to position themselves very well.
+                </span>
+                <br />
+                <span className="flex items-start justify-start gap-1">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M19.1667 10.0001L17.1334 7.68345L17.4167 4.61678L14.4084 3.93345L12.8334 1.28345L10 2.50011L7.16671 1.28345L5.59171 3.93345L2.58337 4.60845L2.86671 7.67511L0.833374 10.0001L2.86671 12.3168L2.58337 15.3918L5.59171 16.0751L7.16671 18.7251L10 17.5001L12.8334 18.7168L14.4084 16.0668L17.4167 15.3834L17.1334 12.3168L19.1667 10.0001ZM8.33337 14.1668L5.00004 10.8334L6.17504 9.65845L8.33337 11.8084L13.825 6.31678L15 7.50011L8.33337 14.1668Z"
+                      fill="#59FE8B"
+                    />
+                  </svg>
+                  They learn how to sell themselves exceptionally well through
+                  excellent storytelling skills.
+                </span>
+                <br />
+                <span className="flex items-start justify-start gap-1">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M19.1667 10.0001L17.1334 7.68345L17.4167 4.61678L14.4084 3.93345L12.8334 1.28345L10 2.50011L7.16671 1.28345L5.59171 3.93345L2.58337 4.60845L2.86671 7.67511L0.833374 10.0001L2.86671 12.3168L2.58337 15.3918L5.59171 16.0751L7.16671 18.7251L10 17.5001L12.8334 18.7168L14.4084 16.0668L17.4167 15.3834L17.1334 12.3168L19.1667 10.0001ZM8.33337 14.1668L5.00004 10.8334L6.17504 9.65845L8.33337 11.8084L13.825 6.31678L15 7.50011L8.33337 14.1668Z"
+                      fill="#59FE8B"
+                    />
+                  </svg>
+                  They learn how to become the most memorable candidate and land
+                  their dream job.
+                </span>
+                <br />
               </p>
               {props?.description?.length > MAX_DESCRIPTION_LENGTH && (
                 <span
@@ -427,21 +554,8 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
           <CourseDetailsRequirements />
         </div>
       </div>
-      {/* <Modal
-        isOpen={videoModalOpen}
-        closeModal={() => setVideoModalOpen(false)}
-      >
-        <iframe
-          width="1000"
-          className="aspect-video"
-          src="https://www.youtube-nocookie.com/embed/UY28LXU2M3Q?autoplay=1&mute=1"
-          title="YouTube video player"
-          // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web"
-          allowFullScreen
-        ></iframe>
-      </Modal> */}
     </div>
-  );
-};
+  )
+}
 
-export default AboutCourseDetails;
+export default AboutCourseDetails

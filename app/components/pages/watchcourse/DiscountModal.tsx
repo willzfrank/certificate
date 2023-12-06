@@ -263,7 +263,7 @@ const DiscountModal = (props: Props) => {
                 >
                   <input
                     className="h-full px-2 flex-1 uppercase border bg-white rounded-[10px]  border-red-600"
-                    maxLength={8}
+                    maxLength={15}
                     placeholder="Enter Discount Code"
                     readOnly={props.discountDetails.hasAppliedDiscount}
                     onChange={(e) =>

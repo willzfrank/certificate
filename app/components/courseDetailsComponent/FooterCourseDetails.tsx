@@ -1,5 +1,6 @@
-import { ExternalCourse } from 'app/types';
-import React from 'react';
+import { ExternalCourse } from 'app/types'
+import React from 'react'
+import linkedin from '../../../public/icons/linkedin.svg'
 
 const FooterCourseDetails = (props: ExternalCourse) => {
   return (
@@ -28,7 +29,7 @@ const FooterCourseDetails = (props: ExternalCourse) => {
             </div>
           </div>
           <div className="justify-start items-start gap-2 inline-flex">
-            <div className="justify-start items-center gap-2 flex">
+            {/* <div className="justify-start items-center gap-2 flex">
               <svg
                 width="20"
                 height="20"
@@ -42,9 +43,12 @@ const FooterCourseDetails = (props: ExternalCourse) => {
                 />
               </svg>
               <div className="text-neutral-700 text-sm font-medium font-['Inter']">
-                4.5 <span className="hidden md:inline-flex">ratings</span>
+                {(props.ratings / Math.max(props.ratingsCount, 1)).toPrecision(
+                  2
+                )}{' '}
+                <span className="hidden md:inline-flex">ratings</span>
               </div>
-            </div>
+            </div> */}
             <div className="justify-start items-center gap-2 flex">
               <svg
                 width="20"
@@ -59,10 +63,10 @@ const FooterCourseDetails = (props: ExternalCourse) => {
                 />
               </svg>
               <div className="text-neutral-700 text-sm font-medium font-['Inter']">
-                10 <span className="hidden md:inline-flex"> courses </span>
+                1 <span className="hidden md:inline-flex"> course </span>
               </div>
             </div>
-            <div className="justify-start items-center gap-2 flex">
+            {/* <div className="justify-start items-center gap-2 flex">
               <svg
                 width="20"
                 height="20"
@@ -78,15 +82,15 @@ const FooterCourseDetails = (props: ExternalCourse) => {
               <div className="text-neutral-700 text-sm font-medium font-['Inter'] ">
                 150 <span className="hidden md:inline-flex">students </span>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
       <p className="w-full lg:w-[746px] mt-10 h-max md:h-[125px] text-neutral-600 text-sm font-medium font-['Inter'] leading-tight">
         {props?.instructors[0]?.bio}
       </p>
-      <div className="w-[241px] h-5 justify-start items-start md:my-0 my-5 gap-2 inline-flex">
-        <p className="text-red-500 text-sm font-medium font-['Inter'] underline leading-tight">
+      <div className="w-max justify-end items-end md:my-2 my-5 gap-2 inline-flex">
+        <p className="text-red-500 text-sm font-medium font-['Inter']  leading-tight">
           Learn more about the instructor
         </p>
         <svg
@@ -101,9 +105,38 @@ const FooterCourseDetails = (props: ExternalCourse) => {
             fill="#F36143"
           />
         </svg>
+        <a
+          href="https://www.linkedin.com/in/odabor"
+          className="mb-[-5px]"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 48 48"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>Linkedin</title>
+            <g
+              id="Icon/Social/linkedin-color"
+              stroke="none"
+              strokeWidth="1"
+              fill="none"
+              fillRule="evenodd"
+            >
+              <path
+                d="M20.9716667,33.5527338 L25.001,33.5527338 L25.001,27.1328007 C25.001,25.439485 25.3213333,23.7988354 27.4206667,23.7988354 C29.491,23.7988354 29.517,25.7351486 29.517,27.2404662 L29.517,33.5527338 L33.5506667,33.5527338 L33.5506667,26.4341413 C33.5506667,22.9381777 32.796,20.2505391 28.711,20.2505391 C26.7483333,20.2505391 25.432,21.3265278 24.8943333,22.3471839 L24.839,22.3471839 L24.839,20.5725357 L20.9716667,20.5725357 L20.9716667,33.5527338 Z M16.423,14.1202696 C15.1273333,14.1202696 14.0823333,15.1682587 14.0823333,16.4595785 C14.0823333,17.7508984 15.1273333,18.7992208 16.423,18.7992208 C17.7133333,18.7992208 18.761,17.7508984 18.761,16.4595785 C18.761,15.1682587 17.7133333,14.1202696 16.423,14.1202696 L16.423,14.1202696 Z M14.4026667,33.5527338 L18.4406667,33.5527338 L18.4406667,20.5725357 L14.4026667,20.5725357 L14.4026667,33.5527338 Z M9.76633333,40 C8.79033333,40 8,39.2090082 8,38.2336851 L8,9.76631493 C8,8.79065843 8.79033333,8 9.76633333,8 L38.234,8 C39.2093333,8 40,8.79065843 40,9.76631493 L40,38.2336851 C40,39.2090082 39.2093333,40 38.234,40 L9.76633333,40 Z"
+                id="Shape"
+                fill="#0077B5"
+              ></path>
+            </g>
+          </svg>
+        </a>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default FooterCourseDetails;
+export default FooterCourseDetails

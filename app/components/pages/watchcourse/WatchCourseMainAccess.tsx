@@ -280,7 +280,7 @@ const WatchCourseMainAccess = (props: Props) => {
                   >
                     <input
                       className="h-full px-2 flex-1 uppercase border bg-white rounded-[10px]  border-red-600"
-                      maxLength={8}
+                      maxLength={15}
                       placeholder="Enter Discount Code"
                       readOnly={props.discountDetails.hasAppliedDiscount}
                       onChange={(e) =>
@@ -319,7 +319,7 @@ const WatchCourseMainAccess = (props: Props) => {
               >
                 <div>
                   <button className=" text-white md:text-lg text-[18px] font-semibold rounded font-['Inter']">
-                    Subscribe
+                    Enroll
                   </button>
                 </div>
                 <div className="  text-white text-center md:text-xs text-[12px] font-medium font-['Inter']">

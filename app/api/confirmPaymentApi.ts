@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { API_URL } from 'app/constants';
-import { RootState } from 'app/types';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
+import { API_URL } from 'app/constants'
+import { RootState } from 'app/types'
 
 export const confirmPaymentApi = createApi({
   reducerPath: 'confirmPaymentApi',
@@ -9,9 +9,9 @@ export const confirmPaymentApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const {
         user: { token },
-      } = getState() as RootState;
-      headers.set('Authorization', `Bearer ${token}`);
-      return headers;
+      } = getState() as RootState
+      headers.set('Authorization', `Bearer ${token}`)
+      return headers
     },
   }),
   tagTypes: ['PAYMENT'],
@@ -24,17 +24,10 @@ export const confirmPaymentApi = createApi({
         }),
         providesTags: (result, error, id) => [{ type: 'PAYMENT' }],
       }),
-      verifyExternalCourse: builder.query<any, { tx_ref: string }>({
-        query: (arg) => ({
-          url: `/Transactions/verify-transaction?transactionReference=${arg.tx_ref}`,
-          method: 'GET',
-        }),
-        providesTags: (result, error, id) => [{ type: 'PAYMENT' }],
-      }),
-    };
+    }
   },
-});
+})
 
-export const { usePaymentConfirmQuery, useLazyPaymentConfirmQuery, useLazyVerifyExternalCourseQuery } =
-  confirmPaymentApi;
-export default confirmPaymentApi;
+export const { usePaymentConfirmQuery, useLazyPaymentConfirmQuery } =
+  confirmPaymentApi
+export default confirmPaymentApi

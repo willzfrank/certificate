@@ -1,24 +1,24 @@
-import { Image, Modal, VideoPlayer } from 'app/components/elements';
-import { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { Image, Modal, VideoPlayer } from 'app/components/elements'
+import { useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 
-import Slider from 'react-slick';
-import { Course } from 'app/types';
-import Link from 'next/link';
+import Slider from 'react-slick'
+import { Course } from 'app/types'
+import Link from 'next/link'
 
 const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
-  const sliderRef = useRef<Slider | null>();
+  const sliderRef = useRef<Slider | null>()
 
-  const [activeCarouselItemIndex, setActiveCarouselItemIndex] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [activeCarouselItemIndex, setActiveCarouselItemIndex] = useState(0)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const forwardCarousel = () => {
-    sliderRef.current?.slickNext();
-  };
+    sliderRef.current?.slickNext()
+  }
 
   const backwardCarousel = () => {
-    sliderRef.current?.slickPrev();
-  };
+    sliderRef.current?.slickPrev()
+  }
 
   const settings = {
     dots: false,
@@ -49,14 +49,14 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
         },
       },
     ],
-  };
+  }
 
   const handleOpenModal = (courseId: string) => {
     setActiveCarouselItemIndex(
       courses.findIndex((course) => course.courseId === courseId)
-    );
-    setModalOpen(true);
-  };
+    )
+    setModalOpen(true)
+  }
 
   return (
     <div className="py-10 md:py-28">
@@ -165,8 +165,8 @@ const CategorizedCourses = ({ courses }: { courses: Array<Course> }) => {
         />
       </Modal>
     </div>
-  );
-};
+  )
+}
 
 const Course = ({
   imageUrl,
@@ -175,24 +175,24 @@ const Course = ({
   openModal,
   courseId,
 }: Course & { openModal: (courseId: string) => void }) => {
-  console.log({ imageUrl, title, instructors, openModal, courseId });
+  console.log({ imageUrl, title, instructors, openModal, courseId })
 
-/* The code block is assigning a value to the variable `href` based on the value of the `courseId`
-variable. If the `courseId` matches either `'03804b6c-1e6f-4f03-91e8-502ecd7e3333'` or
-`'7961c48d-5654-49be-9679-9b9c220ab36d'`, then `href` is set to
-`'/pathways/become-a-banker/overview'`. Otherwise, `href` is set to `'/course//preview'`,
-where `` is the actual value of the `courseId` variable. */
-  let href;
+let href
 
-  if (
-    courseId === '03804b6c-1e6f-4f03-91e8-502ecd7e3333' ||
-    courseId === '7961c48d-5654-49be-9679-9b9c220ab36d'
-  ) {
-    href = '/pathways/become-a-banker/overview';
-  } else {
-    href = `/course/${courseId}/preview`;
-  }
+switch (courseId) {
+  case '03804b6c-1e6f-4f03-91e8-502ecd7e3333':
+  case '7961c48d-5654-49be-9679-9b9c220ab36d':
+    href = '/pathways/become-a-banker/overview'
+    break
 
+  case 'b31c7954-faa3-4adb-9338-d19cda985861':
+    href = `/course/${courseId}/JobInterviewMasterClass`
+    break
+
+  default:
+    href = `/course/${courseId}/preview`
+    break
+}
 
   return (
     <motion.div
@@ -240,7 +240,7 @@ where `` is the actual value of the `courseId` variable. */
         </div>
       </Link>
     </motion.div>
-  );
-};
+  )
+}
 
-export default CategorizedCourses;
+export default CategorizedCourses
