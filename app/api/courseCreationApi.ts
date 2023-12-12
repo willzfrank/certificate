@@ -186,6 +186,19 @@ const courseCreationApi = createApi({
         result
           ? [{ type: 'MODULECONTENT' as const, id: args.moduleId }]
           : [{ type: 'MODULECONTENT' as const, id: 'LIST' }],
+    }), createNewCourse__AddYoutubeVideoToModule: build.mutation<
+      any,
+      { courseId: string; moduleId: string; formData: FormData }
+    >({
+      query: (args) => ({
+        url: `/${args.courseId}/modules/add-video-to-module?moduleId=${args.moduleId}`,
+        method: 'PUT',
+        body: args.formData,
+      }),
+      invalidatesTags: (result, error, args) =>
+        result
+          ? [{ type: 'MODULECONTENT' as const, id: args.moduleId }]
+          : [{ type: 'MODULECONTENT' as const, id: 'LIST' }],
     }),
 
     editModuleVideo: build.mutation<
@@ -826,6 +839,7 @@ export const {
   useCreateNewCourse_CourseInfoMutation,
   useCreateNewCourse__GenerateModulesMutation,
   useCreateNewCourse__AddVideoToModuleMutation,
+  useCreateNewCourse__AddYoutubeVideoToModuleMutation,
   useCreateNewCourse__RemoveVideoFromModuleMutation,
   useCreateNewCourse__AddAssessmentToModuleMutation,
   useCreateNewCourse__UploadPreviewMediaMutation,

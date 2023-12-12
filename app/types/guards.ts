@@ -17,6 +17,9 @@ import {
 export function isVideo(resource: any): resource is ModuleContentResponse['data']['videos'][number] {
     return resource?.type === ModuleContentTypes.video;
 }
+export function isYoutubeVideo(resource: any): resource is ModuleContentResponse['data']['videos'][number] {
+    return resource?.type === ModuleContentTypes.youtube;
+}
 
 export function isAssessment(resource: any): resource is ModuleContentResponse['data']['assessments'][0] {
     return resource?.type === ModuleContentTypes.assessment
@@ -93,6 +96,6 @@ export function isInteractiveResource(resource: any): resource is AllInteractive
         resource?.value.type === ModuleContentTypes.clickAndMatch ||
         resource?.value.type === ModuleContentTypes.fillInTheBlank ||
         resource?.value.type === ModuleContentTypes.selectAnAnswer ||
-        resource?.value.type === ModuleContentTypes.thisOrThat 
+        resource?.value.type === ModuleContentTypes.thisOrThat
     );
 }
