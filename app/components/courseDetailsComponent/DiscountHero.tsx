@@ -79,14 +79,14 @@ const DiscountHero = (props: Props) => {
         </div>
       ) : (
         <div className="w-full flex items-center justify-center my-5">
-          <div className="w-[184px] h-[29px] p-0.5 bg-green-50 rounded-[32px] flex-col justify-start items-start gap-px inline-flex">
-            <div className="w-[180px] md:w-[280px] px-3 py-1 bg-green-50 rounded-[32px] border border-emerald-200 justify-center items-center gap-2 inline-flex">
+          <div className=" h-[29px] p-0.5 bg-red-50 rounded-[32px] flex-col justify-start items-start gap-px inline-flex">
+            <div className="w-max px-3 py-1 bg-red-50 rounded-[32px] border border-red-500 justify-center items-center gap-2 flex">
               <div className="w-2.5 h-2.5 relative">
-                <div className="w-2.5 h-2.5 left-0 top-0 absolute bg-green-100 rounded-full" />
-                <div className="w-[7px] h-[7px] left-[1.50px] top-[1.50px] absolute bg-gradient-to-b from-green-300 to-lime-800 rounded-full" />
+                <div className="w-2.5 h-2.5 left-0 top-0 absolute bg-rose-200 rounded-full" />
+                <div className="w-[7px] h-[7px] left-[1.50px] top-[1.50px] absolute bg-gradient-to-b from-red-500 to-rose-600 rounded-full" />
               </div>
-              <div className="text-green-900 text-sm md:text-2xl font-medium font-['Inter']">
-                Available Soon
+              <div className="text-red-900 text-sm md:text-2xl font-medium font-['Inter']">
+                Coming Soon
               </div>
             </div>
           </div>

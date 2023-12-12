@@ -116,7 +116,7 @@ const InterviewCourseModules = (props: Props) => {
       </div>
 
       {/* CARD MODULES */}
-      <div className="items-center justify-start grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 space-y-10 mb-10  md:mb-[100px] ">
+      <div className="items-center justify-start grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-20 mb-10  md:mb-[100px] ">
         <ModuleOne />
         <ModuleTwo />
         <ModuleThree />

@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import CourseDetailsRequirements from './CourseDetailsRequirements'
-import { CustomizedLottie, Image, Modal, VideoPlayer } from '../elements'
 import { ExternalCourse } from 'app/types'
 import { useAppSelector } from 'app/hooks'
 import { useCookies } from 'react-cookie'
 import { TOKEN_KEY, USER_TYPE_KEY } from 'app/constants'
-import Plyr from 'plyr-react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import checkLottie from 'app/lotties/check.json'
 import { useLazyGetSingleCoursePreviewQuery } from 'app/api/courseApi'
+
+// Import ReactPlayer using dynamic import
+const ReactPlayer = dynamic(() => import('react-player/youtube'), {
+  ssr: false,
+})
 
 interface IAboutCourseDetails extends ExternalCourse {
   setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -41,7 +44,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
       props.setShowAuthModal(true)
       return
     }
-    // props.setAccessModal(true)
+    props.setAccessModal(true)
   }
 
   const displayDescription = showMore
@@ -81,25 +84,12 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
       <div className="flex-col-reverse lg:block flex">
         <div className="flex items-center justify-between flex-col lg:flex-row">
           <div className="aspect-video lg:w-[60%] w-full hidden h-auto lg:block lg:h-[472px] my-5 relative rounded-lg overflow-clip">
-            <Plyr
-              source={{
-                type: 'video',
-                sources: [
-                  {
-                    src: 'kkAfafNnqPc',
-                    provider: 'youtube',
-                  },
-                ],
-              }}
-              options={{
-                youtube: {
-                  muted: true,
-                  volume: 0,
-                },
-                muted: true,
-                volume: 0,
-                clickToPlay: true,
-              }}
+            <ReactPlayer
+              url="https://www.youtube.com/watch?v=kkAfafNnqPc"
+              muted
+              controls
+              playing
+              loop
             />
           </div>
           <div className="">
@@ -436,22 +426,26 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
         {/* ABOUT US BODY CONTENT */}
         <div className="flex-col flex lg:block">
           <div>
-            <div className="lg:w-[60%] w-full lg:hidden block h-auto lg:h-[472px] my-5 relative rounded-lg overflow-clip">
-              <Plyr
-                source={{
-                  type: 'video',
-                  sources: [
-                    {
-                      src: 'kkAfafNnqPc',
-                      provider: 'youtube',
-                    },
-                  ],
-                }}
-                options={{
-                  youtube: {
-                    autoplay: true,
-                  },
-                }}
+            <div className="lg:w-[60%] w-full lg:hidden flex md:hidden h-auto lg:h-[472px] my-5 relative rounded-lg overflow-clip items-center justify-center">
+              <ReactPlayer
+                url="https://www.youtube.com/watch?v=kkAfafNnqPc"
+                muted
+                controls
+                playing
+                loop
+                width="100%"
+                style={{ maxWidth: '350px' }}
+              />
+            </div>
+            <div className="lg:w-[60%] lg:hidden md:flex hidden w-full h-auto lg:h-[472px] my-5 relative rounded-lg overflow-clip items-center justify-center">
+              <ReactPlayer
+                url="https://www.youtube.com/watch?v=kkAfafNnqPc"
+                muted
+                controls
+                playing
+                loop
+                width="100%"
+                style={{ maxWidth: '700px' }}
               />
             </div>
             <h2 className="text-neutral-700 my-2 text-2xl font-medium font-['Inter']">

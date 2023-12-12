@@ -110,8 +110,7 @@ const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
           >
             <div className="flex flex-row gap-1">
               <span className="text-white w-max text-sm font-medium font-['Inter']">
-                
-                  Enroll Now 
+                Enroll Now
               </span>
             </div>
           </button>
@@ -155,17 +154,7 @@ const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
       <div className="w-screen h-[83px] px-5 lg:px-[78px] py-5 border-b border-neutral-200 flex-col justify-start items-start gap-px inline-flex">
         <div className="w-full justify-between items-center inline-flex">
           <div className="justify-center items-center gap-[416px] flex">
-            <Link
-              href={
-                user.token
-                  ? user.roleName?.toLowerCase() === USERTYPES.STUDENT
-                    ? '/dashboard'
-                    : user.roleName?.toLowerCase() === USERTYPES.INSTRUCTOR
-                    ? '/instructors/overview'
-                    : '/'
-                  : '/'
-              }
-            >
+            <Link href={user.token ? '/dashboard' : '/'}>
               <a>
                 <Image
                   src="/images/unifyLogo.png"

@@ -1,7 +1,8 @@
 // @ts-nocheck
 
 import { useLoginMutation, useRegisterMutation } from 'app/api/authApi'
-import { useNotify } from 'app/hooks'
+import { useAppDispatch, useNotify } from 'app/hooks'
+import { TOKEN_KEY, USER_ID_KEY, USER_TYPE_KEY } from 'app/constants'
 
 import { USERTYPES } from 'app/types'
 import Link from 'next/link'
@@ -9,6 +10,9 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Loader } from '../elements'
+import { updateUser, updateUserToken } from 'app/redux/actions'
+import { useCookies } from 'react-cookie'
+import { useLazyGetUserByIdQuery, getUserFromResponse } from 'app/api/userApi'
 
 type FormData = {
   firstName: string
@@ -22,18 +26,34 @@ type FormData = {
 interface AuthProps {
   setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>
   setActiveTab: React.Dispatch<React.SetStateAction<number>>
+  setAccessModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const Signup = (props: AuthProps) => {
+  const [_, setCookies] = useCookies([TOKEN_KEY, USER_TYPE_KEY, USER_ID_KEY])
+
   const [hasRegisteredSuccessfully, setHasRegisteredSuccessfully] =
     React.useState(false)
+  const dispatch = useAppDispatch()
 
   const [showPassword, setShowPassword] = useState(false)
 
   const [register, { isLoading, isError, error, isSuccess, data }] =
     useRegisterMutation()
 
+  const [trigger, { isLoading: isLoadingUserDetails }] =
+    useLazyGetUserByIdQuery()
+
   const router = useRouter()
+  const [
+    login,
+    {
+      isLoading: loginLoading,
+      isSuccess: LoadngSuccess,
+      error: loadingError,
+      isError: isLoadingError,
+    },
+  ] = useLoginMutation()
 
   const {
     register: rhfregister,
@@ -63,7 +83,6 @@ const Signup = (props: AuthProps) => {
 
   React.useEffect(() => {
     if (isSuccess) {
-      props.setActiveTab(2)
       notify({
         title: 'Success',
         description: 'Your account has been created successfully',
@@ -71,23 +90,90 @@ const Signup = (props: AuthProps) => {
       })
     }
 
-    if (isError) {
-      const errorMessage =
-        error?.data?.errors[0]?.errorMessages || 'Something went wrong'
-
+    if (isError)
       notify({
         title: 'Error',
-        description: errorMessage,
+        description:
+          'Error creating account. Please check if account already exists',
         type: 'error',
       })
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess, isError, data, error])
 
   const password = watch('password')
 
-  const handleFormSubmission = (data: FormData) => {
-    register(data)
+  const handleFormSubmission = async (data: FormData) => {
+    try {
+      // Call the register endpoint
+      await register(data).unwrap()
+
+      // Notify success if registration is successful
+      notify({
+        title: 'Success',
+        description: 'Your account has been created.',
+        type: 'success',
+      })
+    } catch (error) {
+      // Handle errors for registration without rethrowing
+      console.error('Registration error:', error)
+    }
+
+    // Call the login endpoint whether registration succeeds or results in an error
+    const loginData = {
+      userName: data.email,
+      password: data.password,
+      userType: USERTYPES.STUDENT,
+    }
+
+    try {
+      const loginResponse = await login(loginData).unwrap()
+      const { token, userId } = loginResponse.data
+
+      // Update the user details in the store and set cookies
+      dispatch(updateUserToken(token))
+
+      setCookies(TOKEN_KEY, token, {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 2),
+        path: '/',
+      })
+
+      setCookies(USER_TYPE_KEY, data.userType, {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 2),
+        path: '/',
+      })
+
+      setCookies(USER_ID_KEY, userId, {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 2),
+        path: '/',
+      })
+
+      // Get the user details and update the store
+      const userDetails = await trigger({
+        id: userId,
+        isInstructor: false, // Assuming isInstructor is always false for students
+      }).unwrap()
+
+      dispatch(updateUser({ ...getUserFromResponse(userDetails), token }))
+
+      // Set the appropriate modals
+      props.setAccessModal(true)
+      props.setShowAuthModal(false)
+
+      // Notify success
+      notify({
+        title: 'Success',
+        description: 'You are now logged in.',
+        type: 'success',
+      })
+    } catch (error) {
+      // Handle errors for login
+      console.error('Login error:', error)
+      notify({
+        title: 'Error',
+        description: error?.data?.errors[0]?.errorMessages,
+        type: 'error',
+      })
+    }
   }
 
   const togglePasswordVisibility = () => {
@@ -96,13 +182,13 @@ const Signup = (props: AuthProps) => {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmission)}>
-      <div className="flex items-start md:items-center flex-wrap md:flex-row flex-col md:justify-between justify-start ">
+      <div className="flex items-center flex-wrap justify-between">
         <div className="flex flex-col items-start space-y-2 mb-3">
           <label className="text-neutral-700 text-base font-medium font-['Inter']">
             First name
           </label>{' '}
           <input
-            className="w-full md:w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
+            className="w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
             placeholder="First name"
             {...rhfregister('firstName', {
               required: 'First name is required',
@@ -134,7 +220,7 @@ const Signup = (props: AuthProps) => {
             id="lastName"
             type="text"
             name="lastName"
-            className="w-full md:w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
+            className="w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
             placeholder="Last name"
           />
           {errors.lastName && (
@@ -143,7 +229,7 @@ const Signup = (props: AuthProps) => {
         </div>
       </div>
       {/* EMAIL ADDRESS */}
-      <div className="flex flex-col">
+      <div>
         <label className="text-neutral-700 text-base font-medium font-['Inter']">
           Email address
         </label>
@@ -152,7 +238,7 @@ const Signup = (props: AuthProps) => {
           id="email"
           type="email"
           name="email"
-          className="w-full md:w-[462px] h-[51px] mt-2 px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
+          className="w-[462px] h-[51px] mt-2 px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
           placeholder="Email"
         />
         {errors.email && (
@@ -161,11 +247,11 @@ const Signup = (props: AuthProps) => {
       </div>
 
       {/* password */}
-      <div className="my-3 flex flex-col">
+      <div className="my-3">
         <label className="text-neutral-700 text-base font-medium font-['Inter']">
           Password{' '}
         </label>
-        <div className="mt-2 px-3 gap-px inline-flex justify-between items-center py-4 w-full md:w-[462px] h-[51px] border border-neutral-200 rounded">
+        <div className="mt-2 px-3 gap-px inline-flex justify-between items-center py-4 w-[462px] h-[51px] border border-neutral-200 rounded">
           <input
             {...rhfregister('password', {
               required: 'You must specify a password',
@@ -201,20 +287,20 @@ const Signup = (props: AuthProps) => {
           required
           className="cursor-pointer"
         />
-        <div className="flex flex-wrap w-[250px] md:w-full ">
+        <div>
           <span className="text-neutral-600 text-sm font-normal font-['Inter']">
             I have read, understood and agreed to the{' '}
-            <Link href="/privacy/policy">
-              <a className="text-rose-600 text-sm font-normal font-['Inter'] underline cursor-pointer">
-                Terms and Conditions
-              </a>
-            </Link>
           </span>
+          <Link href="/privacy/policy">
+            <a className="text-rose-600 text-sm font-normal font-['Inter'] underline cursor-pointer">
+              Terms and Conditions
+            </a>
+          </Link>
         </div>
       </div>
       <button
         type="submit"
-        className="w-full md:w-[462px] h-[59px] px-3 py-5 bg-gradient-to-r from-red-500 to-rose-600 rounded-lg justify-center items-center gap-px inline-flex"
+        className="w-[462px] h-[59px] px-3 py-5 bg-gradient-to-r from-red-500 to-rose-600 rounded-lg justify-center items-center gap-px inline-flex"
         disabled={isLoading}
       >
         <div className="text-white text-base font-medium font-['Inter']">

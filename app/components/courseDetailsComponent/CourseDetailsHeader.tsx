@@ -26,7 +26,7 @@ const CourseDetailsHeader = (props: IAboutCourseDetails) => {
       props.setShowAuthModal(true)
       return
     }
-    // props.setAccessModal(true)
+    props.setAccessModal(true)
   }
   useEffect(() => {
     ;(async () => {

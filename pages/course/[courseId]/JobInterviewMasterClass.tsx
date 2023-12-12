@@ -16,6 +16,7 @@ import AuthModal from 'app/components/modalAuth/AuthModal'
 import { Modal } from 'app/components'
 import FullAccess from 'app/components/pages/watchcourse/FullAccess'
 import { calculateDiscountedPrice } from 'app/components/pages/coursedetails/CourseDetailsHero'
+import { Suspense } from 'react'
 
 import courseApi from 'app/api/courseApi'
 import { DiscountDetailsType } from 'app/components/pages/coursedetails/CourseDetailsHero'

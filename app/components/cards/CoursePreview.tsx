@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Course, PreviewProps } from 'app/types'
 import { Image } from '../elements'
 import { useWishList } from 'app/hooks'
+import comingSoon from '../../../public/images/coming_soon.png'
 
 interface CourseProps {
   courses: Course[]
@@ -47,6 +48,8 @@ const UnCoursePreview = (props: PreviewProps) => {
     | '7961c48d-5654-49be-9679-9b9c220ab36d'
     | 'b31c7954-faa3-4adb-9338-d19cda985861'
     | 'job-interview-masterclass-b31c'
+    | 'c23638f5-6be7-4662-91aa-450a90c2959a'
+    | 'test-pdf-c236'
 
   const slugNameToHrefMap: Record<SlugName, string> = {
     'language-of-banking-0380': '/pathways/become-a-banker/overview',
@@ -59,16 +62,35 @@ const UnCoursePreview = (props: PreviewProps) => {
       '/course/b31c7954-faa3-4adb-9338-d19cda985861/JobInterviewMasterClass',
     'job-interview-masterclass-b31c':
       '/course/job-interview-masterclass-b31c/JobInterviewMasterClass',
+    'c23638f5-6be7-4662-91aa-450a90c2959a':
+      '/course/c23638f5-6be7-4662-91aa-450a90c2959a/JobInterviewMasterClass',
+    'test-pdf-c236': '/course/test-pdf-c236/JobInterviewMasterClass',
   }
+
+  const comingSoonId = 'c23638f5-6be7-4662-91aa-450a90c2959a'
 
   const slugName = props.slugName as SlugName
   const href = slugNameToHrefMap[slugName] || `/course/${slugName}/preview`
 
   return (
-    <div className="" key={props.imageUrl}>
+    <div className="relative" key={props.imageUrl}>
+      {props.courseId == comingSoonId && (
+        <Image
+          src="/images/coming_soon.png"
+          alt=""
+          width="0"
+          height="0"
+          sizes="100vw"
+          className="w-[140px] h-[250px] absolute top-[-40px] z-10 left-[-19.8px]"
+        />
+      )}
       <Link href={href}>
         <a>
-          <div className="relative rounded-md overflow-hidden aspect-[8/5] md:aspect-[12/10]">
+          <div
+            className={`relative ${
+              props.courseId == comingSoonId ? 'mt-[-250px]' : 'mt-0'
+            } rounded-md overflow-hidden aspect-[8/5] md:aspect-[12/10]`}
+          >
             <Image
               src={props.imageUrl}
               alt="Picture of the course"

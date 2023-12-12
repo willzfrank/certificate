@@ -2,7 +2,7 @@ import React from 'react'
 
 const ModuleOne = () => {
   return (
-    <div className="flex items-start justify-start flex-col mb-20 md:mb-0">
+    <div className="flex items-start justify-start flex-col mb-[150px] md:mb-0">
       <div className="w-[305px] h-[57px] pb-3 border-b border-neutral-100 justify-between items-center inline-flex">
         <div className="justify-start items-center gap-[9px] flex">
           {/* <div className="w-[45px] h-[45px] relative">
@@ -35,78 +35,36 @@ const ModuleOne = () => {
 
         <div className="h-max w-full p-3 rounded-lg border border-red-200 flex-col justify-start items-start gap-6 flex ">
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
-            <div className="w-[26px] h-[26px] relative">
-              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
-              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
-                T1
-              </div>
-            </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
               Introduction
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
-            <div className="w-[26px] h-[26px] relative">
-              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
-              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
-                T2
-              </div>
-            </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
               Connecting with your interviewer
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
-            <div className="w-[26px] h-[26px] relative">
-              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
-              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
-                T3
-              </div>
-            </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
               Storytelling
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
-            <div className="w-[26px] h-[26px] relative">
-              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
-              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
-                T4
-              </div>
-            </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
               Rules of Networking
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
-            <div className="w-[26px] h-[26px] relative">
-              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
-              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
-                T5
-              </div>
-            </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
               Limiting Beliefs & Winning Beliefs
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
-            <div className="w-[26px] h-[26px] relative">
-              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
-              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
-                T6
-              </div>
-            </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
               Effective Communication
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-[9px] inline-flex">
-            <div className="w-[26px] h-[26px] relative">
-              <div className="w-[26px] h-[26px] left-0 top-0 absolute bg-neutral-100 rounded-full" />
-              <div className="w-5 h-2.5 left-[5px] top-[5px] absolute text-neutral-700 text-sm font-medium font-['Inter']">
-                T7
-              </div>
-            </div>
             <div className="text-neutral-700 text-sm font-medium font-['Inter']">
               Verbal and Non-Verbal Communication{' '}
             </div>

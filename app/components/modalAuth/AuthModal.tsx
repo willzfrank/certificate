@@ -82,6 +82,7 @@ const AuthModal: React.FC<AuthProps> = (props) => {
                 <Signup
                   setShowAuthModal={props.setShowAuthModal}
                   setActiveTab={setActiveTab}
+                  setAccessModal={props.setAccessModal}
                 />
               )}
             </div>
