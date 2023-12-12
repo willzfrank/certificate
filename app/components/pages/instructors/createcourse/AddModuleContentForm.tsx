@@ -28,6 +28,8 @@ const AddModuleContentForm = function <T extends ModuleContentTypes>({
 	moduleId: string;
 	initialValues?: T extends ModuleContentTypes.video
 		? VideoResourceType
+		: T extends ModuleContentTypes.youtube
+		? VideoResourceType
 		: T extends ModuleContentTypes.document
 		? DocumentResourceType
 		: T extends ModuleContentTypes.assessment
@@ -56,15 +58,24 @@ const AddModuleContentForm = function <T extends ModuleContentTypes>({
 		courseInfo: { id: courseId },
 	} = React.useContext(CourseCreationContext);
 
+	// These are actually used to check for the edits
+	// Check if the resorce type is video or youtube , check name and check videoUrl
 	const isVideo = (resource: any): resource is VideoResourceType => {
-		return resourceType === ModuleContentTypes.video && typeof resource?.value.videoUrl === "string" && typeof resource?.value.displayName === "string";
+		return (
+			(resourceType === ModuleContentTypes.video || resourceType === ModuleContentTypes.youtube) &&
+			typeof resource?.value.videoUrl === "string" &&
+			typeof resource?.value.displayName === "string"
+		);
 	};
-
+	// Check if the resorce type is a document and has a displayName property as well as url
 	const isDocument = (resource: any): resource is DocumentResourceType => {
 		return resourceType === ModuleContentTypes.document && typeof resource?.value.displayName === "string" && typeof resource?.value.documentUrl === "string";
 	};
 
-	// this shows up when you click on the edit button
+	console.log(isVideo(initialValues));
+
+	// If this is an edit , display based on document or video
+	// this shows up when you click on the edit button for documents
 	if (isDocument(initialValues))
 		return (
 			<AddDocument
@@ -85,17 +96,36 @@ const AddModuleContentForm = function <T extends ModuleContentTypes>({
 	// this also shows up when you click the edit button, the initial values are sure to exist
 	if (isVideo(initialValues))
 		return (
-			<AddVideo
-				isEditing={initialValues.isInputing}
-				moduleId={moduleId}
-				initialValues={{
-					videoName: initialValues.value.displayName,
-					videoFile: initialValues.value.videoUrl,
-					videoDescription: initialValues.value.description,
-					videoId: initialValues.value.id,
-				}}
-				discard={initialValues.isInputing ? toggleEdit : discard}
-			/>
+			<>
+				{resourceType === ModuleContentTypes.video && (
+					<AddVideo
+						isEditing={initialValues.isInputing}
+						moduleId={moduleId}
+						initialValues={{
+							videoName: initialValues.value.displayName,
+							videoFile: initialValues.value.videoUrl,
+							videoDescription: initialValues.value.description,
+							videoId: initialValues.value.id,
+						}}
+						discard={initialValues.isInputing ? toggleEdit : discard}
+					/>
+				)}
+				{resourceType === ModuleContentTypes.youtube && (
+					<AddYoutubeVideo
+						isEditing={initialValues.isInputing}
+						moduleId={moduleId}
+						initialValues={{
+							videoName: initialValues.value.displayName,
+							videoUrl: initialValues.value.videoUrl,
+							videoDescription: initialValues.value.description,
+							videoId: initialValues.value.id,
+							startTime: "300",
+							endTime: "5000",
+						}}
+						discard={initialValues.isInputing ? toggleEdit : discard}
+					/>
+				)}
+			</>
 		);
 
 	if (resourceType === ModuleContentTypes.assessment) return <AddAssessment moduleId={moduleId} courseId={courseId} discard={discard} />;

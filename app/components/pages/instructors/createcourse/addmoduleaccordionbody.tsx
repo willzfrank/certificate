@@ -214,34 +214,37 @@ const AddModuleAccordion__Body = ({
 
 	const [deleteInteractiveContent, { isLoading: isDeletingInteractiveContent }] = useDeleteInteractiveTypeMutation();
 
-	const handleInteractiveDelete = React.useCallback(async ({ interactiveId, interactiveType }: { interactiveType: InteractiveTypes; interactiveId: string }) => {
-		setRemovingInteractiveId(interactiveId);
+	const handleInteractiveDelete = React.useCallback(
+		async ({ interactiveId, interactiveType }: { interactiveType: InteractiveTypes; interactiveId: string }) => {
+			setRemovingInteractiveId(interactiveId);
 
-		try {
-			const res = await deleteInteractiveContent({
-				moduleId,
-				interactiveTypeId: interactiveId,
-				interactiveTypeName: interactiveType,
-			}).unwrap();
+			try {
+				const res = await deleteInteractiveContent({
+					moduleId,
+					interactiveTypeId: interactiveId,
+					interactiveTypeName: interactiveType,
+				}).unwrap();
 
-			if (res) {
+				if (res) {
+					notify({
+						type: "success",
+						title: "Success",
+						description: `Successfully deleted ${interactiveType} interactive type`,
+					});
+				}
+			} catch (error) {
+				console.error(error);
 				notify({
-					type: "success",
-					title: "Success",
-					description: `Successfully deleted ${interactiveType} interactive type`,
+					type: "error",
+					title: "Error",
+					description: `Could not delete ${interactiveType} interactive type`,
 				});
+			} finally {
+				setRemovingInteractiveId("");
 			}
-		} catch (error) {
-			console.error(error);
-			notify({
-				type: "error",
-				title: "Error",
-				description: `Could not delete ${interactiveType} interactive type`,
-			});
-		} finally {
-			setRemovingInteractiveId("");
-		}
-	}, []);
+		},
+		[notify, moduleId, deleteInteractiveContent]
+	);
 
 	// if (window) {
 	//   // @ts-ignore
@@ -260,8 +263,10 @@ const AddModuleAccordion__Body = ({
 			{/* For displaying the content that already exists */}
 			{allResources.map((resource) => {
 				if (resourceguards.isVideoResource(resource)) {
+					console.log(resource);
 					if (resource.isInputing)
 						return (
+							// This is what displays the video form for edits
 							<AddModuleContentForm
 								resourceType={ModuleContentTypes.video}
 								moduleId={moduleId}
