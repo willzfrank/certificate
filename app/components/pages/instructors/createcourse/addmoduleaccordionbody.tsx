@@ -259,8 +259,6 @@ const AddModuleAccordion__Body = ({
 		<div className="divide-y text-sm">
 			{/* For displaying the content that already exists */}
 			{allResources.map((resource) => {
-				console.log("resource", resource);
-
 				if (resourceguards.isVideoResource(resource)) {
 					if (resource.isInputing)
 						return (
