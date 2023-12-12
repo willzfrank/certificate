@@ -263,7 +263,6 @@ const AddModuleAccordion__Body = ({
 			{/* For displaying the content that already exists */}
 			{allResources.map((resource) => {
 				if (resourceguards.isVideoResource(resource)) {
-					console.log(resource);
 					if (resource.isInputing)
 						return (
 							// This is what displays the video form for edits
