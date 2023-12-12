@@ -262,12 +262,13 @@ const AddModuleAccordion__Body = ({
 		<div className="divide-y text-sm">
 			{/* For displaying the content that already exists */}
 			{allResources.map((resource) => {
+				console.log(resource?.value);
 				if (resourceguards.isVideoResource(resource)) {
 					if (resource.isInputing)
 						return (
 							// This is what displays the video form for edits
 							<AddModuleContentForm
-								resourceType={ModuleContentTypes.video}
+								resourceType={resource?.value?.isYoutube ? ModuleContentTypes.youtube : ModuleContentTypes.video}
 								moduleId={moduleId}
 								initialValues={resource}
 								discard={() => setResourceType(ModuleContentTypes.NULL)}
