@@ -1,11 +1,12 @@
 import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useCreateNewCourse__AddYoutubeVideoToModuleMutation, useEditModuleVideoMutation } from "app/api/courseCreationApi";
+import { useCreateNewCourse__AddVideoToModuleMutation, useEditModuleVideoMutation } from "app/api/courseCreationApi";
 import { CourseCreationContext } from "app/contexts";
 import { VideoResourceType } from "app/types";
 import { Button } from "app/components";
 import { getVideoLength } from "app/utils";
 import { useNotify } from "app/hooks";
+import { Description } from "@headlessui/react/dist/components/description/description";
 
 let ORDER = 0;
 
@@ -53,55 +54,43 @@ const AddYoutubeVideo = ({
 
 	const notify = useNotify();
 
-	const [addVideo, { isLoading: isVideoLoading }] = useCreateNewCourse__AddYoutubeVideoToModuleMutation();
+	const [addVideo, { isLoading: isVideoLoading }] = useCreateNewCourse__AddVideoToModuleMutation();
 
 	const [editVideo, { isLoading: isEditVideoLoading }] = useEditModuleVideoMutation();
 
 	const videoSubmit: SubmitHandler<any> = async (data: { videoName: string; videoUrl: string; videoDescription: string; startTime: string; endTime: string }) => {
 		console.log(data);
-		const { videoName, videoUrl, videoDescription, startTime, endTime } = data;
+		let { videoName, videoUrl, videoDescription, startTime, endTime } = data;
 		const formData = new FormData();
-		console.log({ videoName, videoUrl, videoDescription, startTime, endTime });
-		// if (isEditing) {
-		// 	// const uploadedNewVideo = data.videoFile[0] instanceof Blob;
+		formData.append("Name", videoName);
+		formData.append("Description", videoDescription);
+		formData.append("Order", (++ORDER).toString());
+		formData.append("NumberOfSeconds", "" + (+endTime - +startTime));
+		formData.append("isYoutube", "true");
+		formData.append("YoutubeLink", videoUrl);
 
-		// 	// if (data.videoFile[0] instanceof Blob) {
-		// 	// 	formData.append("videoToUpload", data.videoFile[0], data.videoFile[0].name);
-		// 	// }
-
-		// 	// const videoLength = uploadedNewVideo ? await getVideoLength(data.videoFile[0], document) : 0;
-
-		// 	const res = await editVideo({
-		// 		courseId,
-		// 		moduleId,
-		// 		videoId: initialValues.videoId,
-		// 		name: data.videoName,
-		// 		description: data.videoDescription,
-		// 		formData: formData,
-		// 		numberOfSeconds: videoLength.toString(),
-		// 	}).unwrap();
-
-		// 	if (res.errors.length === 0) {
-		// 		notify({ title: "Successfully edited video", type: "success" });
-		// 	} else {
-		// 		notify({
-		// 			title: "Error",
-		// 			description: "An error occurred while editing video",
-		// 			type: "error",
-		// 		});
-		// 	}
-		// } else {
-		// 	formData.append("Name", data.videoName);
-		// 	formData.append("VideoToUpload", data.videoFile[0], data.videoFile[0].name);
-		// 	formData.append("Description", data.videoDescription);
-		// 	formData.append("Order", (++ORDER).toString());
-
-		// 	const videoLength = await getVideoLength(data.videoFile[0], document);
-
-		// 	formData.append("NumberOfSeconds", videoLength.toString());
-
-		// 	await addVideo({ courseId, moduleId, formData }).unwrap();
-		// }
+		if (isEditing) {
+			// const res = await editVideo({
+			// 	courseId,
+			// 	moduleId,
+			// 	videoId: initialValues.videoId,
+			// 	name: data.videoName,
+			// 	description: data.videoDescription,
+			// 	formData: formData,
+			// 	numberOfSeconds: videoLength.toString(),
+			// }).unwrap();
+			// if (res.errors.length === 0) {
+			// 	notify({ title: "Successfully edited video", type: "success" });
+			// } else {
+			// 	notify({
+			// 		title: "Error",
+			// 		description: "An error occurred while editing video",
+			// 		type: "error",
+			// 	});
+			// }
+		} else {
+			await addVideo({ courseId, moduleId, formData }).unwrap();
+		}
 	};
 
 	return (
@@ -148,15 +137,27 @@ const AddYoutubeVideo = ({
 				<div className="w-1/2 mt-3 h-auto gap-5 flex justify-start items-center">
 					<div className="w-1/2 h-full">
 						<label htmlFor="startTime" className="block mb-[5px]">
-							Start Time
+							Start Time(in seconds)
 						</label>
-						<input type="text" id="startTime" placeholder="00:00" className="w-full border-[1px] rounded-[5px] py-3 px-2" {...formControl.register("startTime", { required: true })} />
+						<input
+							type="text"
+							id="startTime"
+							placeholder="120 for (2:00)"
+							className="w-full border-[1px] rounded-[5px] py-3 px-2"
+							{...formControl.register("startTime", { required: true })}
+						/>
 					</div>
 					<div className="w-1/2 h-full">
 						<label htmlFor="endTime" className="block mb-[5px]">
-							End Time
+							End Time (in seconds)
 						</label>
-						<input type="text" id="endTime" placeholder="05:32" className="w-full border-[1px] rounded-[5px] py-3 px-2" {...formControl.register("endTime", { required: true })} />
+						<input
+							type="text"
+							id="endTime"
+							placeholder="3640 for (01:10:40)"
+							className="w-full border-[1px] rounded-[5px] py-3 px-2"
+							{...formControl.register("endTime", { required: true })}
+						/>
 					</div>
 				</div>
 			</div>
