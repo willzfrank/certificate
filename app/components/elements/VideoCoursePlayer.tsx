@@ -3,6 +3,9 @@ import styles from "./videoplayer.module.css";
 import { motion } from "framer-motion";
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
+import dynamic from "next/dynamic";
+// Import ReactPlayer using dynamic import
+import ReactPlayer from "react-player";
 
 interface VideoPlayerProps {
 	src: string | SourceInfo[];
@@ -25,6 +28,8 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 
 	const videoRef = useRef<any>(null);
 
+	console.log(videoSrc[0]);
+
 	useEffect(() => {
 		if (props.src) {
 			setVideoSrc((_prev: any) => {
@@ -32,13 +37,6 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 			});
 		}
 	}, [props.src]);
-
-	useEffect(() => {
-		videoRef.current.load();
-		videoRef.current.play().catch((error: any) => {
-			console.error("Autoplay failed:", error);
-		});
-	}, [videoSrc]);
 
 	const handleContextMenu = (event: { preventDefault: () => void }) => {
 		event.preventDefault(); // Prevent the default right-click menu
@@ -50,22 +48,21 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 				<h6 className="capitalize inter">{props.title}</h6>
 				<div>
 					<div>
-						{
-							<video
-								controls
-								onContextMenu={handleContextMenu}
-								controlsList="nodownload"
-								playsInline
-								poster={props.posterUrl}
-								onEnded={props.onVideoEnded}
-								ref={videoRef}
-								width="100%"
-								className="rounded h-full md:border-4 border-app-pink ">
-								{videoSrc.map((source, index) => (
-									<source key={index} src={source.src} type={source.type ? source.type : "video/mp4"} />
-								))}
-							</video>
-						}
+						<ReactPlayer
+							controls
+							onContextMenu={handleContextMenu}
+							controlsList="nodownload"
+							playsInline
+							poster={props.posterUrl}
+							onEnded={props.onVideoEnded}
+							ref={videoRef}
+							width="100%"
+							playing={true}
+							onError={(e) => {
+								console.log(e);
+							}}
+							className="rounded h-full md:border-4 border-app-pink "
+							url={videoSrc[0]?.src}></ReactPlayer>
 					</div>
 				</div>
 			</motion.div>
