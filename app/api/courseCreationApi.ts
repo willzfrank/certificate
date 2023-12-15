@@ -488,6 +488,7 @@ const courseCreationApi = createApi({
               description: video.description,
               position: video.position,
               type: video.type,
+              isYoutube: video.isYoutube
             })),
             assessments: res.data.assessments,
             documents: res.data.documents,

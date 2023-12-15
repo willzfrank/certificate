@@ -140,6 +140,8 @@ export type VideoResourceType = {
   isInputing: boolean
 }
 
+
+
 export type AssessmentResourceType = {
   value: ModuleContentResponse['data']['assessments'][number]
   isInputing: boolean
@@ -214,9 +216,9 @@ export enum CourseApprovalStatus {
 
 export type AllModuleResources =
   | ModuleContentResponse['data'][keyof Omit<
-      ModuleContentResponse['data'],
-      'totalSeconds' | 'thisOrThatInteractiveTypes'
-    >]
+    ModuleContentResponse['data'],
+    'totalSeconds' | 'thisOrThatInteractiveTypes'
+  >]
   | ThisOrThatInteractives[]
 
 export type ThisOrThatInteractives = {

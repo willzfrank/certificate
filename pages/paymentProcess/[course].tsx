@@ -27,7 +27,7 @@ const PaymentProcess: NextPageWithLayout<any> = (props) => {
   )
 
   useEffect(() => {
-    ;(async () => {
+  (async () => {
       if (courseId) {
         try {
           const res = await getCourseDetails({
