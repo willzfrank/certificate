@@ -2,10 +2,10 @@ import React from 'react'
 
 const ModuleTwo = () => {
   return (
-    <div className="flex items-start justify-start flex-col">
+    <div className="flex items-start justify-start flex-col ">
       <div className="w-[305px] h-[57px] pb-3 border-b border-neutral-100 justify-between items-center inline-flex">
         <div className="justify-start items-center gap-[9px] flex">
-          <div className="text-neutral-700 text-base font-medium font-['Inter']">
+          <div className="text-neutral-700 text-base font-medium font-['Inter'] md:pt-5">
             The Secret ABC&rsquo;s of Communication
           </div>
         </div>

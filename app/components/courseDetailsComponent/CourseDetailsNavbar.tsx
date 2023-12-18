@@ -105,7 +105,7 @@ const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
           </>
         ) : (
           <button
-            className=" w-max lg:w-max h-[42px] lg:h-[33px] px-3 md:px-10 py-2 cursor-pointer rounded border justify-center lg:justify-center items-center gap-2 inline-flex hover:shadow bg-rose-600  hover:border-rose-600 border-rose-600 text-center "
+            className=" w-max lg:w-max h-[42px] lg:h-[33px] px-3 md:px-10 py-2 lg:mr-0 mr-5 cursor-pointer rounded border justify-center lg:justify-center items-center gap-2 inline-flex hover:shadow bg-rose-600  hover:border-rose-600 border-rose-600 text-center "
             onClick={signUp}
           >
             <div className="flex flex-row gap-1">
@@ -152,35 +152,37 @@ const CourseDetailsNavbar = (props: ICourseDetailsNavbar) => {
     <>
       {/* Desktop Navigation */}
       <div className="w-screen h-[83px] px-5 lg:px-[78px] py-5 border-b border-neutral-200 flex-col justify-start items-start gap-px inline-flex">
-        <div className="w-full justify-between items-center inline-flex">
-          <div className="justify-center items-center gap-[416px] flex">
+        <div className="w-full justify-between items-center flex">
+          <div className="justify-between w-full items-center flex ">
             <Link href={user.token ? '/dashboard' : '/'}>
               <a>
-                <Image
-                  src="/images/unifyLogo.png"
-                  alt="Certification by Unify Logo"
-                  width={100}
-                  height={40}
-                />
+                <div>
+                  <Image
+                    src="/images/unifyLogo.png"
+                    alt="Certification by Unify Logo"
+                    width={90}
+                    height={50}
+                  />
+                </div>
               </a>
             </Link>
-            <div className="lg:flex space-x-12 hidden h-[19px] ">
-              <Link href="/courses/browseCourses">
-                <a className="flex items-center space-x-2 text-neutral-700 text-base font-medium font-['Inter']">
-                  <span>Courses</span>
-                </a>
-              </Link>
-              <Link href="/about">
-                <a className="flex items-center space-x-2 text-neutral-700 text-base font-medium font-['Inter']">
-                  <span> About us</span>
-                </a>
-              </Link>
-              <Link href="/faqs">
-                <a className="flex items-center space-x-2 text-neutral-700 text-base font-medium font-['Inter']">
-                  <span>FAQ</span>
-                </a>
-              </Link>
-            </div>
+          </div>
+          <div className="lg:flex space-x-12 w-full ml-[-50px] hidden h-[19px] ">
+            <Link href="/courses/browseCourses">
+              <a className="flex items-center space-x-2 text-neutral-700 text-base font-medium font-['Inter']">
+                <span>Courses</span>
+              </a>
+            </Link>
+            <Link href="/about">
+              <a className="flex items-center space-x-2 text-neutral-700 text-base font-medium font-['Inter']">
+                <span> About Us</span>
+              </a>
+            </Link>
+            <Link href="/faqs">
+              <a className="flex items-center space-x-2 text-neutral-700 text-base font-medium font-['Inter']">
+                <span>FAQ</span>
+              </a>
+            </Link>
           </div>
           {renderUserSection()}
           {renderMobileIcon()}

@@ -183,12 +183,12 @@ const Signup = (props: AuthProps) => {
   return (
     <form onSubmit={handleSubmit(handleFormSubmission)}>
       <div className="flex items-center flex-wrap justify-between">
-        <div className="flex flex-col items-start space-y-2 mb-3">
+        <div className="flex flex-col items-start space-y-2 mb-3 w-full md:w-max">
           <label className="text-neutral-700 text-base font-medium font-['Inter']">
             First name
           </label>{' '}
           <input
-            className="w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
+            className="w-full md:w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
             placeholder="First name"
             {...rhfregister('firstName', {
               required: 'First name is required',
@@ -205,7 +205,7 @@ const Signup = (props: AuthProps) => {
             <p className="text-xs text-app-pink">{errors.firstName.message}</p>
           )}
         </div>
-        <div className="flex flex-col items-start space-y-2 mb-3">
+        <div className="flex flex-col items-start space-y-2 mb-3 w-full md:w-max">
           <label className="text-neutral-700 text-base font-medium font-['Inter']">
             Last name
           </label>{' '}
@@ -220,7 +220,7 @@ const Signup = (props: AuthProps) => {
             id="lastName"
             type="text"
             name="lastName"
-            className="w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
+            className="w-full md:w-[215px] h-[51px] px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
             placeholder="Last name"
           />
           {errors.lastName && (
@@ -238,7 +238,7 @@ const Signup = (props: AuthProps) => {
           id="email"
           type="email"
           name="email"
-          className="w-[462px] h-[51px] mt-2 px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
+          className="w-full md:w-[462px] h-[51px] mt-2 px-3 py-4 rounded border border-neutral-200 justify-start items-center gap-px inline-flex  text-base font-normal font-['Inter']"
           placeholder="Email"
         />
         {errors.email && (
@@ -251,7 +251,7 @@ const Signup = (props: AuthProps) => {
         <label className="text-neutral-700 text-base font-medium font-['Inter']">
           Password{' '}
         </label>
-        <div className="mt-2 px-3 gap-px inline-flex justify-between items-center py-4 w-[462px] h-[51px] border border-neutral-200 rounded">
+        <div className="mt-2 px-3 gap-px inline-flex justify-between items-center py-4 w-full md:w-[462px] h-[51px] border border-neutral-200 rounded">
           <input
             {...rhfregister('password', {
               required: 'You must specify a password',
@@ -300,7 +300,7 @@ const Signup = (props: AuthProps) => {
       </div>
       <button
         type="submit"
-        className="w-[462px] h-[59px] px-3 py-5 bg-gradient-to-r from-red-500 to-rose-600 rounded-lg justify-center items-center gap-px inline-flex"
+        className="w-full md:w-[462px] h-[59px] px-3 py-5 bg-gradient-to-r from-red-500 to-rose-600 rounded-lg justify-center items-center gap-px inline-flex"
         disabled={isLoading}
       >
         <div className="text-white text-base font-medium font-['Inter']">

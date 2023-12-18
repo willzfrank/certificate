@@ -82,18 +82,21 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
       </div>
       {/* ABOUT US BODY HERO */}
       <div className="flex-col-reverse lg:block flex">
-        <div className="flex items-center justify-between flex-col lg:flex-row">
-          <div className="aspect-video lg:w-[60%] w-full hidden h-auto lg:block lg:h-[472px] my-5 relative rounded-lg overflow-clip">
+        <div className="flex items-start justify-between flex-col lg:flex-row">
+          <div className="aspect-video lg:w-[60%] w-full hidden h-auto lg:block my-5 relative  overflow-clip">
             <ReactPlayer
               url="https://www.youtube.com/watch?v=kkAfafNnqPc"
               muted
               controls
               playing
               loop
+              width="100%"
+              height="100%"
+              style={{ maxWidth: '100%' }}
             />
           </div>
-          <div className="">
-            <div>
+          <div className="md:w-full lg:w-max">
+            <div className="md:w-full lg:w-max md:flex md:items-center md:justify-center lg:inline-block">
               <div
                 className={`w-[330px] h-[381px] my-5 p-5 relative rounded-2xl border ${
                   courseSubscribed ? 'border-[#9edab1]' : 'border-red-500'
@@ -394,39 +397,14 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                 )}
               </div>
             </div>
-            {/* <div className="w-[348px] h-[130px] flex-col justify-start items-start gap-[17px] inline-flex">
-              <div className="w-full py-1.5 border-b border-neutral-100 justify-between items-start inline-flex">
-                <div className="text-neutral-400 text-base font-medium font-['Inter'] leading-tight">
-                  Total Reviews
-                </div>
-                <div className="text-neutral-700 text-base font-medium font-['Inter'] leading-tight">
-                  76+
-                </div>
-              </div>
-              <div className="w-full py-1.5 border-b border-neutral-100 justify-between items-start inline-flex">
-                <div className="text-neutral-400 text-base font-medium font-['Inter'] leading-tight">
-                  Succes Rate
-                </div>
-                <div className="text-neutral-700 text-base font-medium font-['Inter'] leading-tight">
-                  90%
-                </div>
-              </div>
-              <div className="w-full py-1.5 border-b border-neutral-100 justify-between items-start inline-flex">
-                <div className="text-neutral-400 text-base font-medium font-['Inter'] leading-tight">
-                  Registered Students
-                </div>
-                <div className="text-neutral-700 text-base font-medium font-['Inter'] leading-tight">
-                  50+
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
 
         {/* ABOUT US BODY CONTENT */}
+
         <div className="flex-col flex lg:block">
           <div>
-            <div className="lg:w-[60%] w-full lg:hidden flex md:hidden h-auto lg:h-[472px] my-5 relative rounded-lg overflow-clip items-center justify-center">
+            <div className="lg:w-[60%] w-full lg:hidden flex md:hidden h-full my-5 relative rounded-lg overflow-clip items-center justify-center">
               <ReactPlayer
                 url="https://www.youtube.com/watch?v=kkAfafNnqPc"
                 muted
@@ -434,10 +412,11 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                 playing
                 loop
                 width="100%"
-                style={{ maxWidth: '350px' }}
+                height="100%"
+                style={{ maxWidth: '400px' }}
               />
             </div>
-            <div className="lg:w-[60%] lg:hidden md:flex hidden w-full h-auto lg:h-[472px] my-5 relative rounded-lg overflow-clip items-center justify-center">
+            <div className="lg:w-[60%] lg:hidden md:flex hidden w-full h-full my-5 relative rounded-lg overflow-clip items-center justify-center">
               <ReactPlayer
                 url="https://www.youtube.com/watch?v=kkAfafNnqPc"
                 muted
@@ -445,6 +424,7 @@ const AboutCourseDetails = (props: IAboutCourseDetails) => {
                 playing
                 loop
                 width="100%"
+                height="100%"
                 style={{ maxWidth: '700px' }}
               />
             </div>

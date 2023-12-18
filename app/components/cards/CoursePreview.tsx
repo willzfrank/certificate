@@ -67,14 +67,19 @@ const UnCoursePreview = (props: PreviewProps) => {
     'test-pdf-c236': '/course/test-pdf-c236/JobInterviewMasterClass',
   }
 
-  const comingSoonId = 'c23638f5-6be7-4662-91aa-450a90c2959a'
+  const comingSoonIds = [
+    'c23638f5-6be7-4662-91aa-450a90c2959a',
+    'b31c7954-faa3-4adb-9338-d19cda985861',
+  ]
+
+  const isComingSoon = comingSoonIds.includes(props.courseId)
 
   const slugName = props.slugName as SlugName
   const href = slugNameToHrefMap[slugName] || `/course/${slugName}/preview`
 
   return (
     <div className="relative" key={props.imageUrl}>
-      {props.courseId == comingSoonId && (
+      {isComingSoon && (
         <Image
           src="/images/coming_soon.png"
           alt=""
@@ -88,7 +93,7 @@ const UnCoursePreview = (props: PreviewProps) => {
         <a>
           <div
             className={`relative ${
-              props.courseId == comingSoonId ? 'mt-[-250px]' : 'mt-0'
+              isComingSoon ? 'mt-[-250px]' : 'mt-0'
             } rounded-md overflow-hidden aspect-[8/5] md:aspect-[12/10]`}
           >
             <Image
