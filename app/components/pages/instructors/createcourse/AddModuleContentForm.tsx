@@ -72,8 +72,6 @@ const AddModuleContentForm = function <T extends ModuleContentTypes>({
 		return resourceType === ModuleContentTypes.document && typeof resource?.value.displayName === "string" && typeof resource?.value.documentUrl === "string";
 	};
 
-	console.log(isVideo(initialValues));
-
 	// If this is an edit , display based on document or video
 	// this shows up when you click on the edit button for documents
 	if (isDocument(initialValues))
@@ -119,8 +117,8 @@ const AddModuleContentForm = function <T extends ModuleContentTypes>({
 							videoUrl: initialValues.value.videoUrl,
 							videoDescription: initialValues.value.description,
 							videoId: initialValues.value.id,
-							startTime: "300",
-							endTime: "5000",
+							startFrom: initialValues.value?.startFrom ? "" + initialValues?.value.startFrom : "0",
+							endAt: initialValues.value?.endAt ? "" + initialValues?.value.endAt : "0",
 						}}
 						discard={initialValues.isInputing ? toggleEdit : discard}
 					/>

@@ -15,6 +15,8 @@ interface VideoPlayerProps {
 	subtitleUrl?: string;
 	className?: string;
 	shouldShowLoader?: boolean;
+	startFrom?: string;
+	endAt?: string;
 	onVideoEnded?: () => void;
 }
 
@@ -28,8 +30,6 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 
 	const videoRef = useRef<any>(null);
 
-	console.log(videoSrc[0]);
-
 	useEffect(() => {
 		if (props.src) {
 			setVideoSrc((_prev: any) => {
@@ -40,6 +40,18 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 
 	const handleContextMenu = (event: { preventDefault: () => void }) => {
 		event.preventDefault(); // Prevent the default right-click menu
+	};
+
+	const handleProgress = (state: any) => {
+		// Check if the current time has reached the desired end time (240 seconds)
+		if (props.endAt) {
+			if (state.playedSeconds >= +props.endAt) {
+				// Stop the video when it reaches the end time
+				// setPlaying(false);
+				videoRef.current.getInternalPlayer().stopVideo();
+				props?.onVideoEnded ? props.onVideoEnded() : undefined;
+			}
+		}
 	};
 
 	return (
@@ -56,7 +68,9 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 							poster={props.posterUrl}
 							onEnded={props.onVideoEnded}
 							ref={videoRef}
+							onReady={() => videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds")}
 							width="100%"
+							onProgress={handleProgress}
 							playing={true}
 							onError={(e) => {
 								console.log(e);
