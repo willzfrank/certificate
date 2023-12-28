@@ -23,8 +23,8 @@ const AddYoutubeVideo = ({
 		videoUrl: string;
 		videoDescription: string;
 		videoId: string;
-		startTime: string;
-		endTime: string;
+		startFrom: string;
+		endAt: string;
 	};
 	discard: () => void;
 }) => {
@@ -40,15 +40,15 @@ const AddYoutubeVideo = ({
 		videoName: string;
 		videoUrl: string;
 		videoDescription: string;
-		startTime: string;
-		endTime: string;
+		startFrom: string;
+		endAt: string;
 	}>({
 		defaultValues: {
 			videoName: initialValues?.videoName ? initialValues?.videoName : "",
 			videoUrl: initialValues?.videoUrl ? initialValues?.videoUrl : "",
 			videoDescription: initialValues?.videoDescription ? initialValues?.videoDescription : "",
-			startTime: initialValues?.videoUrl ? initialValues?.startTime : "",
-			endTime: initialValues?.videoDescription ? initialValues?.endTime : "",
+			startFrom: initialValues?.videoUrl ? initialValues?.startFrom : "",
+			endAt: initialValues?.videoDescription ? initialValues?.endAt : "",
 		},
 	});
 
@@ -58,36 +58,37 @@ const AddYoutubeVideo = ({
 
 	const [editVideo, { isLoading: isEditVideoLoading }] = useEditModuleVideoMutation();
 
-	const videoSubmit: SubmitHandler<any> = async (data: { videoName: string; videoUrl: string; videoDescription: string; startTime: string; endTime: string }) => {
-		console.log(data);
-		let { videoName, videoUrl, videoDescription, startTime, endTime } = data;
+	const videoSubmit: SubmitHandler<any> = async (data: { videoName: string; videoUrl: string; videoDescription: string; startFrom: string; endAt: string }) => {
+		let { videoName, videoUrl, videoDescription, startFrom, endAt } = data;
 		const formData = new FormData();
 		formData.append("Name", videoName);
 		formData.append("Description", videoDescription);
 		formData.append("Order", (++ORDER).toString());
-		formData.append("NumberOfSeconds", "" + (+endTime - +startTime));
+		formData.append("NumberOfSeconds", "" + (+endAt - +startFrom));
 		formData.append("isYoutube", "true");
 		formData.append("YoutubeLink", videoUrl);
+		formData.append("startFrom", startFrom);
+		formData.append("endAt", endAt);
 
 		if (isEditing) {
-			// const res = await editVideo({
-			// 	courseId,
-			// 	moduleId,
-			// 	videoId: initialValues.videoId,
-			// 	name: data.videoName,
-			// 	description: data.videoDescription,
-			// 	formData: formData,
-			// 	numberOfSeconds: videoLength.toString(),
-			// }).unwrap();
-			// if (res.errors.length === 0) {
-			// 	notify({ title: "Successfully edited video", type: "success" });
-			// } else {
-			// 	notify({
-			// 		title: "Error",
-			// 		description: "An error occurred while editing video",
-			// 		type: "error",
-			// 	});
-			// }
+			const res = await editVideo({
+				courseId,
+				moduleId,
+				videoId: initialValues?.videoId as string,
+				name: data.videoName,
+				description: data.videoDescription,
+				formData: formData,
+				numberOfSeconds: (+endAt - +startFrom).toString(),
+			}).unwrap();
+			if (res.errors.length === 0) {
+				notify({ title: "Successfully edited video", type: "success" });
+			} else {
+				notify({
+					title: "Error",
+					description: "An error occurred while editing video",
+					type: "error",
+				});
+			}
 		} else {
 			await addVideo({ courseId, moduleId, formData }).unwrap();
 		}
@@ -136,27 +137,27 @@ const AddYoutubeVideo = ({
 				</div>
 				<div className="w-1/2 mt-3 h-auto gap-5 flex justify-start items-center">
 					<div className="w-1/2 h-full">
-						<label htmlFor="startTime" className="block mb-[5px]">
+						<label htmlFor="startFrom" className="block mb-[5px]">
 							Start Time(in seconds)
 						</label>
 						<input
 							type="text"
-							id="startTime"
+							id="startFrom"
 							placeholder="120 for (2:00)"
 							className="w-full border-[1px] rounded-[5px] py-3 px-2"
-							{...formControl.register("startTime", { required: true })}
+							{...formControl.register("startFrom", { required: true })}
 						/>
 					</div>
 					<div className="w-1/2 h-full">
-						<label htmlFor="endTime" className="block mb-[5px]">
+						<label htmlFor="endAt" className="block mb-[5px]">
 							End Time (in seconds)
 						</label>
 						<input
 							type="text"
-							id="endTime"
+							id="endAt"
 							placeholder="3640 for (01:10:40)"
 							className="w-full border-[1px] rounded-[5px] py-3 px-2"
-							{...formControl.register("endTime", { required: true })}
+							{...formControl.register("endAt", { required: true })}
 						/>
 					</div>
 				</div>

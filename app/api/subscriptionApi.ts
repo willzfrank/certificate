@@ -93,6 +93,8 @@ const subscriptionApi = createApi({
               description: video.description,
               position: video.position,
               type: video.type,
+              startFrom: video.startFrom ? video.startFrom : '0',
+              endAt: video.endAt ? video.endAt : '0'
             })),
             assessments: res.data.assessments,
             documents: res.data.documents ?? [],

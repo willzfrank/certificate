@@ -104,8 +104,8 @@ export interface ModuleContentResponse {
       readonly isWatched: boolean
       readonly position: number
       readonly isYoutube?: boolean
-      readonly startTime?: number
-      readonly endTime?: number
+      readonly startFrom?: number
+      readonly endAt?: number
       readonly type: ModuleContentTypes.video
     }>
     assessments: Array<{
