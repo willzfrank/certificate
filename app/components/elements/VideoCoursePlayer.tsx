@@ -61,7 +61,7 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
     }
   }
 
-  return (
+	return (
     <div className="w-full ">
       <motion.div>
         <h6 className="capitalize inter">{props.title}</h6>
@@ -76,14 +76,18 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
               onEnded={props.onVideoEnded}
               ref={videoRef}
               onReady={() =>
-                videoRef.current.seekTo(
-                  props.startFrom ? +props.startFrom : 0,
-                  'seconds'
-                )
+                !props.endAt || props.endAt === '0'
+                  ? ''
+                  : videoRef.current.seekTo(
+                      props.startFrom ? +props.startFrom : 0,
+                      'seconds'
+                    )
               }
               width="100%"
               height={isSmallDevice ? 'auto' : '510px'}
-              onProgress={handleProgress}
+              onProgress={(e) =>
+                !props.endAt || props.endAt === '0' ? '' : handleProgress(e)
+              }
               playing={true}
               onError={(e) => {
                 console.log(e)
