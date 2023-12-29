@@ -29,6 +29,7 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 	const [videoSrc, setVideoSrc] = useState<SourceInfo[]>([]);
 
 	const videoRef = useRef<any>(null);
+	// console.log("props", props);
 
 	useEffect(() => {
 		if (props.src) {
@@ -68,9 +69,10 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 							poster={props.posterUrl}
 							onEnded={props.onVideoEnded}
 							ref={videoRef}
-							onReady={() => videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds")}
+							onReady={() => (props.endAt === "0" ? "" : videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds"))}
 							width="100%"
-							onProgress={handleProgress}
+							height="100%"
+							onProgress={(e) => (props.endAt === "0" ? "" : handleProgress(e))}
 							playing={true}
 							onError={(e) => {
 								console.log(e);
