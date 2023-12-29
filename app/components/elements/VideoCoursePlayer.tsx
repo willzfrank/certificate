@@ -69,10 +69,10 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 							poster={props.posterUrl}
 							onEnded={props.onVideoEnded}
 							ref={videoRef}
-							onReady={() => (props.endAt === "0" ? "" : videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds"))}
+							onReady={() => (!props.endAt || props.endAt === "0" ? "" : videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds"))}
 							width="100%"
 							height="100%"
-							onProgress={(e) => (props.endAt === "0" ? "" : handleProgress(e))}
+							onProgress={(e) => (!props.endAt || props.endAt === "0" ? "" : handleProgress(e))}
 							playing={true}
 							onError={(e) => {
 								console.log(e);
