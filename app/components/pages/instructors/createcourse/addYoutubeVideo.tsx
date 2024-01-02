@@ -140,25 +140,13 @@ const AddYoutubeVideo = ({
 						<label htmlFor="startFrom" className="block mb-[5px]">
 							Start Time(in seconds)
 						</label>
-						<input
-							type="text"
-							id="startFrom"
-							placeholder="120 for (2:00)"
-							className="w-full border-[1px] rounded-[5px] py-3 px-2"
-							{...formControl.register("startFrom", { required: true })}
-						/>
+						<input type="text" id="startFrom" placeholder="120 for (2:00)" className="w-full border-[1px] rounded-[5px] py-3 px-2" {...formControl.register("startFrom")} />
 					</div>
 					<div className="w-1/2 h-full">
 						<label htmlFor="endAt" className="block mb-[5px]">
 							End Time (in seconds)
 						</label>
-						<input
-							type="text"
-							id="endAt"
-							placeholder="3640 for (01:10:40)"
-							className="w-full border-[1px] rounded-[5px] py-3 px-2"
-							{...formControl.register("endAt", { required: true })}
-						/>
+						<input type="text" id="endAt" placeholder="3640 for (01:10:40)" className="w-full border-[1px] rounded-[5px] py-3 px-2" {...formControl.register("endAt")} />
 					</div>
 				</div>
 			</div>
