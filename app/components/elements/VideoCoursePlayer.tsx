@@ -71,13 +71,13 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 							ref={videoRef}
 							onReady={() => (!props.endAt || props.endAt === "0" ? "" : videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds"))}
 							width="100%"
-							height="100%"
+							height="70vh"
 							onProgress={(e) => (!props.endAt || props.endAt === "0" ? "" : handleProgress(e))}
 							playing={true}
 							onError={(e) => {
 								console.log(e);
 							}}
-							className="rounded h-full md:border-4 border-app-pink "
+							className="rounded md:border-4 border-app-pink "
 							url={videoSrc[0]?.src}></ReactPlayer>
 					</div>
 				</div>
