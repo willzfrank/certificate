@@ -54,7 +54,6 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
     if (props.endAt) {
       if (state.playedSeconds >= +props.endAt) {
         // Stop the video when it reaches the end time
-        // setPlaying(false);
         videoRef.current.getInternalPlayer().stopVideo()
         props?.onVideoEnded ? props.onVideoEnded() : undefined
       }
