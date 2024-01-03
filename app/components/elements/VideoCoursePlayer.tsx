@@ -60,34 +60,44 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
     }
   }
 
-	return (
-		<div className="w-full ">
-			<motion.div>
-				<h6 className="capitalize inter">{props.title}</h6>
-				<div>
-					<div>
-						<ReactPlayer
-							controls
-							onContextMenu={handleContextMenu}
-							controlsList="nodownload"
-							playsInline
-							poster={props.posterUrl}
-							onEnded={props.onVideoEnded}
-							ref={videoRef}
-							onReady={() => (!props.endAt || props.endAt === "0" ? "" : videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds"))}
-							width="100%"
-              height={isSmallDevice ? 'auto' : '70vh'}
-							onProgress={(e) => (!props.endAt || props.endAt === "0" ? "" : handleProgress(e))}
-							playing={true}
-							onError={(e) => {
-								console.log(e);
-							}}
-							className="rounded md:border-4 border-app-pink "
-							url={videoSrc[0]?.src}></ReactPlayer>
-					</div>
-				</div>
-			</motion.div>
-		</div>
-	);
-
+  return (
+    <div className="w-full ">
+      <motion.div>
+        <h6 className="capitalize inter">{props.title}</h6>
+        <div>
+          <div>
+            <ReactPlayer
+              controls
+              onContextMenu={handleContextMenu}
+              controlsList="nodownload"
+              playsInline
+              poster={props.posterUrl}
+              onEnded={props.onVideoEnded}
+              ref={videoRef}
+              onReady={() =>
+                !props.endAt || props.endAt === '0'
+                  ? ''
+                  : videoRef.current.seekTo(
+                      props.startFrom ? +props.startFrom : 0,
+                      'seconds'
+                    )
+              }
+              width="100%"
+              height={isSmallDevice ? 'auto' : '100vh'}
+              onProgress={(e) =>
+                !props.endAt || props.endAt === '0' ? '' : handleProgress(e)
+              }
+              playing={true}
+              onError={(e) => {
+                console.log(e)
+              }}
+              className="rounded md:border-4 border-app-pink "
+              url={videoSrc[0]?.src}
+            ></ReactPlayer>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
 export default VideoCoursePlayer
