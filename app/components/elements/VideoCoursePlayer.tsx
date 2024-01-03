@@ -1,59 +1,65 @@
-import React, { useRef, useEffect, useState } from "react";
-import styles from "./videoplayer.module.css";
-import { motion } from "framer-motion";
-import Plyr from "plyr-react";
-import "plyr-react/plyr.css";
-import dynamic from "next/dynamic";
+import React, { useRef, useEffect, useState } from 'react'
+import styles from './videoplayer.module.css'
+import { motion } from 'framer-motion'
+import Plyr from 'plyr-react'
+import 'plyr-react/plyr.css'
+import dynamic from 'next/dynamic'
 // Import ReactPlayer using dynamic import
-import ReactPlayer from "react-player";
+import ReactPlayer from 'react-player'
 
 interface VideoPlayerProps {
-	src: string | SourceInfo[];
-	title?: string;
-	description?: string;
-	posterUrl?: string;
-	subtitleUrl?: string;
-	className?: string;
-	shouldShowLoader?: boolean;
-	startFrom?: string;
-	endAt?: string;
-	onVideoEnded?: () => void;
+  src: string | SourceInfo[]
+  title?: string
+  description?: string
+  posterUrl?: string
+  subtitleUrl?: string
+  className?: string
+  shouldShowLoader?: boolean
+  startFrom?: string
+  endAt?: string
+  onVideoEnded?: () => void
 }
 
 interface SourceInfo {
-	src: string;
-	type: string;
+  src: string
+  type: string
 }
 
 function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
-	const [videoSrc, setVideoSrc] = useState<SourceInfo[]>([]);
+  const [videoSrc, setVideoSrc] = useState<SourceInfo[]>([])
 
-	const videoRef = useRef<any>(null);
-	// console.log("props", props);
+  const videoRef = useRef<any>(null)
 
-	useEffect(() => {
-		if (props.src) {
-			setVideoSrc((_prev: any) => {
-				return Array.isArray(props.src) ? props.src : [{ src: props.src, type: "video/mp4" }];
-			});
-		}
-	}, [props.src]);
+  const SMALL_DEVICE_WIDTH_THRESHOLD = 500
 
-	const handleContextMenu = (event: { preventDefault: () => void }) => {
-		event.preventDefault(); // Prevent the default right-click menu
-	};
+  // Determine if the device is small based on the threshold
+  const isSmallDevice = window.innerWidth <= SMALL_DEVICE_WIDTH_THRESHOLD
 
-	const handleProgress = (state: any) => {
-		// Check if the current time has reached the desired end time (240 seconds)
-		if (props.endAt) {
-			if (state.playedSeconds >= +props.endAt) {
-				// Stop the video when it reaches the end time
-				// setPlaying(false);
-				videoRef.current.getInternalPlayer().stopVideo();
-				props?.onVideoEnded ? props.onVideoEnded() : undefined;
-			}
-		}
-	};
+  useEffect(() => {
+    if (props.src) {
+      setVideoSrc((_prev: any) => {
+        return Array.isArray(props.src)
+          ? props.src
+          : [{ src: props.src, type: 'video/mp4' }]
+      })
+    }
+  }, [props.src])
+
+  const handleContextMenu = (event: { preventDefault: () => void }) => {
+    event.preventDefault() // Prevent the default right-click menu
+  }
+
+  const handleProgress = (state: any) => {
+    // Check if the current time has reached the desired end time (240 seconds)
+    if (props.endAt) {
+      if (state.playedSeconds >= +props.endAt) {
+        // Stop the video when it reaches the end time
+        // setPlaying(false);
+        videoRef.current.getInternalPlayer().stopVideo()
+        props?.onVideoEnded ? props.onVideoEnded() : undefined
+      }
+    }
+  }
 
 	return (
 		<div className="w-full ">
@@ -71,7 +77,7 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 							ref={videoRef}
 							onReady={() => (!props.endAt || props.endAt === "0" ? "" : videoRef.current.seekTo(props.startFrom ? +props.startFrom : 0, "seconds"))}
 							width="100%"
-							height="70vh"
+              height={isSmallDevice ? 'auto' : '70vh'}
 							onProgress={(e) => (!props.endAt || props.endAt === "0" ? "" : handleProgress(e))}
 							playing={true}
 							onError={(e) => {
@@ -84,6 +90,5 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
 			</motion.div>
 		</div>
 	);
-}
 
-export default VideoCoursePlayer;
+export default VideoCoursePlayer
