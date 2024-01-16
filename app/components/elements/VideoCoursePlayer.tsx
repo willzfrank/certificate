@@ -50,6 +50,10 @@ function VideoCoursePlayer(props: VideoPlayerProps): JSX.Element {
   }
 
   const handleProgress = (state: any) => {
+    if (props.startFrom && state.playedSeconds < +props.startFrom) {
+      // Seek the video back to the start time
+      videoRef.current.seekTo(+props.startFrom, 'seconds')
+    }
     // Check if the current time has reached the desired end time (240 seconds)
     if (props.endAt) {
       if (state.playedSeconds >= +props.endAt) {
